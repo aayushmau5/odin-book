@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "client": "cd client && npm run dev",
-    "server": "node ./server/index.js",
+    "client": "npm run dev --prefix client",
+    "server": "npm run dev --prefix server",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {

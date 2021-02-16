@@ -7,7 +7,7 @@
 - friend requests
 - news feed
 - signup using github/email-password
-- _possbily_ a chat system using `socket.io`.
+- _possibly_ a chat system using `socket.io`.
 
 ## Steps
 

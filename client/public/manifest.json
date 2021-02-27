@@ -1,6 +1,6 @@
 {
-  "short_name": "Odin book",
-  "name": "Odin book project created by aayushmau5",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",

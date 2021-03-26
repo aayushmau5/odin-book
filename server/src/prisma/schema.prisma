@@ -8,8 +8,29 @@ generator client {
 }
 
 model User {
-  id Int @default(autoincrement()) @id
+  @@map("users")
+  id String @default(uuid()) @id
   createdAt DateTime @default(now())
   username String
   email String @unique
+  posts Post[] 
+}
+
+model Post {
+  @@map("posts")
+  id String @default(uuid()) @id
+  data String
+  createdAt DateTime @default(now())
+  author User @relation(fields: [authorId], references: [id]) // only exists in Prisma level (doesn't exist on the db)
+  authorId String // foreign key (exists in the db)
+  comments Comment[]
+}
+
+model Comment {
+  @@map("comments")
+  id String @default(uuid()) @id
+  data String
+  createdAt DateTime @default(now())
+  post Post @relation(fields: [postId], references: [id])
+  postId String
 }

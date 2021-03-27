@@ -5,9 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "nodemon dist/index.js",
+    "dev": "nodemon ./dist/index.js",
     "watch": "tsc -w",
-    "db": "ts-node ./src/db.ts",
     "migrate": "prisma migrate dev --schema ./src/prisma/schema.prisma --preview-feature"
   },
   "author": "aayushmau5",

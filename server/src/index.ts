@@ -1,19 +1,9 @@
 import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
-import { ApolloServer, gql } from "apollo-server-express";
-
-const typeDefs = gql`
-  type Query {
-    hello: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => "Hello from graphql",
-  },
-};
+import { ApolloServer } from "apollo-server-express";
+import { typeDefs } from "./query";
+import { resolvers } from "./resolvers";
 
 const main = async () => {
   const PORT = process.env.PORT || 8000;

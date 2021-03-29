@@ -1,4 +1,4 @@
-import { getAllUser, getUser, addUser } from "./utils/db";
+import { getAllUser, getUser, addUser, addPost } from "../utils/db";
 
 export const resolvers = {
   Query: {
@@ -12,6 +12,13 @@ export const resolvers = {
     ) => {
       const { username, email, password } = args.user;
       return await addUser(username, email, password);
+    },
+    addPost: async (
+      _: any,
+      args: { data: { userId: string; data: string } }
+    ) => {
+      const { userId, data } = args.data;
+      return await addPost(userId, data);
     },
   },
 };

@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import { ApolloServer } from "apollo-server-express";
-import { typeDefs } from "./query";
-import { resolvers } from "./resolvers";
+import { typeDefs } from "./schema/schema";
+import { resolvers } from "./resolvers/resolvers";
 
 const main = async () => {
   const PORT = process.env.PORT || 8000;

@@ -14,8 +14,6 @@ model User {
   email     String @unique
   password  String
   posts     Post[] 
-  // friends   User @relation(fields: [friendsId], references: [id])
-  // friendsId User[]
   createdAt DateTime @default(now())
 }
 

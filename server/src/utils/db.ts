@@ -34,10 +34,18 @@ export async function addUser(
   return savedUser;
 }
 
-// runDb()
-//   .catch((e) => {
-//     throw e;
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });
+export async function getAllPosts() {
+  return await prisma.post.findMany({
+    include: { author: true, comments: true },
+  });
+}
+
+export async function addPost(userId: string, postData: string) {
+  const savedPost = await prisma.post.create({
+    data: {
+      data: postData,
+      authorId: userId,
+    },
+  });
+  return savedPost;
+}

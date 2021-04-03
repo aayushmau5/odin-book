@@ -19,6 +19,12 @@ export const typeDefs = gql`
     posts: [Post]
   }
 
+  type Demo {
+    id: ID!
+    username: String!
+    email: String!
+  }
+
   type Post {
     data: String!
   }
@@ -26,6 +32,7 @@ export const typeDefs = gql`
   type Query {
     user(id: ID!): User
     users: [User]
+    demo: Demo!
   }
 
   type Mutation {

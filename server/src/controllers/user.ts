@@ -1,7 +1,12 @@
-import { getAllUser, getUser, addUser } from "../utils/db";
+import { getAllUser, getUser, addUser, findUserByEmail } from "../utils/db";
 
 interface User {
   username: string;
+  email: string;
+  password: string;
+}
+
+interface Login {
   email: string;
   password: string;
 }
@@ -15,5 +20,13 @@ export async function getSpecificUser(id: string) {
 }
 
 export async function saveUser({ username, email, password }: User) {
+  //TODO hash the password before saving
   return await addUser(username, email, password);
+}
+
+export async function login({ email, password }: Login) {
+  const user = await findUserByEmail(email);
+  if (user) {
+    console.log(password);
+  }
 }

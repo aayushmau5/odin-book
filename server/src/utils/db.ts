@@ -49,3 +49,8 @@ export async function addPost(userId: string, postData: string) {
   });
   return savedPost;
 }
+
+export async function findUserByEmail(email: string) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  return user;
+}

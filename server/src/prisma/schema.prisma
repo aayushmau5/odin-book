@@ -8,30 +8,60 @@ generator client {
 }
 
 model User {
+  id               String    @id @default(uuid())
+  username         String
+  email            String    @unique
+  password         String
+  profile          Profile?  @relation("profile")
+  friends          Profile[] @relation("friends")
+  incoming_friends Profile[] @relation("incoming_friends")
+  outgoing_friends Profile[] @relation("outgoing_friends")
+  createdAt        DateTime  @default(now())
+
   @@map("users")
-  id        String @default(uuid()) @id
-  username  String
-  email     String @unique
-  password  String
-  posts     Post[] 
-  createdAt DateTime @default(now())
+}
+
+model Profile {
+  id                 String   @id @default(uuid())
+  firstname          String
+  lastname           String
+  display            String
+  friends            User[]   @relation("friends", fields: [friendsId], references: [id])
+  friendsId          String[]
+  incoming_friends   User[]   @relation("incoming_friends", fields: [incoming_friendsId], references: [id])
+  incoming_friendsId String[]
+  outgoing_friends   User[]   @relation("outgoing_friends", fields: [outgoing_friendsId], references: [id])
+  outgoing_friendsId String[]
+  posts              Post[]
+  likes              Post[]   @relation("likes")
+  user               User     @relation("profile", fields: [userId], references: [id])
+  userId             String
+
+  @@map("profiles")
 }
 
 model Post {
+  id        String    @id @default(uuid())
+  data      String
+  createdAt DateTime  @default(now())
+  author    Profile   @relation(fields: [authorId], references: [id])
+  authorId  String
+  likes     Profile[] @relation("likes", fields: [likesId], references: [id])
+  likesId   String[]
+  comments  Comment[]
+
   @@map("posts")
-  id         String @default(uuid()) @id
-  data       String
-  createdAt  DateTime @default(now())
-  author     User @relation(fields: [authorId], references: [id]) // only exists in Prisma level (doesn't exist on the db)
-  authorId   String // foreign key (exists in the db)
-  comments   Comment[]
 }
 
 model Comment {
+  id         String   @id @default(uuid())
+  data       String
+  createdAt  DateTime @default(now())
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     String
+  comments   Comment  @relation(fields: [commentsId], references: [id])
+  commentsId String[]
+
   @@map("comments")
-  id        String @default(uuid()) @id
-  data      String
-  createdAt DateTime @default(now())
-  post      Post @relation(fields: [postId], references: [id])
-  postId    String
+  Comment Comment[] @relation("CommentToComment")
 }

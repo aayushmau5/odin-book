@@ -11,7 +11,9 @@ function returnIdAndUsername() {
 
 export const resolvers = {
   Query: {
-    users,
+    users: () => ({
+      ...users(),
+    }),
     user,
     // posts,
     demo: () => ({

@@ -22,20 +22,17 @@ model User {
 }
 
 model Profile {
-  id                 String   @id @default(uuid())
-  firstname          String
-  lastname           String
-  display            String
-  friends            User[]   @relation("friends", fields: [friendsId], references: [id])
-  friendsId          String[]
-  incoming_friends   User[]   @relation("incoming_friends", fields: [incoming_friendsId], references: [id])
-  incoming_friendsId String[]
-  outgoing_friends   User[]   @relation("outgoing_friends", fields: [outgoing_friendsId], references: [id])
-  outgoing_friendsId String[]
-  posts              Post[]
-  likes              Post[]   @relation("likes")
-  user               User     @relation("profile", fields: [userId], references: [id])
-  userId             String
+  id               String @id @default(uuid())
+  firstname        String
+  lastname         String
+  display          String
+  friends          User[] @relation("friends")
+  incoming_friends User[] @relation("incoming_friends")
+  outgoing_friends User[] @relation("outgoing_friends")
+  posts            Post[]
+  likes            Post[] @relation("likes")
+  user             User   @relation("profile", fields: [userId], references: [id])
+  userId           String
 
   @@map("profiles")
 }
@@ -46,22 +43,20 @@ model Post {
   createdAt DateTime  @default(now())
   author    Profile   @relation(fields: [authorId], references: [id])
   authorId  String
-  likes     Profile[] @relation("likes", fields: [likesId], references: [id])
-  likesId   String[]
+  likes     Profile[] @relation("likes")
   comments  Comment[]
 
   @@map("posts")
 }
 
 model Comment {
-  id         String   @id @default(uuid())
-  data       String
-  createdAt  DateTime @default(now())
-  post       Post     @relation(fields: [postId], references: [id])
-  postId     String
-  comments   Comment  @relation(fields: [commentsId], references: [id])
-  commentsId String[]
+  id        String    @id @default(uuid())
+  data      String
+  createdAt DateTime  @default(now())
+  post      Post      @relation(fields: [postId], references: [id])
+  postId    String
+  comments  Comment[] @relation("CommentToComment")
 
-  @@map("comments")
   Comment Comment[] @relation("CommentToComment")
+  @@map("comments")
 }

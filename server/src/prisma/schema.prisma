@@ -16,6 +16,7 @@ model User {
   friends          Profile[] @relation("friends")
   incoming_friends Profile[] @relation("incoming_friends")
   outgoing_friends Profile[] @relation("outgoing_friends")
+  comments         Comment[]
   createdAt        DateTime  @default(now())
 
   @@map("users")
@@ -30,7 +31,6 @@ model Profile {
   incoming_friends User[] @relation("incoming_friends")
   outgoing_friends User[] @relation("outgoing_friends")
   posts            Post[]
-  likes            Post[] @relation("likes")
   user             User   @relation("profile", fields: [userId], references: [id])
   userId           String
 
@@ -43,7 +43,7 @@ model Post {
   createdAt DateTime  @default(now())
   author    Profile   @relation(fields: [authorId], references: [id])
   authorId  String
-  likes     Profile[] @relation("likes")
+  likes     Int       @default(0)
   comments  Comment[]
 
   @@map("posts")
@@ -55,8 +55,10 @@ model Comment {
   createdAt DateTime  @default(now())
   post      Post      @relation(fields: [postId], references: [id])
   postId    String
-  comments  Comment[] @relation("CommentToComment")
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
+  inReplyTo Comment[] @relation("nestedComment")
+  repliedBy Comment[] @relation("nestedComment")
 
-  Comment Comment[] @relation("CommentToComment")
   @@map("comments")
 }

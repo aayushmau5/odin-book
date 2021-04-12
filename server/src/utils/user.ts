@@ -5,9 +5,6 @@ export async function getUser(id: string) {
     where: {
       id,
     },
-    select: {
-      password: false,
-    },
   });
   return user;
 }
@@ -15,20 +12,19 @@ export async function getUser(id: string) {
 export async function getUserByEmail(email: string) {
   const user = await prisma.user.findUnique({
     where: { email },
-    select: { password: false },
   });
   return user;
 }
 
 export async function getAllUser() {
-  const users = await prisma.user.findMany({ select: { password: false } });
+  const users = await prisma.user.findMany({ orderBy: { createdAt: "asc" } });
   return users;
 }
 
 export async function getAllUserExcept(id: string) {
   const users = await prisma.user.findMany({
     where: { NOT: { id } },
-    select: { password: false },
+    orderBy: { createdAt: "asc" },
   });
   return users;
 }
@@ -71,9 +67,9 @@ export async function setProfile(
 export async function updateCommonProfile(
   id: string,
   data: {
-    display: string;
-    firstname: string;
-    lastname: string;
+    display?: string;
+    firstname?: string;
+    lastname?: string;
   }
 ) {
   const {
@@ -99,4 +95,11 @@ export async function deleteProfile(profileId: string) {
     where: { id: profileId },
   });
   return deletedProfile;
+}
+
+export async function deleteUser(userId: string) {
+  const deletedUser = await prisma.user.delete({
+    where: { id: userId },
+  });
+  return deletedUser;
 }

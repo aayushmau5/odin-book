@@ -1,4 +1,4 @@
-import { getAllUser, getUser, addUser, findUserByEmail } from "../utils/db";
+import { getAllUser, getUser, addUser, getUserByEmail } from "../utils/user";
 
 interface User {
   username: string;
@@ -25,7 +25,7 @@ export async function saveUser({ username, email, password }: User) {
 }
 
 export async function login({ email, password }: Login) {
-  const user = await findUserByEmail(email);
+  const user = await getUserByEmail(email);
   if (user) {
     console.log(password);
   }

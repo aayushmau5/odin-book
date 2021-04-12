@@ -1,4 +1,4 @@
-import { getAllPosts, addPost } from "../utils/db";
+import { getAllPosts, addPost } from "../utils/post";
 
 interface Post {
   userId: string;

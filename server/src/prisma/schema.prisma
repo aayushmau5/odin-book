@@ -39,7 +39,8 @@ model Profile {
 
 model Post {
   id        String    @id @default(uuid())
-  data      String
+  data      String?
+  image     String?
   createdAt DateTime  @default(now())
   author    Profile   @relation(fields: [authorId], references: [id])
   authorId  String

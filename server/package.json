@@ -9,7 +9,8 @@
     "watch": "tsc -w",
     "migrate": "prisma migrate dev --schema ./src/prisma/schema.prisma --preview-feature",
     "studio": "prisma studio --schema ./src/prisma/schema.prisma",
-    "format": "prisma format --schema ./src/prisma/schema.prisma"
+    "format": "prisma format --schema ./src/prisma/schema.prisma",
+    "test-db": "ts-node ./src/test-db.ts"
   },
   "author": "aayushmau5",
   "license": "ISC",

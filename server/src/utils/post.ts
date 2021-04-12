@@ -1,12 +1,11 @@
 import { prisma } from "./db";
 
-export async function removeUser(userId: string) {
-  const posts = removeAllPostBy(userId);
-}
-
 export async function getAllPosts() {
   return await prisma.post.findMany({
     include: { author: true },
+    orderBy: {
+      createdAt: "asc",
+    },
   });
 }
 
@@ -14,6 +13,9 @@ export async function getPostByUser(id: string) {
   return await prisma.post.findMany({
     where: {
       authorId: id,
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   });
 }
@@ -28,16 +30,23 @@ export async function generateFeed(userId: string) {
     const posts = await prisma.post.findMany({
       where: { authorId: data.id },
       include: { author: true, comments: true },
+      orderBy: {
+        createdAt: "asc",
+      },
     });
     feed.push(posts);
   });
   return feed;
 }
 
-export async function addPost(userId: string, postData: string) {
+export async function addPost(
+  userId: string,
+  postData: { textData: string; imageUrl: string }
+) {
   const savedPost = await prisma.post.create({
     data: {
-      data: postData,
+      image: postData.imageUrl || null,
+      data: postData.textData || null,
       authorId: userId,
     },
   });
@@ -49,7 +58,7 @@ export async function removePost(postId: string) {
   return removedPost;
 }
 
-async function removeAllPostBy(userId: string) {
+export async function removeAllPostByUser(userId: string) {
   const removedPosts = await prisma.post.deleteMany({
     where: { authorId: userId },
   });

@@ -1,12 +1,12 @@
 import { prisma } from "./db";
 
 export async function addCommentToPost(
-  userId: string,
+  profileId: string,
   postId: string,
   data: string
 ) {
   const comment = await prisma.comment.create({
-    data: { data, postId, authorId: userId },
+    data: { data, postId, authorId: profileId },
   });
   return comment;
 }

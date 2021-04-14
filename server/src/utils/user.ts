@@ -125,88 +125,43 @@ export async function deleteUser(userId: string) {
   return deletedUser;
 }
 
-export async function sendFriendRequest(idFrom: string, idTo: string) {
-  const user1 = await prisma.profile.findUnique({
-    where: { id: idFrom },
-    select: { id: true, friendrequest_by: true, friendrequest_to: true },
-  });
-  const user2 = await prisma.profile.findUnique({
-    where: { id: idTo },
-    select: { id: true, friendrequest_by: true, friendrequest_to: true },
-  });
-  await prisma.profile.update({
+export async function getUserWithField(
+  userId: string,
+  data: {
+    profile?: boolean;
+    posts?: boolean;
+    commentsOnPost?: boolean;
+    friends?: boolean;
+    comments?: boolean;
+  }
+) {
+  return await prisma.user.findUnique({
     where: {
-      id: idFrom,
+      id: userId,
     },
-    data: {
-      friendrequest_to: user2?.id
+    include: {
+      profile: data.profile
         ? {
-            connect: {
-              id: user2.id,
+            include: {
+              friends: data.friends ? true : false,
+              posts: data.posts
+                ? {
+                    include: {
+                      comments: data.commentsOnPost ? true : false,
+                    },
+                  }
+                : {},
+              comments: data.comments
+                ? {
+                    include: {
+                      inReplyTo: true,
+                      post: true,
+                    },
+                  }
+                : false,
             },
           }
-        : {},
-    },
-  });
-  await prisma.profile.update({
-    where: {
-      id: idTo,
-    },
-    data: {
-      friendrequest_by: user1?.id
-        ? {
-            connect: {
-              id: user1.id,
-            },
-          }
-        : {},
-    },
-  });
-  return true;
-}
-
-export async function deleteFriendRequest(idFrom: string, idTo: string) {
-  const user1 = await prisma.profile.findUnique({ where: { id: idFrom } });
-  const user2 = await prisma.profile.findUnique({ where: { id: idTo } });
-  await prisma.profile.update({
-    where: {
-      id: user1?.id ? user1.id : undefined,
-    },
-    data: {
-      friendrequest_to: {
-        disconnect: [
-          {
-            id: user2?.id,
-          },
-        ],
-      },
-    },
-  });
-  await prisma.profile.update({
-    where: {
-      id: user2?.id ? user2.id : undefined,
-    },
-    data: {
-      friendrequest_by: {
-        disconnect: [
-          {
-            id: user1?.id,
-          },
-        ],
-      },
-    },
-  });
-  return true;
-}
-
-export async function listFriendRequests(id: string) {
-  return await prisma.profile.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      friendrequest_by: true,
-      friendrequest_to: true,
+        : false,
     },
   });
 }

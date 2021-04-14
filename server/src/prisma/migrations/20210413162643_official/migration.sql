@@ -23,7 +23,8 @@ CREATE TABLE "profiles" (
 -- CreateTable
 CREATE TABLE "posts" (
     "id" TEXT NOT NULL,
-    "data" TEXT NOT NULL,
+    "data" TEXT,
+    "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "authorId" TEXT NOT NULL,
     "likes" INTEGER NOT NULL DEFAULT 0,
@@ -49,13 +50,7 @@ CREATE TABLE "_friends" (
 );
 
 -- CreateTable
-CREATE TABLE "_incoming_friends" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_outgoing_friends" (
+CREATE TABLE "_friendrequests" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -79,16 +74,10 @@ CREATE UNIQUE INDEX "_friends_AB_unique" ON "_friends"("A", "B");
 CREATE INDEX "_friends_B_index" ON "_friends"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_incoming_friends_AB_unique" ON "_incoming_friends"("A", "B");
+CREATE UNIQUE INDEX "_friendrequests_AB_unique" ON "_friendrequests"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_incoming_friends_B_index" ON "_incoming_friends"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_outgoing_friends_AB_unique" ON "_outgoing_friends"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_outgoing_friends_B_index" ON "_outgoing_friends"("B");
+CREATE INDEX "_friendrequests_B_index" ON "_friendrequests"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_nestedComment_AB_unique" ON "_nestedComment"("A", "B");
@@ -106,25 +95,19 @@ ALTER TABLE "posts" ADD FOREIGN KEY ("authorId") REFERENCES "profiles"("id") ON 
 ALTER TABLE "comments" ADD FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "comments" ADD FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "comments" ADD FOREIGN KEY ("authorId") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_friends" ADD FOREIGN KEY ("A") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_friends" ADD FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_friends" ADD FOREIGN KEY ("B") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_incoming_friends" ADD FOREIGN KEY ("A") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_friendrequests" ADD FOREIGN KEY ("A") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_incoming_friends" ADD FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_outgoing_friends" ADD FOREIGN KEY ("A") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_outgoing_friends" ADD FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_friendrequests" ADD FOREIGN KEY ("B") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_nestedComment" ADD FOREIGN KEY ("A") REFERENCES "comments"("id") ON DELETE CASCADE ON UPDATE CASCADE;

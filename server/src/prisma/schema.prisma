@@ -8,30 +8,28 @@ generator client {
 }
 
 model User {
-  id               String    @id @default(uuid())
-  username         String
-  email            String    @unique
-  password         String
-  profile          Profile?  @relation("profile")
-  friends          Profile[] @relation("friends")
-  incoming_friends Profile[] @relation("incoming_friends")
-  outgoing_friends Profile[] @relation("outgoing_friends")
-  comments         Comment[]
-  createdAt        DateTime  @default(now())
+  id        String   @id @default(uuid())
+  username  String
+  email     String   @unique
+  password  String
+  profile   Profile? @relation("profile")
+  createdAt DateTime @default(now())
 
   @@map("users")
 }
 
 model Profile {
-  id               String @id @default(uuid())
+  id               String    @id @default(uuid())
   firstname        String
   lastname         String
   display          String
-  friends          User[] @relation("friends")
-  incoming_friends User[] @relation("incoming_friends")
-  outgoing_friends User[] @relation("outgoing_friends")
+  friends          Profile[] @relation("friends", references: [id])
+  friendsRelation  Profile[] @relation("friends", references: [id])
+  friendrequest_to Profile[] @relation("friendrequests", references: [id])
+  friendrequest_by Profile[] @relation("friendrequests", references: [id])
   posts            Post[]
-  user             User   @relation("profile", fields: [userId], references: [id])
+  comments         Comment[]
+  user             User      @relation("profile", fields: [userId], references: [id])
   userId           String
 
   @@map("profiles")
@@ -56,7 +54,7 @@ model Comment {
   createdAt DateTime  @default(now())
   post      Post      @relation(fields: [postId], references: [id])
   postId    String
-  author    User      @relation(fields: [authorId], references: [id])
+  author    Profile   @relation(fields: [authorId], references: [id])
   authorId  String
   inReplyTo Comment[] @relation("nestedComment")
   repliedBy Comment[] @relation("nestedComment")

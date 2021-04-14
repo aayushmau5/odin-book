@@ -1,5 +1,21 @@
 import { prisma } from "./db";
 
+export async function getUserWithProfile(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      profile: {
+        include: {
+          posts: true,
+        },
+      },
+    },
+  });
+  return user;
+}
+
 export async function getUser(id: string) {
   const user = await prisma.user.findUnique({
     where: {
@@ -19,6 +35,11 @@ export async function getUserByEmail(email: string) {
 export async function getAllUser() {
   const users = await prisma.user.findMany({ orderBy: { createdAt: "asc" } });
   return users;
+}
+
+export async function getAllProfiles() {
+  const profiles = await prisma.profile.findMany({});
+  return profiles;
 }
 
 export async function getAllUserExcept(id: string) {
@@ -102,4 +123,86 @@ export async function deleteUser(userId: string) {
     where: { id: userId },
   });
   return deletedUser;
+}
+
+export async function sendFriendRequest(idFrom: string, idTo: string) {
+  const user1 = await prisma.profile.findUnique({
+    where: { id: idFrom },
+    select: { id: true, friendrequest_by: true, friendrequest_to: true },
+  });
+  const user2 = await prisma.profile.findUnique({
+    where: { id: idTo },
+    select: { id: true, friendrequest_by: true, friendrequest_to: true },
+  });
+  await prisma.profile.update({
+    where: {
+      id: idFrom,
+    },
+    data: {
+      friendrequest_to: user2?.id
+        ? {
+            connect: {
+              id: user2.id,
+            },
+          }
+        : {},
+    },
+  });
+  await prisma.profile.update({
+    where: {
+      id: idTo,
+    },
+    data: {
+      friendrequest_by: user1?.id
+        ? {
+            connect: {
+              id: user1.id,
+            },
+          }
+        : {},
+    },
+  });
+  return true;
+}
+
+export async function deleteFriendRequest(idFrom: string, idTo: string) {
+  const user1 = await prisma.profile.findUnique({ where: { id: idFrom } });
+  const user2 = await prisma.profile.findUnique({ where: { id: idTo } });
+  await prisma.profile.update({
+    where: {
+      id: user1?.id ? user1.id : undefined,
+    },
+    data: {
+      friendrequest_to: {
+        disconnect: {
+          id: user2?.id,
+        },
+      },
+    },
+  });
+  await prisma.profile.update({
+    where: {
+      id: user2?.id ? user2.id : undefined,
+    },
+    data: {
+      friendrequest_by: {
+        disconnect: {
+          id: user1?.id,
+        },
+      },
+    },
+  });
+  return true;
+}
+
+export async function listFriendRequests(id: string) {
+  return await prisma.profile.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      friendrequest_by: true,
+      friendrequest_to: true,
+    },
+  });
 }

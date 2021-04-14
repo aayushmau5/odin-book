@@ -174,9 +174,11 @@ export async function deleteFriendRequest(idFrom: string, idTo: string) {
     },
     data: {
       friendrequest_to: {
-        disconnect: {
-          id: user2?.id,
-        },
+        disconnect: [
+          {
+            id: user2?.id,
+          },
+        ],
       },
     },
   });
@@ -186,9 +188,11 @@ export async function deleteFriendRequest(idFrom: string, idTo: string) {
     },
     data: {
       friendrequest_by: {
-        disconnect: {
-          id: user1?.id,
-        },
+        disconnect: [
+          {
+            id: user1?.id,
+          },
+        ],
       },
     },
   });

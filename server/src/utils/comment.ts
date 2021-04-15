@@ -6,7 +6,19 @@ export async function addCommentToPost(
   data: string
 ) {
   const comment = await prisma.comment.create({
-    data: { data, postId, authorId: profileId },
+    data: {
+      data: data,
+      post: {
+        connect: {
+          id: postId,
+        },
+      },
+      author: {
+        connect: {
+          id: profileId,
+        },
+      },
+    },
   });
   return comment;
 }
@@ -37,6 +49,9 @@ export async function addCommentOnComment(
 export async function getCommentsOnPost(postId: string) {
   const comments = await prisma.comment.findMany({
     where: { postId },
+    include: {
+      inReplyTo: true,
+    },
   });
   return comments;
 }

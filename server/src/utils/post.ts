@@ -20,34 +20,40 @@ export async function getPostByUser(id: string) {
   });
 }
 
-export async function generateFeed(userId: string) {
-  const feed: any[] = [];
-  const user = await prisma.profile.findUnique({
+export async function generateFeedForUser(userId: string) {
+  const userFriends = await prisma.profile.findUnique({
     where: { id: userId },
-    include: { friends: true },
+    select: { friends: { select: { id: true } } },
   });
-  user?.friends.forEach(async (data) => {
-    const posts = await prisma.post.findMany({
-      where: { authorId: data.id },
-      include: { author: true, comments: true },
-      orderBy: {
-        createdAt: "asc",
+  if (!userFriends) return false;
+  const friendsId = userFriends.friends.map((data) => data.id);
+  const feedPosts = await prisma.post.findMany({
+    where: {
+      authorId: {
+        in: friendsId,
       },
-    });
-    feed.push(posts);
+    },
+    include: { author: true, comments: true },
+    orderBy: {
+      createdAt: "asc",
+    },
   });
-  return feed;
+  return feedPosts;
 }
 
 export async function addPost(
   userId: string,
-  postData: { textData: string; imageUrl: string }
+  postData: { textData?: string; imageUrl?: string }
 ) {
   const savedPost = await prisma.post.create({
     data: {
       image: postData.imageUrl || null,
       data: postData.textData || null,
-      authorId: userId,
+      author: {
+        connect: {
+          id: userId,
+        },
+      },
     },
   });
   return savedPost;
@@ -66,17 +72,17 @@ export async function removeAllPostByUser(userId: string) {
 }
 
 export async function likePost(postId: string) {
-  const likedPost = await prisma.post.update({
+  await prisma.post.update({
     where: { id: postId },
     data: { likes: { increment: 1 } },
   });
-  return likedPost;
+  return true;
 }
 
 export async function dislikePost(postId: string) {
-  const likedPost = await prisma.post.update({
+  await prisma.post.update({
     where: { id: postId },
     data: { likes: { decrement: 1 } },
   });
-  return likedPost;
+  return true;
 }

@@ -14,6 +14,22 @@ import {
   unfriend,
 } from "./utils/friends";
 
+import {
+  addPost,
+  likePost,
+  dislikePost,
+  getAllPosts,
+  getPostByUser,
+  generateFeedForUser,
+  removePost,
+  removeAllPostByUser,
+} from "./utils/post";
+import {
+  addCommentOnComment,
+  addCommentToPost,
+  getCommentsOnPost,
+} from "./utils/comment";
+
 async function createUser() {
   const first = await addUser("sherlock", "sherlock@gmail.com", "sherlock");
   const second = await addUser("john", "john@gmail.com", "john");
@@ -50,9 +66,6 @@ async function specificField() {
   console.log(result);
 }
 
-// main();
-// specificField();
-
 async function friends() {
   const users = await getAllProfiles();
   const john = users[0];
@@ -78,4 +91,44 @@ async function friends() {
   });
 }
 
-friends();
+async function posts() {
+  const users = await getAllProfiles();
+  const john = users[0];
+  const sherlock = users[1];
+  const johnPost = await addPost(john.id, {
+    textData: "Hello there, sherlock",
+  });
+  const sherlockPost = await addPost(sherlock.id, { textData: "Welcome John" });
+  console.log({ johnPost, sherlockPost });
+  await likePost(johnPost.id);
+  await likePost(sherlockPost.id);
+  console.log(await getAllPosts());
+  const johnFeed = await generateFeedForUser(john.id);
+  const sherlockFeed = await generateFeedForUser(sherlock.id);
+  console.log({ johnFeed, sherlockFeed });
+  await dislikePost(johnPost.id);
+  await dislikePost(sherlockPost.id);
+  console.log(await getAllPosts());
+}
+
+async function comments() {
+  const users = await getAllProfiles();
+  const john = users[0];
+  const sherlock = users[1];
+  const johnPost = await addPost(john.id, {
+    textData: "Hello there, sherlock",
+  });
+  const sherlockPost = await addPost(sherlock.id, { textData: "Welcome John" });
+  const johnComment = await addCommentToPost(
+    john.id,
+    sherlockPost.id,
+    "Comment1"
+  );
+  const sherlockComment = await addCommentOnComment(
+    sherlockPost.id,
+    johnComment.id,
+    sherlock.id,
+    "Comment2"
+  );
+  console.log(await getCommentsOnPost(sherlockPost.id));
+}

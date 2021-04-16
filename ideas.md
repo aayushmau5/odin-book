@@ -24,6 +24,9 @@
 - Make posts also allow images (either just via a url, or by uploading one.)
 - Allow Users to upload and update their own profile photo.
 
-## Additional help
+## Consider thinking about
 
+- TDD with JEST(+ In-memory db like sqlite)
 - Use `fakerjs` to mock fake data.
+- A Commit template(feat, test, fix)
+- Pagination

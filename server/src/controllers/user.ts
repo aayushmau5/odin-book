@@ -1,4 +1,10 @@
-import { getAllUser, getUser, addUser, getUserByEmail } from "../utils/user";
+import { ValidationError } from "apollo-server-errors";
+import {
+  addUser,
+  getUserByEmail,
+  setProfile,
+  updateCommonProfile,
+} from "../utils/user";
 
 interface User {
   username: string;
@@ -11,22 +17,41 @@ interface Login {
   password: string;
 }
 
-export async function allUsers() {
-  return await getAllUser();
+interface Profile {
+  display: string;
+  firstname: string;
+  lastname: string;
 }
 
-export async function getSpecificUser(id: string) {
-  return await getUser(id);
+interface optionalProfile {
+  display?: string;
+  firstname?: string;
+  lastname?: string;
 }
 
 export async function saveUser({ username, email, password }: User) {
   //TODO hash the password before saving
-  return await addUser(username, email, password);
+  const hashedPassword = password;
+  return await addUser(username, email, hashedPassword);
+}
+
+export async function addProfile(userId: string, data: Profile) {
+  const profile = await setProfile(userId, data);
+  return profile;
+}
+
+export async function profileUpdate(profileId: string, data: optionalProfile) {
+  const updatedProfile = await updateCommonProfile(profileId, data);
+  return updatedProfile;
 }
 
 export async function login({ email, password }: Login) {
+  //TODO JWT and stuff
   const user = await getUserByEmail(email);
-  if (user) {
-    console.log(password);
+  if (!user) {
+    const error = new ValidationError("User doesn't exist");
+    error.status = 404;
+    throw error;
   }
+  console.log(password);
 }

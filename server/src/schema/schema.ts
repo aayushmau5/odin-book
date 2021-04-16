@@ -1,6 +1,45 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
+  type User {
+    id: ID!
+    username: String!
+    email: String!
+    profile: Profile
+    posts: [Post]
+    createdAt: DateTime!
+  }
+
+  type Profile {
+    id: ID!
+    firstname: String!
+    lastname: String!
+    display: String
+    friends: [Profile]
+    user: User!
+    friendrequest_to: [Profile]
+    friendrequest_by: [Profile]
+  }
+
+  type Post {
+    id: ID!
+    data: String
+    image: String
+    author: User!
+    likes: Int!
+    comments: [Comment]
+    createdAt: DateTime!
+  }
+
+  type Comment {
+    id: ID!
+    data: String!
+    post: Post!
+    author: Profile!
+    inReplyTo: Comment
+    createdAt: DateTime!
+  }
+
   input Signup {
     username: String!
     email: String!
@@ -12,28 +51,13 @@ export const typeDefs = gql`
     data: String!
   }
 
-  type User {
-    id: ID!
-    username: String!
-    email: String!
-    posts: [Post]
-  }
-
-  type Demo {
-    id: ID!
-    username: String!
-    email: String!
-  }
-
-  type Post {
-    data: String!
-  }
-
   type Query {
     user(id: ID!): User
     users: [User]
-    postByUser(id: ID!): [Post]
-    demo: Demo!
+    profiles: [Profile]
+    profile(id: ID!): Profile
+    postsByProfile(id: ID!): [Post]
+    feedForProfile(id: ID!): [Post]
   }
 
   type Mutation {

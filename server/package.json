@@ -7,10 +7,9 @@
     "start": "node dist/index.js",
     "dev": "nodemon ./dist/index.js",
     "watch": "tsc -w",
-    "migrate": "prisma migrate dev --schema ./src/prisma/schema.prisma --preview-feature",
+    "migrate": "prisma migrate dev --schema ./src/prisma/schema.prisma",
     "studio": "prisma studio --schema ./src/prisma/schema.prisma",
     "format": "prisma format --schema ./src/prisma/schema.prisma",
-    "fng": "npm run format && npm run migrate",
     "test-db": "ts-node ./src/test-db.ts",
     "generate": "prisma generate --schema ./src/prisma/schema.prisma"
   },

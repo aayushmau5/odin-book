@@ -1,11 +1,12 @@
-import { allUsers, getSpecificUser, saveUser } from "../controllers/user";
+import { saveUser } from "../controllers/user";
+import { getAllUser, getUser } from "../utils/user";
 import { ValidationError } from "apollo-server-express";
 
-export const users = allUsers;
+export const users = getAllUser;
 
 export const user = async (_: any, { id }: { id: string }) => {
   try {
-    return await getSpecificUser(id);
+    return await getUser(id);
   } catch (err) {
     console.log(err);
     return new ValidationError("Invalid Id");

@@ -1,5 +1,5 @@
 import { saveUser } from "../controllers/user";
-import { getAllUser, getUser } from "../utils/user";
+import { getAllUser, getUser } from "../utils/db/user";
 import { ValidationError } from "apollo-server-express";
 
 export const users = getAllUser;

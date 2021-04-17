@@ -4,7 +4,7 @@ import {
   getUserByEmail,
   setProfile,
   updateCommonProfile,
-} from "../utils/user";
+} from "../utils/db/user";
 
 interface User {
   username: string;

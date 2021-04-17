@@ -4,7 +4,7 @@ import {
   getUserWithField,
   addUser,
   setProfile,
-} from "./utils/user";
+} from "./utils/db/user";
 
 import {
   acceptRequest,
@@ -12,7 +12,7 @@ import {
   listFriends,
   sendFriendRequest,
   unfriend,
-} from "./utils/friends";
+} from "./utils/db/friends";
 
 import {
   addPost,
@@ -23,12 +23,12 @@ import {
   generateFeedForUser,
   removePost,
   removeAllPostByUser,
-} from "./utils/post";
+} from "./utils/db/post";
 import {
   addCommentOnComment,
   addCommentToPost,
   getCommentsOnPost,
-} from "./utils/comment";
+} from "./utils/db/comment";
 
 async function createUser() {
   const first = await addUser("sherlock", "sherlock@gmail.com", "sherlock");

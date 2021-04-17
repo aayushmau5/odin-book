@@ -4,7 +4,7 @@ export const posts = allPosts;
 
 export const addPost = async (
   _: any,
-  args: { data: { userId: string; data: string } }
+  args: { data: { userId: string; data: any } }
 ) => {
   return await savePost(args.data);
 };

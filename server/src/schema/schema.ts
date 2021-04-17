@@ -96,7 +96,6 @@ export const typeDefs = gql`
     username: String!
     email: String!
     profile: Profile
-    posts: [Post]
     createdAt: DateTime!
   }
 
@@ -148,5 +147,6 @@ export const typeDefs = gql`
 
   type Query {
     users: [User]
+    profiles: [Profile]
   }
 `;

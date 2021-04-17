@@ -37,6 +37,14 @@ export async function getAllUser() {
   return users;
 }
 
+export async function getAllUsersWithProfile() {
+  const users = await prisma.user.findMany({
+    include: { profile: true },
+    orderBy: { createdAt: "asc" },
+  });
+  return users;
+}
+
 export async function getAllProfiles() {
   const profiles = await prisma.profile.findMany({});
   return profiles;

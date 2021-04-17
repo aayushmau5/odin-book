@@ -1,7 +1,7 @@
 import { users, user, signup } from "./user";
 import { posts, addPost } from "./post";
 import { Kind, GraphQLScalarType } from "graphql";
-import { getAllProfiles } from "../utils/db/user";
+import { getAllProfiles, getAllUsersWithProfile } from "../utils/db/user";
 
 // custom "DateTime" scalar
 const dateScalar = new GraphQLScalarType({
@@ -21,15 +21,23 @@ const dateScalar = new GraphQLScalarType({
   },
 });
 
+function checkForSelectionField(ctx: any, field: string): boolean {
+  const selections = ctx.fieldNodes[0].selectionSet.selections;
+  const result = selections.filter((data: any) => data.name.value === field);
+  return result.length !== 0 ? true : false;
+}
+
 export const resolvers = {
   DateTime: dateScalar,
   Query: {
-    users: {
-      id: "",
-      email: "",
-      username: "",
-      profile: "",
-      posts: "",
+    users: async (_: any, __: any, ___: any, ctx: any) => {
+      if (checkForSelectionField(ctx, "profile")) {
+        return await getAllUsersWithProfile();
+      }
+      return await users();
+    },
+    profiles: async () => {
+      return await getAllProfiles();
     },
   },
 };

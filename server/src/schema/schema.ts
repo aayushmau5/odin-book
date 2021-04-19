@@ -106,6 +106,7 @@ export const typeDefs = gql`
     display: String
     friends: [Profile]
     user: User!
+    posts: [Post]
     friendrequest_to: [Profile]
     friendrequest_by: [Profile]
   }

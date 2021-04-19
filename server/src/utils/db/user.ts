@@ -32,8 +32,13 @@ export async function getUserByEmail(email: string) {
   return user;
 }
 
-export async function getAllUser() {
-  const users = await prisma.user.findMany({ orderBy: { createdAt: "asc" } });
+export async function getAllUser({ profile }: { profile?: boolean }) {
+  const users = await prisma.user.findMany({
+    orderBy: { createdAt: "asc" },
+    include: {
+      profile: profile,
+    },
+  });
   return users;
 }
 
@@ -45,8 +50,8 @@ export async function getAllUsersWithProfile() {
   return users;
 }
 
-export async function getAllProfiles() {
-  const profiles = await prisma.profile.findMany({});
+export async function getAllProfiles({ posts }: { posts?: boolean }) {
+  const profiles = await prisma.profile.findMany({ include: { posts: posts } });
   return profiles;
 }
 

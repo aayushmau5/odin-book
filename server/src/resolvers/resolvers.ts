@@ -1,7 +1,6 @@
-import { users, user, signup } from "./user";
-import { posts, addPost } from "./post";
-import { Kind, GraphQLScalarType } from "graphql";
-import { getAllProfiles, getAllUsersWithProfile } from "../utils/db/user";
+import { Kind, GraphQLScalarType, GraphQLNonNull } from "graphql";
+import { getAllProfiles, getAllUser } from "../utils/db/user";
+import { parseResolveInfo } from "graphql-parse-resolve-info";
 
 // custom "DateTime" scalar
 const dateScalar = new GraphQLScalarType({
@@ -21,23 +20,48 @@ const dateScalar = new GraphQLScalarType({
   },
 });
 
-function checkForSelectionField(ctx: any, field: string): boolean {
-  const selections = ctx.fieldNodes[0].selectionSet.selections;
-  const result = selections.filter((data: any) => data.name.value === field);
-  return result.length !== 0 ? true : false;
+function checkForSelectionField(
+  info: any,
+  field: string,
+  selections: string[]
+): object {
+  const parsedInfo = parseResolveInfo(info);
+  const nestedFields: any = {};
+  if (!parsedInfo) return {};
+  const fieldsObject: any = parsedInfo.fieldsByTypeName[field];
+  selections;
+  const rootKeys = Object.keys(fieldsObject);
+  for (const key of rootKeys) {
+    const selectedField = fieldsObject[key].fieldsByTypeName;
+    if (Object.keys(selectedField).length !== 0) {
+      nestedFields[key] = true;
+    }
+  }
+
+  console.log(fieldsObject);
+  return {};
+  // return selections.reduce((acc, currentValue) => {
+  //   const value = currentValue.name.value;
+  //   if (fields.includes(value)) {
+  //     acc[value] = true;
+  //   }
+  //   return acc;
+  // }, {});
 }
 
 export const resolvers = {
   DateTime: dateScalar,
   Query: {
-    users: async (_: any, __: any, ___: any, ctx: any) => {
-      if (checkForSelectionField(ctx, "profile")) {
-        return await getAllUsersWithProfile();
-      }
-      return await users();
+    users: async (_: any, __: any, ___: any, info: any) => {
+      return await getAllUser(
+        checkForSelectionField(info, "User", ["Profile"])
+      );
     },
-    profiles: async () => {
-      return await getAllProfiles();
+    profiles: async (_: any, __: any, ___: any, info: any) => {
+      const parsedInfo = parseResolveInfo(info);
+      return await getAllProfiles(
+        checkForSelectionField(parsedInfo, "Profile", ["Posts"])
+      );
     },
   },
 };

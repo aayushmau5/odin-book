@@ -1,6 +1,7 @@
 import { Kind, GraphQLScalarType, GraphQLNonNull } from "graphql";
 import { getAllProfiles, getAllUser } from "../utils/db/user";
 import { parseResolveInfo } from "graphql-parse-resolve-info";
+import { flatten } from "flat";
 
 // custom "DateTime" scalar
 const dateScalar = new GraphQLScalarType({
@@ -20,33 +21,19 @@ const dateScalar = new GraphQLScalarType({
   },
 });
 
-function checkForSelectionField(
-  info: any,
-  field: string,
-  selections: string[]
-): object {
+function checkForSelectionField(info: any, fields: string[]): object {
+  const selections: any = {};
   const parsedInfo = parseResolveInfo(info);
-  const nestedFields: any = {};
   if (!parsedInfo) return {};
-  const fieldsObject: any = parsedInfo.fieldsByTypeName[field];
-  selections;
-  const rootKeys = Object.keys(fieldsObject);
-  for (const key of rootKeys) {
-    const selectedField = fieldsObject[key].fieldsByTypeName;
-    if (Object.keys(selectedField).length !== 0) {
-      nestedFields[key] = true;
-    }
-  }
-
-  console.log(fieldsObject);
-  return {};
-  // return selections.reduce((acc, currentValue) => {
-  //   const value = currentValue.name.value;
-  //   if (fields.includes(value)) {
-  //     acc[value] = true;
-  //   }
-  //   return acc;
-  // }, {});
+  flatten(parsedInfo, {
+    transformKey(key) {
+      if (fields.includes(key)) {
+        selections[key] = true;
+      }
+      return key;
+    },
+  });
+  return selections;
 }
 
 export const resolvers = {
@@ -54,13 +41,13 @@ export const resolvers = {
   Query: {
     users: async (_: any, __: any, ___: any, info: any) => {
       return await getAllUser(
-        checkForSelectionField(info, "User", ["Profile"])
+        checkForSelectionField(info, ["profile", "posts", "comments"])
       );
     },
     profiles: async (_: any, __: any, ___: any, info: any) => {
       const parsedInfo = parseResolveInfo(info);
       return await getAllProfiles(
-        checkForSelectionField(parsedInfo, "Profile", ["Posts"])
+        checkForSelectionField(parsedInfo, ["user", "posts", "comments"])
       );
     },
   },

@@ -16,15 +16,6 @@ export async function getUserWithProfile(userId: string) {
   return user;
 }
 
-export async function getUser(id: string) {
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-  });
-  return user;
-}
-
 export async function getUserByEmail(email: string) {
   const user = await prisma.user.findUnique({
     where: { email },
@@ -32,20 +23,74 @@ export async function getUserByEmail(email: string) {
   return user;
 }
 
-export async function getAllUser({ profile }: { profile?: boolean }) {
-  const users = await prisma.user.findMany({
-    orderBy: { createdAt: "asc" },
+export async function getUser(
+  id: string,
+  {
+    profile,
+    posts,
+    comments,
+  }: {
+    profile?: boolean;
+    posts?: boolean;
+    comments?: boolean;
+  }
+) {
+  return await prisma.user.findUnique({
+    where: { id },
     include: {
-      profile: profile,
+      profile: profile
+        ? {
+            include: {
+              posts: posts
+                ? {
+                    include: {
+                      comments: comments
+                        ? {
+                            orderBy: { createdAt: "desc" },
+                          }
+                        : false,
+                    },
+                    orderBy: { createdAt: "desc" },
+                  }
+                : false,
+            },
+          }
+        : false,
     },
   });
-  return users;
 }
 
-export async function getAllUsersWithProfile() {
+export async function getAllUser({
+  profile,
+  posts,
+  comments,
+}: {
+  profile?: boolean;
+  posts?: boolean;
+  comments?: boolean;
+}) {
   const users = await prisma.user.findMany({
-    include: { profile: true },
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: "desc" },
+    include: {
+      profile: profile
+        ? {
+            include: {
+              posts: posts
+                ? {
+                    include: {
+                      comments: comments
+                        ? {
+                            orderBy: { createdAt: "desc" },
+                          }
+                        : false,
+                    },
+                    orderBy: { createdAt: "desc" },
+                  }
+                : false,
+            },
+          }
+        : false,
+    },
   });
   return users;
 }

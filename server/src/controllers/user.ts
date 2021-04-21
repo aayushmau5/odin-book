@@ -45,13 +45,17 @@ export async function profileUpdate(profileId: string, data: optionalProfile) {
   return updatedProfile;
 }
 
-export async function login({ email, password }: Login) {
+export async function loginUser(
+  { email, password }: Login,
+  selections: object
+) {
   //TODO JWT and stuff
-  const user = await getUserByEmail(email);
+  password;
+  const user = await getUserByEmail(email, selections);
   if (!user) {
     const error = new ValidationError("User doesn't exist");
     error.status = 404;
     throw error;
   }
-  console.log(password);
+  return user;
 }

@@ -7,7 +7,7 @@ import {
   getAllProfiles,
   getProfile,
 } from "../utils/db/user";
-import { saveUser } from "../controllers/user";
+import { saveUser, loginUser } from "../controllers/user";
 
 const selectionsForUser = [
   "profile",
@@ -80,7 +80,21 @@ export const profile = async (
 
 export const signup = async (
   _parent: any,
-  args: { user: { username: string; email: string; password: string } }
+  args: { data: { username: string; email: string; password: string } }
 ) => {
-  return await saveUser(args.user);
+  // TODO Validate user input
+  return await saveUser(args.data);
+};
+
+export const login = async (
+  _parent: any,
+  args: { data: { email: string; password: string } },
+  _context: any,
+  info: any
+) => {
+  // TODO Validate user input
+  return await loginUser(
+    args.data,
+    checkForSelectionField(info, selectionsForUser)
+  );
 };

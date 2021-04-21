@@ -151,5 +151,10 @@ export const typeDefs = gql`
     user(id: ID!): User
     profiles: [Profile]
     profile(id: ID!): Profile
+    login(data: Login!): User
+  }
+
+  type Mutation {
+    signup(data: Signup!): UserWithoutProfile
   }
 `;

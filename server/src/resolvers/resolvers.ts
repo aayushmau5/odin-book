@@ -1,5 +1,5 @@
 import { Kind, GraphQLScalarType } from "graphql";
-import { users, profiles, user, profile } from "./user";
+import { users, profiles, user, profile, signup, login } from "./user";
 
 // Custome "DateTime" Scalar
 const dateScalar = new GraphQLScalarType({
@@ -26,5 +26,9 @@ export const resolvers = {
     user,
     profiles,
     profile,
+    login,
+  },
+  Mutation: {
+    signup,
   },
 };

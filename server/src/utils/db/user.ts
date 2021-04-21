@@ -18,9 +18,48 @@ interface profileSelections {
   friendrequests_to?: boolean;
 }
 
-export async function getUserByEmail(email: string) {
+export async function getUserByEmail(
+  email: string,
+  {
+    profile,
+    posts,
+    comments,
+    friends,
+    friends_posts,
+    friendrequests_to,
+  }: userSelections
+) {
   const user = await prisma.user.findUnique({
     where: { email },
+    include: {
+      profile: profile
+        ? {
+            include: {
+              posts: posts
+                ? {
+                    include: {
+                      comments: comments
+                        ? {
+                            orderBy: { createdAt: "desc" },
+                          }
+                        : false,
+                    },
+                    orderBy: { createdAt: "desc" },
+                  }
+                : false,
+              friends: friends
+                ? {
+                    include: {
+                      posts: friends_posts,
+                    },
+                  }
+                : false,
+              friendrequest_to: friendrequests_to,
+              friendrequest_by: friendrequests_to,
+            },
+          }
+        : false,
+    },
   });
   return user;
 }

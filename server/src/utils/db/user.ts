@@ -1,19 +1,21 @@
 import { prisma } from "./db";
 
-export async function getUserWithProfile(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    include: {
-      profile: {
-        include: {
-          posts: true,
-        },
-      },
-    },
-  });
-  return user;
+interface userSelections {
+  profile?: boolean;
+  posts?: boolean;
+  comments?: boolean;
+  friends?: boolean;
+  friends_posts?: boolean;
+  friendrequests_to?: boolean;
+}
+
+interface profileSelections {
+  user?: boolean;
+  posts?: boolean;
+  comments?: boolean;
+  friends?: boolean;
+  friends_posts?: boolean;
+  friendrequests_to?: boolean;
 }
 
 export async function getUserByEmail(email: string) {
@@ -29,11 +31,10 @@ export async function getUser(
     profile,
     posts,
     comments,
-  }: {
-    profile?: boolean;
-    posts?: boolean;
-    comments?: boolean;
-  }
+    friends,
+    friends_posts,
+    friendrequests_to,
+  }: userSelections
 ) {
   return await prisma.user.findUnique({
     where: { id },
@@ -53,6 +54,15 @@ export async function getUser(
                     orderBy: { createdAt: "desc" },
                   }
                 : false,
+              friends: friends
+                ? {
+                    include: {
+                      posts: friends_posts,
+                    },
+                  }
+                : false,
+              friendrequest_to: friendrequests_to,
+              friendrequest_by: friendrequests_to,
             },
           }
         : false,
@@ -64,11 +74,10 @@ export async function getAllUser({
   profile,
   posts,
   comments,
-}: {
-  profile?: boolean;
-  posts?: boolean;
-  comments?: boolean;
-}) {
+  friends,
+  friends_posts,
+  friendrequests_to,
+}: userSelections) {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: {
@@ -87,6 +96,15 @@ export async function getAllUser({
                     orderBy: { createdAt: "desc" },
                   }
                 : false,
+              friends: friends
+                ? {
+                    include: {
+                      posts: friends_posts,
+                    },
+                  }
+                : false,
+              friendrequest_to: friendrequests_to,
+              friendrequest_by: friendrequests_to,
             },
           }
         : false,
@@ -95,15 +113,99 @@ export async function getAllUser({
   return users;
 }
 
-export async function getAllProfiles({ posts }: { posts?: boolean }) {
-  const profiles = await prisma.profile.findMany({ include: { posts: posts } });
+export async function getAllProfiles({
+  user,
+  posts,
+  comments,
+  friends,
+  friends_posts,
+  friendrequests_to,
+}: profileSelections) {
+  const profiles = await prisma.profile.findMany({
+    include: {
+      user: user,
+      posts: posts
+        ? {
+            include: {
+              comments: comments,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          }
+        : false,
+      friends: friends
+        ? {
+            include: {
+              user: true,
+              posts: friends_posts,
+            },
+          }
+        : false,
+      friendrequest_to: friendrequests_to
+        ? {
+            include: {
+              user: true,
+            },
+          }
+        : false,
+      friendrequest_by: friendrequests_to
+        ? {
+            include: {
+              user: true,
+            },
+          }
+        : false,
+    },
+  });
   return profiles;
+}
+
+export async function getProfile(
+  profileId: string,
+  {
+    user,
+    posts,
+    comments,
+    friends,
+    friends_posts,
+    friendrequests_to,
+  }: profileSelections
+) {
+  return await prisma.profile.findUnique({
+    where: {
+      id: profileId,
+    },
+    include: {
+      user: user,
+      posts: posts
+        ? {
+            include: {
+              comments: comments,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          }
+        : false,
+      friends: friends
+        ? {
+            include: {
+              posts: friends_posts,
+            },
+          }
+        : false,
+      friendrequest_to: friendrequests_to,
+      friendrequest_by: friendrequests_to,
+    },
+  });
 }
 
 export async function getAllUserExcept(id: string) {
   const users = await prisma.user.findMany({
     where: { NOT: { id } },
-    orderBy: { createdAt: "asc" },
+    include: { profile: true },
+    orderBy: { createdAt: "desc" },
   });
   return users;
 }
@@ -181,45 +283,4 @@ export async function deleteUser(userId: string) {
     where: { id: userId },
   });
   return deletedUser;
-}
-
-export async function getUserWithField(
-  userId: string,
-  data: {
-    profile?: boolean;
-    posts?: boolean;
-    commentsOnPost?: boolean;
-    friends?: boolean;
-    comments?: boolean;
-  }
-) {
-  return await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    include: {
-      profile: data.profile
-        ? {
-            include: {
-              friends: data.friends ? true : false,
-              posts: data.posts
-                ? {
-                    include: {
-                      comments: data.commentsOnPost ? true : false,
-                    },
-                  }
-                : {},
-              comments: data.comments
-                ? {
-                    include: {
-                      inReplyTo: true,
-                      post: true,
-                    },
-                  }
-                : false,
-            },
-          }
-        : false,
-    },
-  });
 }

@@ -22,7 +22,7 @@ const main = async () => {
   app.use((_, res) => {
     res.status(200);
     res.json({
-      message: "Hello, World!",
+      message: "Go to /graphql endpoint for GraphQL Server",
     });
   });
 

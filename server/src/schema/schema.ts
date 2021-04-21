@@ -1,68 +1,7 @@
 import { gql } from "apollo-server-express";
 
 const DemotypeDefs = `
-  scalar DateTime
-  
-  type User {
-    id: ID!
-    username: String!
-    email: String!
-    profile: Profile
-    posts: [Post]
-    createdAt: DateTime!
-  }
-
-  type Profile {
-    id: ID!
-    firstname: String!
-    lastname: String!
-    display: String
-    friends: [Profile]
-    user: User!
-    friendrequest_to: [Profile]
-    friendrequest_by: [Profile]
-  }
-
-  type Post {
-    id: ID!
-    data: String
-    image: String
-    author: User!
-    likes: Int!
-    comments: [Comment]
-    createdAt: DateTime!
-  }
-
-  type Comment {
-    id: ID!
-    data: String!
-    post: Post!
-    author: Profile!
-    inReplyTo: Comment
-    createdAt: DateTime!
-  }
-
-  input Signup {
-    username: String!
-    email: String!
-    password: String!
-  }
-
-  input Login {
-    email: String!
-    password: String!
-  }
-
-  input AddPost {
-    userId: ID!
-    data: String!
-  }
-
   type Query {
-    // user(id: ID!): User
-    users: [User]
-    // profiles: [Profile]
-    // profile(id: ID!): Profile
     // postsByProfile(id: ID!): [Post]
     // feedForProfile(id: ID!): [Post]
     // getFriends(id: ID!): [Profile]
@@ -88,39 +27,87 @@ const DemotypeDefs = `
   // }
 `;
 
-export const typeDefs = gql`
-  scalar DateTime
-
+const userTypeDefs = `
   type User {
     id: ID!
     username: String!
     email: String!
-    profile: Profile
+    profile: ProfileWithoutUser
     createdAt: DateTime!
   }
 
+  type UserWithoutProfile {
+    id: ID!
+    username: String!
+    email: String!
+    createdAt: DateTime!
+  }
+`;
+
+const profileTypeDefs = `
   type Profile {
     id: ID!
     firstname: String!
     lastname: String!
     display: String
-    friends: [Profile]
-    user: User!
+    friends: [friendsProfile]
+    user: UserWithoutProfile!
     posts: [Post]
-    friendrequest_to: [Profile]
-    friendrequest_by: [Profile]
+    friendrequest_to: [requestProfile]
+    friendrequest_by: [requestProfile]
   }
 
+  type ProfileWithoutUser {
+    id: ID!
+    firstname: String!
+    lastname: String!
+    display: String
+    friends: [friendsProfile]
+    posts: [PostWithoutAuthor]
+    friendrequest_to: [requestProfile]
+    friendrequest_by: [requestProfile]
+  }
+
+  type friendsProfile {
+    id: ID!
+    firstname: String!
+    lastname: String!
+    display: String
+    user: UserWithoutProfile!
+    friends_posts: [PostWithoutAuthor]
+  }
+
+  type requestProfile {
+    id: ID!
+    firstname: String!
+    lastname: String!
+    display: String
+    user: UserWithoutProfile!
+  }
+`;
+
+const postsTypeDefs = `
   type Post {
     id: ID!
     data: String
     image: String
-    author: User!
+    author: Profile!
     likes: Int!
     comments: [Comment]
     createdAt: DateTime!
   }
 
+  type PostWithoutAuthor {
+    id: ID!
+    data: String
+    image: String
+    likes: Int!
+    comments: [Comment]
+    createdAt: DateTime!
+  }
+`;
+
+const commentTypeDefs = `
   type Comment {
     id: ID!
     data: String!
@@ -129,7 +116,9 @@ export const typeDefs = gql`
     inReplyTo: Comment
     createdAt: DateTime!
   }
+`;
 
+const inputs = `
   input Signup {
     username: String!
     email: String!
@@ -142,12 +131,25 @@ export const typeDefs = gql`
   }
 
   input AddPost {
-    userId: ID!
     data: String!
   }
 
+`;
+
+export const typeDefs = gql`
+  scalar DateTime
+
+  ${userTypeDefs}
+  ${profileTypeDefs}
+  ${postsTypeDefs}
+  ${commentTypeDefs}
+
+  ${inputs}
+
   type Query {
     users: [User]
+    user(id: ID!): User
     profiles: [Profile]
+    profile(id: ID!): Profile
   }
 `;

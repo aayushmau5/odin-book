@@ -1,7 +1,6 @@
 import {
   getAllUser,
   getAllProfiles,
-  getUserWithField,
   addUser,
   setProfile,
 } from "./utils/db/user";

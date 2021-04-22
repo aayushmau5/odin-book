@@ -1,30 +1,23 @@
 import { gql } from "apollo-server-express";
 
 const DemotypeDefs = `
-  type Query {
-    // postsByProfile(id: ID!): [Post]
-    // feedForProfile(id: ID!): [Post]
-    // getFriends(id: ID!): [Profile]
-    // getFriendRequests(id: ID!): [Profile]
+  type Mutation {
+    addPost(data: AddPost!): User
+    likePost(postId): Count
+    dislikePost(postId): Count
+    addProfile()
+    updateProfile()
+    addCommentOnPost(): Comment
+    addCommentOnComment(): Comment
+    sendFriendRequest()
+    cancelFriendRequest()
+    acceptFriendRequest()
+    unfriend()
   }
 
-  // type Mutation {
-  //   signup(user: Signup!): User
-  //   login(user: Login!): User
-  //   addPost(data: AddPost!): User
-  //   addProfile()
-  //   updateProfile()
-  //   addCommentOnPost(): Comment
-  //   addCommentOnComment(): Comment
-  //   sendFriendRequest()
-  //   cancelFriendRequest()
-  //   acceptFriendRequest()
-  //   unfriend()
-  // }
-
-  // type Subscription {
-  //   chat()
-  // }
+  type Subscription {
+    chat()
+  }
 `;
 
 const userTypeDefs = `
@@ -151,6 +144,11 @@ export const typeDefs = gql`
     user(id: ID!): User
     profiles: [Profile]
     profile(id: ID!): Profile
+    posts: [Post]
+    postsByProfile(id: ID!): [Post]
+    feed: [Post]
+    getFriends(id: ID!): [Profile]
+    getFriendRequests: [Profile]
     login(data: Login!): User
   }
 

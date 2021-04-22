@@ -6,8 +6,9 @@ import {
   getUser,
   getAllProfiles,
   getProfile,
+  addUser,
+  getUserByEmail,
 } from "../utils/db/user";
-import { saveUser, loginUser } from "../controllers/user";
 
 const selectionsForUser = [
   "profile",
@@ -83,7 +84,10 @@ export const signup = async (
   args: { data: { username: string; email: string; password: string } }
 ) => {
   // TODO Validate user input
-  return await saveUser(args.data);
+  //TODO hash the password before saving
+  const { username, email, password } = args.data;
+  const hashedPassword = password;
+  return await addUser(username, email, hashedPassword);
 };
 
 export const login = async (
@@ -93,8 +97,16 @@ export const login = async (
   info: any
 ) => {
   // TODO Validate user input
-  return await loginUser(
-    args.data,
+  //TODO JWT and stuff
+  const { email, password } = args.data;
+  const user = await getUserByEmail(
+    email,
     checkForSelectionField(info, selectionsForUser)
   );
+  if (!user) {
+    const error = new ValidationError("User doesn't exist");
+    error.status = 404;
+    throw error;
+  }
+  return user;
 };

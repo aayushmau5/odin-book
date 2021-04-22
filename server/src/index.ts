@@ -17,20 +17,22 @@ const main = async () => {
   app.use(cors({ credentials: true }));
   app.use(express.json());
 
-  apolloserver.applyMiddleware({ app, cors: false });
+  apolloserver.applyMiddleware({ app, path: "/", cors: false });
 
   app.use((_, res) => {
     res.status(200);
     res.json({
-      message: "Go to /graphql endpoint for GraphQL Server",
+      message: "Go to / endpoint for GraphQL Server",
     });
   });
 
-  app.listen(PORT, () =>
-    console.log(
-      `Listening on PORT http://localhost:${PORT}${apolloserver.graphqlPath}`
-    )
-  );
+  app.listen(PORT, () => {
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `Listening on PORT http://localhost:${PORT}${apolloserver.graphqlPath}`
+      );
+    }
+  });
 };
 
 main().catch((err) => console.log(err));

@@ -9,7 +9,7 @@ export async function getAllPosts() {
   });
 }
 
-export async function getPostByUser(id: string) {
+export async function getPostByProfile(id: string) {
   return await prisma.post.findMany({
     where: {
       authorId: id,
@@ -20,12 +20,12 @@ export async function getPostByUser(id: string) {
   });
 }
 
-export async function generateFeedForUser(userId: string) {
+export async function generateFeedForUser(profileId: string) {
   const userFriends = await prisma.profile.findUnique({
-    where: { id: userId },
+    where: { id: profileId },
     select: { friends: { select: { id: true } } },
   });
-  if (!userFriends) return false;
+  if (!userFriends) return false; //TODO throw Error
   const friendsId = userFriends.friends.map((data) => data.id);
   const feedPosts = await prisma.post.findMany({
     where: {
@@ -35,13 +35,13 @@ export async function generateFeedForUser(userId: string) {
     },
     include: { author: true, comments: true },
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
   });
   return feedPosts;
 }
 
-export async function addPost(
+export async function savePost(
   userId: string,
   postData: { textData?: string; imageUrl?: string }
 ) {

@@ -1,5 +1,8 @@
 import { Kind, GraphQLScalarType } from "graphql";
+
 import { users, profiles, user, profile, signup, login } from "./user";
+import { posts, postsByProfile, feed } from "./post";
+import { getFriends, getFriendRequests } from "./friends";
 
 // Custome "DateTime" Scalar
 const dateScalar = new GraphQLScalarType({
@@ -26,6 +29,11 @@ export const resolvers = {
     user,
     profiles,
     profile,
+    posts,
+    postsByProfile,
+    feed,
+    getFriends,
+    getFriendRequests,
     login,
   },
   Mutation: {

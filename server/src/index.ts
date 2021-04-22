@@ -17,12 +17,12 @@ const main = async () => {
   app.use(cors({ credentials: true }));
   app.use(express.json());
 
-  apolloserver.applyMiddleware({ app, path: "/", cors: false });
+  apolloserver.applyMiddleware({ app, cors: false });
 
   app.use((_, res) => {
     res.status(200);
     res.json({
-      message: "Go to / endpoint for GraphQL Server",
+      message: "Go to /graphql endpoint for GraphQL Server",
     });
   });
 

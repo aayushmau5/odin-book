@@ -1,21 +1,29 @@
 import { prisma } from "./db";
+import { postSelection } from "./selections";
 
-export async function getAllPosts() {
+export async function getAllPosts(selections: {
+  author?: boolean;
+  user?: boolean;
+}) {
   return await prisma.post.findMany({
-    include: { author: true },
+    include: postSelection(selections),
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
   });
 }
 
-export async function getPostByProfile(id: string) {
+export async function getPostByProfile(
+  id: string,
+  selections: { author?: boolean; user?: boolean }
+) {
   return await prisma.post.findMany({
     where: {
       authorId: id,
     },
+    include: postSelection(selections),
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
   });
 }
@@ -33,7 +41,21 @@ export async function generateFeedForUser(profileId: string) {
         in: friendsId,
       },
     },
-    include: { author: true, comments: true },
+    include: {
+      _count: {
+        select: { comments: true },
+      },
+      author: {
+        include: {
+          user: true,
+        },
+      },
+      comments: {
+        include: {
+          author: true,
+        },
+      },
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -60,7 +82,9 @@ export async function savePost(
 }
 
 export async function removePost(postId: string) {
-  const removedPost = await prisma.post.delete({ where: { id: postId } });
+  const removedPost = await prisma.post.delete({
+    where: { id: postId },
+  });
   return removedPost;
 }
 

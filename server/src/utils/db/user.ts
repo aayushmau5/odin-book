@@ -1,242 +1,52 @@
 import { prisma } from "./db";
-
-interface userSelections {
-  profile?: boolean;
-  posts?: boolean;
-  comments?: boolean;
-  friends?: boolean;
-  friends_posts?: boolean;
-  friendrequests_to?: boolean;
-}
-
-interface profileSelections {
-  user?: boolean;
-  posts?: boolean;
-  comments?: boolean;
-  friends?: boolean;
-  friends_posts?: boolean;
-  friendrequests_to?: boolean;
-}
+import {
+  userSelectionsInterface,
+  profileSelectionsInterface,
+} from "../../types/userInterface";
+import { userSelection, profileSelection } from "./selections";
 
 export async function getUserByEmail(
   email: string,
-  {
-    profile,
-    posts,
-    comments,
-    friends,
-    friends_posts,
-    friendrequests_to,
-  }: userSelections
+  selections: userSelectionsInterface
 ) {
   const user = await prisma.user.findUnique({
     where: { email },
-    include: {
-      profile: profile
-        ? {
-            include: {
-              posts: posts
-                ? {
-                    include: {
-                      comments: comments
-                        ? {
-                            orderBy: { createdAt: "desc" },
-                          }
-                        : false,
-                    },
-                    orderBy: { createdAt: "desc" },
-                  }
-                : false,
-              friends: friends
-                ? {
-                    include: {
-                      posts: friends_posts,
-                    },
-                  }
-                : false,
-              friendrequest_to: friendrequests_to,
-              friendrequest_by: friendrequests_to,
-            },
-          }
-        : false,
-    },
+    include: userSelection(selections),
   });
   return user;
 }
 
-export async function getUser(
-  id: string,
-  {
-    profile,
-    posts,
-    comments,
-    friends,
-    friends_posts,
-    friendrequests_to,
-  }: userSelections
-) {
+export async function getUser(id: string, selections: userSelectionsInterface) {
   return await prisma.user.findUnique({
     where: { id },
-    include: {
-      profile: profile
-        ? {
-            include: {
-              posts: posts
-                ? {
-                    include: {
-                      comments: comments
-                        ? {
-                            orderBy: { createdAt: "desc" },
-                          }
-                        : false,
-                    },
-                    orderBy: { createdAt: "desc" },
-                  }
-                : false,
-              friends: friends
-                ? {
-                    include: {
-                      posts: friends_posts,
-                    },
-                  }
-                : false,
-              friendrequest_to: friendrequests_to,
-              friendrequest_by: friendrequests_to,
-            },
-          }
-        : false,
-    },
+    include: userSelection(selections),
   });
 }
 
-export async function getAllUser({
-  profile,
-  posts,
-  comments,
-  friends,
-  friends_posts,
-  friendrequests_to,
-}: userSelections) {
+export async function getAllUser(selections: userSelectionsInterface) {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
-    include: {
-      profile: profile
-        ? {
-            include: {
-              posts: posts
-                ? {
-                    include: {
-                      comments: comments
-                        ? {
-                            orderBy: { createdAt: "desc" },
-                          }
-                        : false,
-                    },
-                    orderBy: { createdAt: "desc" },
-                  }
-                : false,
-              friends: friends
-                ? {
-                    include: {
-                      posts: friends_posts,
-                    },
-                  }
-                : false,
-              friendrequest_to: friendrequests_to,
-              friendrequest_by: friendrequests_to,
-            },
-          }
-        : false,
-    },
+    include: userSelection(selections),
   });
   return users;
 }
 
-export async function getAllProfiles({
-  user,
-  posts,
-  comments,
-  friends,
-  friends_posts,
-  friendrequests_to,
-}: profileSelections) {
+export async function getAllProfiles(selections: profileSelectionsInterface) {
   const profiles = await prisma.profile.findMany({
-    include: {
-      user: user,
-      posts: posts
-        ? {
-            include: {
-              comments: comments,
-            },
-            orderBy: {
-              createdAt: "desc",
-            },
-          }
-        : false,
-      friends: friends
-        ? {
-            include: {
-              user: true,
-              posts: friends_posts,
-            },
-          }
-        : false,
-      friendrequest_to: friendrequests_to
-        ? {
-            include: {
-              user: true,
-            },
-          }
-        : false,
-      friendrequest_by: friendrequests_to
-        ? {
-            include: {
-              user: true,
-            },
-          }
-        : false,
-    },
+    include: profileSelection(selections),
   });
   return profiles;
 }
 
 export async function getProfile(
   profileId: string,
-  {
-    user,
-    posts,
-    comments,
-    friends,
-    friends_posts,
-    friendrequests_to,
-  }: profileSelections
+  selections: profileSelectionsInterface
 ) {
   return await prisma.profile.findUnique({
     where: {
       id: profileId,
     },
-    include: {
-      user: user,
-      posts: posts
-        ? {
-            include: {
-              comments: comments,
-            },
-            orderBy: {
-              createdAt: "desc",
-            },
-          }
-        : false,
-      friends: friends
-        ? {
-            include: {
-              posts: friends_posts,
-            },
-          }
-        : false,
-      friendrequest_to: friendrequests_to,
-      friendrequest_by: friendrequests_to,
-    },
+    include: profileSelection(selections),
   });
 }
 

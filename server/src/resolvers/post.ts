@@ -4,9 +4,12 @@ import {
   getPostByProfile,
   generateFeedForUser,
 } from "../utils/db/post";
+import { checkForSelectionField } from "../utils/getSelections";
 
-export const posts = async () => {
-  return await getAllPosts();
+const postSelections = ["author", "user"];
+
+export const posts = async (_: any, _args: any, _context: any, info: any) => {
+  return await getAllPosts(checkForSelectionField(info, postSelections));
 };
 
 export const addPost = async (_: any, args: { data: { data: any } }) => {
@@ -17,8 +20,16 @@ export const addPost = async (_: any, args: { data: { data: any } }) => {
   return await savePost(userId, data);
 };
 
-export const postsByProfile = async (_: any, { id }: { id: string }) => {
-  return await getPostByProfile(id);
+export const postsByProfile = async (
+  _: any,
+  { id }: { id: string },
+  _context: any,
+  info: any
+) => {
+  return await getPostByProfile(
+    id,
+    checkForSelectionField(info, postSelections)
+  );
 };
 
 export const feed = async () => {

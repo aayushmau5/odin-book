@@ -89,14 +89,25 @@ export async function deleteFriendRequest(
   return true;
 }
 
-export async function listFriendRequests(id: string) {
+export async function listFriendRequests(
+  id: string,
+  { user }: { user?: boolean }
+) {
   return await prisma.profile.findUnique({
     where: {
       id,
     },
     select: {
-      friendrequest_by: true,
-      friendrequest_to: true,
+      friendrequest_by: {
+        include: {
+          user: user,
+        },
+      },
+      friendrequest_to: {
+        include: {
+          user: user,
+        },
+      },
     },
   });
 }
@@ -187,9 +198,18 @@ export async function unfriend(profile1Id: string, profile2Id: string) {
   return true;
 }
 
-export async function listFriends(profileId: string) {
+export async function listFriends(
+  profileId: string,
+  { user }: { user?: boolean }
+) {
   return await prisma.profile.findUnique({
     where: { id: profileId },
-    select: { friends: true },
+    select: {
+      friends: {
+        include: {
+          user: user,
+        },
+      },
+    },
   });
 }

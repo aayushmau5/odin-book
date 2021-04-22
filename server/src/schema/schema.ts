@@ -127,6 +127,12 @@ const inputs = `
     data: String!
   }
 
+  input ProfileData {
+    firstname: String!
+    lastname: String!
+    display: String!
+  }
+
 `;
 
 export const typeDefs = gql`
@@ -145,14 +151,15 @@ export const typeDefs = gql`
     profiles: [Profile]
     profile(id: ID!): Profile
     posts: [Post]
-    postsByProfile(id: ID!): [Post]
+    postsByProfile(profileId: ID!): [Post]
     feed: [Post]
-    getFriends(id: ID!): [Profile]
+    getFriends(profileId: ID!): [Profile]
     getFriendRequests: [Profile]
     login(data: Login!): User
   }
 
   type Mutation {
     signup(data: Signup!): UserWithoutProfile
+    setProfile(data: ProfileData!): Profile
   }
 `;

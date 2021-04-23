@@ -3,7 +3,10 @@ import {
   getAllPosts,
   getPostByProfile,
   generateFeedForUser,
+  increaseLike,
+  decreaseLike,
 } from "../utils/db/post";
+import { getProfileId } from "../utils/db/user";
 import { checkForSelectionField } from "../utils/getSelections";
 
 const postSelections = ["author", "user"];
@@ -20,14 +23,15 @@ export const addPost = async (_: any, args: { data: { data: any } }) => {
   return await savePost(userId, data);
 };
 
-export const postsByProfile = async (
+export const postsByUser = async (
   _: any,
   { id }: { id: string },
   _context: any,
   info: any
 ) => {
+  const profileId = await getProfileId(id);
   return await getPostByProfile(
-    id,
+    profileId,
     checkForSelectionField(info, postSelections)
   );
 };
@@ -35,5 +39,17 @@ export const postsByProfile = async (
 export const feed = async () => {
   // GET ID from Auth
   const id = "";
-  return await generateFeedForUser(id);
+  const profileId = await getProfileId(id);
+  return await generateFeedForUser(profileId);
 };
+
+export const likePost = async (_: any, { postId }: { postId: any }) => {
+  return await increaseLike(postId);
+};
+
+export const dislikePost = async (_: any, { postId }: { postId: any }) => {
+  return await decreaseLike(postId);
+};
+
+export const addCommentOnPost = () => {};
+export const addCommentOnComment = () => {};

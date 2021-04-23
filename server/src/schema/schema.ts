@@ -1,25 +1,5 @@
 import { gql } from "apollo-server-express";
 
-const DemotypeDefs = `
-  type Mutation {
-    addPost(data: AddPost!): User
-    likePost(postId): Count
-    dislikePost(postId): Count
-    addProfile()
-    updateProfile()
-    addCommentOnPost(): Comment
-    addCommentOnComment(): Comment
-    sendFriendRequest()
-    cancelFriendRequest()
-    acceptFriendRequest()
-    unfriend()
-  }
-
-  type Subscription {
-    chat()
-  }
-`;
-
 const userTypeDefs = `
   type User {
     id: ID!
@@ -50,6 +30,13 @@ const profileTypeDefs = `
     friendrequest_by: [requestProfile]
   }
 
+  type ChangedProfile {
+    id: ID!
+    firstname: String!
+    lastname: String!
+    display: String
+  }
+
   type ProfileWithoutUser {
     id: ID!
     firstname: String!
@@ -60,7 +47,9 @@ const profileTypeDefs = `
     friendrequest_to: [requestProfile]
     friendrequest_by: [requestProfile]
   }
+`;
 
+const friendsTypeDefs = `
   type friendsProfile {
     id: ID!
     firstname: String!
@@ -76,6 +65,16 @@ const profileTypeDefs = `
     lastname: String!
     display: String
     user: UserWithoutProfile!
+  }
+
+  type FriendRequests {
+    id: ID!
+    friendrequest_to: [requestProfile]
+    friendrequest_by: [requestProfile]
+  }
+
+  type AcceptedRequests {
+    friends: [requestProfile]
   }
 `;
 
@@ -97,6 +96,10 @@ const postsTypeDefs = `
     likes: Int!
     comments: [Comment]
     createdAt: DateTime!
+  }
+
+  type LikeDislike {
+    likes: Int!
   }
 `;
 
@@ -124,7 +127,8 @@ const inputs = `
   }
 
   input AddPost {
-    data: String!
+    text: String
+    image: String
   }
 
   input ProfileData {
@@ -140,6 +144,7 @@ export const typeDefs = gql`
 
   ${userTypeDefs}
   ${profileTypeDefs}
+  ${friendsTypeDefs}
   ${postsTypeDefs}
   ${commentTypeDefs}
 
@@ -148,18 +153,24 @@ export const typeDefs = gql`
   type Query {
     users: [User]
     user(id: ID!): User
-    profiles: [Profile]
-    profile(id: ID!): Profile
     posts: [Post]
-    postsByProfile(profileId: ID!): [Post]
+    postsByUser(id: ID!): [Post]
     feed: [Post]
-    getFriends(profileId: ID!): [Profile]
-    getFriendRequests: [Profile]
     login(data: Login!): User
   }
 
   type Mutation {
     signup(data: Signup!): UserWithoutProfile
-    setProfile(data: ProfileData!): Profile
+    addProfile(data: ProfileData!): ChangedProfile!
+    updateProfile(data: ProfileData!): ChangedProfile!
+    addPost(data: AddPost!): Post!
+    addCommentOnPost(postId: ID!, data: String!): Comment!
+    addCommentOnComment(commentId: ID!, data: String!): Comment!
+    sendFriendRequest(profileId: ID!): [FriendRequests]
+    cancelFriendRequest(profileId: ID!): [FriendRequests]
+    acceptFriendRequest(profileId: ID!): [AcceptedRequests]
+    unfriend(profileId: ID!): [AcceptedRequests]
+    likePost(postId: ID!): LikeDislike!
+    dislikePost(postId: ID!): LikeDislike!
   }
 `;

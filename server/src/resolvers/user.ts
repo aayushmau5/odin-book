@@ -4,10 +4,11 @@ import { checkForSelectionField } from "../utils/getSelections";
 import {
   getAllUser,
   getUser,
-  getAllProfiles,
-  getProfile,
   addUser,
   getUserByEmail,
+  setProfile,
+  updateCommonProfile,
+  getProfileId,
 } from "../utils/db/user";
 
 const selectionsForUser = [
@@ -51,32 +52,21 @@ export const user = async (
   }
 };
 
-export const profiles = async (
-  _parent: any,
-  _args: any,
-  _context: any,
-  info: any
+export const addProfile = async (
+  _: any,
+  { data }: { data: { firstname: string; lastname: string; display: string } }
 ) => {
-  return await getAllProfiles(
-    checkForSelectionField(info, selectionsForProfile)
-  );
+  let userId = "";
+  return await setProfile(userId, data);
 };
 
-export const profile = async (
-  _parent: any,
-  { id }: { id: string },
-  _context: any,
-  info: any
+export const updateProfile = async (
+  _: any,
+  { data }: { data: { firstname: string; lastname: string; display: string } }
 ) => {
-  try {
-    return await getProfile(
-      id,
-      checkForSelectionField(info, selectionsForProfile)
-    );
-  } catch (err) {
-    console.log(err);
-    return new ValidationError("Invalid Id");
-  }
+  let userId = "";
+  let profileId = await getProfileId(userId);
+  return await updateCommonProfile(profileId, data);
 };
 
 export const signup = async (

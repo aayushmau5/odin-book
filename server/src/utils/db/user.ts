@@ -31,25 +31,6 @@ export async function getAllUser(selections: userSelectionsInterface) {
   return users;
 }
 
-export async function getAllProfiles(selections: profileSelectionsInterface) {
-  const profiles = await prisma.profile.findMany({
-    include: profileSelection(selections),
-  });
-  return profiles;
-}
-
-export async function getProfile(
-  profileId: string,
-  selections: profileSelectionsInterface
-) {
-  return await prisma.profile.findUnique({
-    where: {
-      id: profileId,
-    },
-    include: profileSelection(selections),
-  });
-}
-
 export async function getAllUserExcept(id: string) {
   const users = await prisma.user.findMany({
     where: { NOT: { id } },
@@ -132,4 +113,17 @@ export async function deleteUser(userId: string) {
     where: { id: userId },
   });
   return deletedUser;
+}
+
+export async function getProfileId(userId: string) {
+  const profile: any = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      profile: true,
+    },
+  });
+  if (!profile) {
+    throw new Error("Profile doesn't exist");
+  }
+  return profile.profile.id;
 }

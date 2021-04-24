@@ -19,14 +19,14 @@ const main = async () => {
       //   const authHeader = req.headers["authorization"];
       //   [, token] = authHeader.split(" ");
       // }
-      let userId;
+      let currentUserId;
       if (req && req.headers["user"]) {
-        userId = req.headers["user"];
+        currentUserId = req.headers["user"];
       }
       return {
         req,
         res,
-        userId,
+        currentUserId,
         // token,
       };
     },

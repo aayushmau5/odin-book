@@ -2,7 +2,7 @@ import { PostInput, SelectionsOnPost } from "../../types/PostTypes";
 import { prisma } from "./db";
 import { postSelection } from "./selections";
 
-export async function getAllPosts(selections: SelectionsOnPost) {
+export async function db_getAllPosts(selections: SelectionsOnPost) {
   return await prisma.post.findMany({
     include: postSelection(selections),
     orderBy: {

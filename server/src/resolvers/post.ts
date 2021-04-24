@@ -7,7 +7,7 @@ import {
   removeComment,
 } from "../utils/db/comment";
 import {
-  getAllPosts,
+  db_getAllPosts,
   getPostByProfile,
   generateFeedForUser,
   increaseLike,
@@ -21,81 +21,80 @@ import { checkForSelectionField } from "../utils/getSelections";
 
 const postSelections = ["author", "user"];
 
-export const posts = async (_: any, __: any, ___: any, info: any) => {
-  return await getAllPosts(checkForSelectionField(info, postSelections));
+export const getAllPosts = async (_: any, __: any, ___: any, info: any) => {
+  return await db_getAllPosts(checkForSelectionField(info, postSelections));
 };
 
-export const addPost = async (
+export const createPost = async (
   _: any,
   { data }: { data: PostInput },
-  { profileId }: { profileId: string }
+  { currentProfileId }: { currentProfileId: string }
 ) => {
-  return await savePost(profileId, data);
+  return await savePost(currentProfileId, data);
 };
 
-export const postsByUser = async (
+export const getAllPostsByUser = async (
   _: any,
-  { id }: { id: string },
+  { userId }: { userId: string },
   __: any,
   info: any
 ) => {
-  const profileId = await getProfileId(id);
+  const profileId = await getProfileId(userId);
   return await getPostByProfile(
     profileId,
     checkForSelectionField(info, postSelections)
   );
 };
 
-export const feed = async (_: any, __: any, { userId }: { userId: string }) => {
-  const profileId = await getProfileId(userId);
-  return await generateFeedForUser(profileId);
+export const getFeed = async (
+  _: any,
+  __: any,
+  { currentProfileId }: { currentProfileId: string }
+) => {
+  return await generateFeedForUser(currentProfileId);
 };
 
 export const likePost = async (
   _: any,
   { postId }: { postId: string },
-  { userId }: { userId: string }
+  { currentProfileId }: { currentProfileId: string }
 ) => {
-  const profileId = await getProfileId(userId);
-  const data = await increaseLike(profileId, postId);
+  const data = await increaseLike(currentProfileId, postId);
   return { liked_by: data.likes, likes: data._count?.likes };
 };
 
 export const dislikePost = async (
   _: any,
   { postId }: { postId: any },
-  { userId }: { userId: string }
+  { currentProfileId }: { currentProfileId: string }
 ) => {
-  const profileId = await getProfileId(userId);
-  const data = await decreaseLike(profileId, postId);
+  const data = await decreaseLike(currentProfileId, postId);
   return { liked_by: data.likes, likes: data._count?.likes };
 };
 
-export const addCommentOnPost = async (
+export const createCommentOnPost = async (
   _: any,
   { postId, data }: PostComment,
-  { userId }: { userId: string }
+  { currentProfileId }: { currentProfileId: string }
 ) => {
-  const profileId = await getProfileId(userId);
-  return await addCommentToPost(profileId, postId, data);
+  return await addCommentToPost(currentProfileId, postId, data);
 };
 
-export const addCommentOnComment = async (
+export const createCommentOnComment = async (
   _: any,
   { postId, commentId, data }: CommentComment,
-  { userId }: { userId: string }
+  { currentProfileId }: { currentProfileId: string }
 ) => {
-  const profileId = await getProfileId(userId);
-  return await commentOnComment(postId, commentId, profileId, data);
+  return await commentOnComment(postId, commentId, currentProfileId, data);
 };
 
 export const deleteComment = async (
   _: any,
   { commentId }: { commentId: string },
-  { userId }: { userId: string }
+  { currentUserId }: { currentUserId: string }
 ) => {
   const comment = await getSingleComment(commentId);
-  if (comment?.author.userId !== userId) {
+  if (comment?.author.userId !== currentUserId) {
     throw new AuthenticationError("Access Denied");
   }
   return await removeComment(commentId);
@@ -104,10 +103,10 @@ export const deleteComment = async (
 export const deletePost = async (
   _: any,
   { postId }: { postId: string },
-  { userId }: { userId: string }
+  { currentUserId }: { currentUserId: string }
 ) => {
   const post = await getSinglePost(postId);
-  if (post?.author.userId !== userId) {
+  if (post?.author.userId !== currentUserId) {
     throw new AuthenticationError("Access Denied");
   }
   return await removePost(postId);

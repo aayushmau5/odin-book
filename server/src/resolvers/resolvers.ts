@@ -1,9 +1,9 @@
 import { Kind, GraphQLScalarType } from "graphql";
 
 import {
-  users,
-  user,
-  addProfile,
+  getAllUsers,
+  getUser,
+  createProfile,
   updateProfile,
   signup,
   login,
@@ -11,14 +11,14 @@ import {
 } from "./user";
 
 import {
-  posts,
-  postsByUser,
-  addPost,
-  feed,
+  getAllPosts,
+  getAllPostsByUser,
+  createPost,
+  getFeed,
   likePost,
   dislikePost,
-  addCommentOnPost,
-  addCommentOnComment,
+  createCommentOnPost,
+  createCommentOnComment,
   deletePost,
   deleteComment,
 } from "./post";
@@ -27,8 +27,9 @@ import {
   sendFriendRequest,
   acceptFriendRequest,
   cancelFriendRequest,
-  unfriend,
+  unfriendUser,
 } from "./friends";
+import { authenticate } from "../utils/auth";
 
 // Custome "DateTime" Scalar
 const dateScalar = new GraphQLScalarType({
@@ -51,28 +52,28 @@ const dateScalar = new GraphQLScalarType({
 export const resolvers = {
   DateTime: dateScalar,
   Query: {
-    users,
-    user,
-    posts,
-    postsByUser,
-    feed,
+    getAllUsers,
+    getUser,
+    getAllPosts,
+    getAllPostsByUser,
+    getFeed: authenticate(getFeed),
     login,
   },
   Mutation: {
     signup,
-    addProfile,
-    updateProfile,
-    addPost,
-    addCommentOnPost,
-    addCommentOnComment,
-    sendFriendRequest,
-    cancelFriendRequest,
-    acceptFriendRequest,
-    unfriend,
-    likePost,
-    dislikePost,
-    deletePost,
-    deleteComment,
-    deleteUser,
+    createProfile: authenticate(createProfile),
+    updateProfile: authenticate(updateProfile),
+    createPost: authenticate(createPost),
+    createCommentOnPost: authenticate(createCommentOnPost),
+    createCommentOnComment: authenticate(createCommentOnComment),
+    sendFriendRequest: authenticate(sendFriendRequest),
+    cancelFriendRequest: authenticate(cancelFriendRequest),
+    acceptFriendRequest: authenticate(acceptFriendRequest),
+    unfriendUser: authenticate(unfriendUser),
+    likePost: authenticate(likePost),
+    dislikePost: authenticate(dislikePost),
+    deletePost: authenticate(deletePost),
+    deleteComment: authenticate(deleteComment),
+    deleteUser: authenticate(deleteUser),
   },
 };

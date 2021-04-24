@@ -1,7 +1,6 @@
 import { checkForSelectionField } from "../utils/getSelections";
 import {
-  getAllUser,
-  getUser,
+  db_getUser,
   addUser,
   getUserByEmail,
   setProfile,
@@ -9,6 +8,7 @@ import {
   getProfileId,
   deleteProfile,
   deleteUser as removeUser,
+  db_getAllUsers,
 } from "../utils/db/user";
 import { removeAllPostByUser } from "../utils/db/post";
 import { removeAllCommentsByUser } from "../utils/db/comment";
@@ -27,20 +27,25 @@ const selectionsForUser = [
   "friendsrequest_to",
 ];
 
-export const users = async (_: any, _args: any, _context: any, info: any) => {
-  return await getAllUser(checkForSelectionField(info, selectionsForUser));
+export const getAllUsers = async (
+  _: any,
+  _args: any,
+  _context: any,
+  info: any
+) => {
+  return await db_getAllUsers(checkForSelectionField(info, selectionsForUser));
 };
 
-export const user = async (
+export const getUser = async (
   _: any,
   { id }: { id: string },
   _context: any,
   info: any
 ) => {
-  return await getUser(id, checkForSelectionField(info, selectionsForUser));
+  return await db_getUser(id, checkForSelectionField(info, selectionsForUser));
 };
 
-export const addProfile = async (
+export const createProfile = async (
   _: any,
   { data }: { data: ProfileInput },
   { userId }: { userId: string }
@@ -51,10 +56,9 @@ export const addProfile = async (
 export const updateProfile = async (
   _: any,
   { data }: { data: ProfileInput },
-  { userId }: { userId: string }
+  { currentProfileId }: { currentProfileId: string }
 ) => {
-  let profileId = await getProfileId(userId);
-  return await updateCommonProfile(profileId, data);
+  return await updateCommonProfile(currentProfileId, data);
 };
 
 export const signup = async (_: any, args: { data: SignupInput }) => {
@@ -66,7 +70,7 @@ export const signup = async (_: any, args: { data: SignupInput }) => {
 export const login = async (
   _: any,
   args: { data: LoginInput },
-  _context: any,
+  __: any,
   info: any
 ) => {
   const { email, password } = args.data;
@@ -80,11 +84,10 @@ export const login = async (
 export const deleteUser = async (
   _: any,
   __: any,
-  { userId }: { userId: string }
+  { userId, currentProfileId }: { userId: string; currentProfileId: string }
 ) => {
-  const profileId = await getProfileId(userId);
-  await removeAllCommentsByUser(profileId);
-  await removeAllPostByUser(profileId);
-  await deleteProfile(profileId);
+  await removeAllCommentsByUser(currentProfileId);
+  await removeAllPostByUser(currentProfileId);
+  await deleteProfile(currentProfileId);
   return await removeUser(userId);
 };

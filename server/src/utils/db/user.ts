@@ -13,14 +13,17 @@ export async function getUserByEmail(
   return user;
 }
 
-export async function getUser(id: string, selections: userSelectionsInterface) {
+export async function db_getUser(
+  id: string,
+  selections: userSelectionsInterface
+) {
   return await prisma.user.findUnique({
     where: { id },
     include: userSelection(selections),
   });
 }
 
-export async function getAllUser(selections: userSelectionsInterface) {
+export async function db_getAllUsers(selections: userSelectionsInterface) {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: userSelection(selections),

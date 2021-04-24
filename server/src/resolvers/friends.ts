@@ -12,40 +12,36 @@ import { getProfileId } from "../utils/db/user";
 
 export const sendFriendRequest: RequestFunctionType = async (
   _,
-  { toUserId },
-  { userId }
+  { userId },
+  { currentProfileId }
 ) => {
-  const senderProfileId = await getProfileId(userId);
-  const receiverProfileId = await getProfileId(toUserId);
-  return await requestFriend(senderProfileId, receiverProfileId);
+  const receiverProfileId = await getProfileId(userId);
+  return await requestFriend(currentProfileId, receiverProfileId);
 };
 
 export const cancelFriendRequest: RequestFunctionType = async (
   _: any,
-  { toUserId },
-  { userId }
+  { userId },
+  { currentProfileId }
 ) => {
-  const senderProfileId = await getProfileId(userId);
-  const receiverProfileId = await getProfileId(toUserId);
-  return await deleteFriendRequest(senderProfileId, receiverProfileId);
+  const receiverProfileId = await getProfileId(userId);
+  return await deleteFriendRequest(currentProfileId, receiverProfileId);
 };
 
 export const acceptFriendRequest: FriendFunctionType = async (
   _: any,
-  { toUserId },
-  { userId }
+  { userId },
+  { currentProfileId }
 ) => {
-  const senderProfileId = await getProfileId(userId);
-  const receiverProfileId = await getProfileId(toUserId);
-  return await acceptRequest(senderProfileId, receiverProfileId);
+  const receiverProfileId = await getProfileId(userId);
+  return await acceptRequest(currentProfileId, receiverProfileId);
 };
 
-export const unfriend: FriendFunctionType = async (
+export const unfriendUser: FriendFunctionType = async (
   _: any,
-  { toUserId },
-  { userId }
+  { userId },
+  { currentProfileId }
 ) => {
-  const senderProfileId = await getProfileId(userId);
-  const receiverProfileId = await getProfileId(toUserId);
-  return await removeFriend(senderProfileId, receiverProfileId);
+  const receiverProfileId = await getProfileId(userId);
+  return await removeFriend(currentProfileId, receiverProfileId);
 };

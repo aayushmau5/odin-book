@@ -1,20 +1,18 @@
 import { AuthenticationError } from "apollo-server-errors";
-import { getUser, getUserByEmail } from "./db/user";
+import { db_getUser } from "./db/user";
 
-export const authenticateUsingEmail = async (email: string) => {
-  const user = await getUserByEmail(email, { profile: true });
+export const authenticate = (next: any) => async (
+  parent: any,
+  args: any,
+  context: any,
+  info: any
+) => {
+  const { currentUserId } = context;
+  const user = await db_getUser(currentUserId, { profile: true });
   if (!user) {
     throw new AuthenticationError("Invalid User");
   }
-  return user;
-};
-
-export const autheticateUsingId = async (userId: string) => {
-  const user = await getUser(userId, { profile: true });
-  if (!user) {
-    if (!user) {
-      throw new AuthenticationError("Invalid User");
-    }
-  }
-  return user;
+  context.currentUserId = user.id;
+  context.currentProfileId = user.profile?.id;
+  return next(parent, args, context, info);
 };

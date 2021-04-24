@@ -11,8 +11,8 @@ export interface userSelectionsInterface {
 
 export type RequestFunctionType = (
   _: any,
-  { toUserId }: { toUserId: string },
-  { userId }: { userId: string }
+  { userId }: { userId: string },
+  { currentProfileId }: { currentProfileId: string }
 ) => Promise<{
   id: string;
   friendrequest_by: Profile[];
@@ -21,8 +21,8 @@ export type RequestFunctionType = (
 
 export type FriendFunctionType = (
   _: any,
-  { toUserId }: { toUserId: string },
-  { userId }: { userId: string }
+  { userId }: { userId: string },
+  { currentProfileId }: { currentProfileId: string }
 ) => Promise<{
   friends: Profile[];
 } | null>;

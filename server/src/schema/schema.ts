@@ -157,29 +157,29 @@ export const typeDefs = gql`
   ${inputs}
 
   type Query {
-    users: [User]
-    user(id: ID!): User
-    posts: [Post]
-    postsByUser(id: ID!): [Post]
-    feed: [Post]
+    getAllUsers: [User]
+    getUser(userId: ID!): User
+    getAllPosts: [Post]
+    getAllPostsByUser(userId: ID!): [Post]
+    getFeed: [Post]
     login(data: Login!): Token
   }
 
   type Mutation {
     signup(data: Signup!): UserWithoutProfile
-    addProfile(data: ProfileData!): ChangedProfile!
+    createProfile(data: ProfileData!): ChangedProfile!
     updateProfile(data: ProfileData!): ChangedProfile!
-    addPost(data: AddPost!): Post!
-    addCommentOnPost(postId: ID!, data: String!): Comment!
-    addCommentOnComment(postId: ID!, commentId: ID!, data: String!): Comment!
-    sendFriendRequest(toUserId: ID!): FriendRequests
-    cancelFriendRequest(toUserId: ID!): FriendRequests
-    acceptFriendRequest(toUserId: ID!): AcceptedRequests
-    unfriend(toUserId: ID!): AcceptedRequests
+    createPost(data: AddPost!): Post!
+    createCommentOnPost(postId: ID!, data: String!): Comment!
+    createCommentOnComment(postId: ID!, commentId: ID!, data: String!): Comment!
+    sendFriendRequest(userId: ID!): FriendRequests
+    cancelFriendRequest(userId: ID!): FriendRequests
+    acceptFriendRequest(userId: ID!): AcceptedRequests
+    unfriendUser(userId: ID!): AcceptedRequests
     likePost(postId: ID!): LikeDislike!
     dislikePost(postId: ID!): LikeDislike!
     deletePost(postId: ID!): Post
     deleteComment(commentId: ID!): Comment
-    deleteUser: User
+    deleteCurrentUser: User
   }
 `;

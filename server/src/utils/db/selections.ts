@@ -1,8 +1,6 @@
 import { Prisma } from "@prisma/client";
-import {
-  userSelectionsInterface,
-  profileSelectionsInterface,
-} from "../../types/userInterface";
+import { SelectionsOnPost } from "../../types/PostTypes";
+import { userSelectionsInterface } from "../../types/UserProfileTypes";
 
 export const userSelection = ({
   profile,
@@ -43,62 +41,7 @@ export const userSelection = ({
   });
 };
 
-export const profileSelection = ({
-  user,
-  posts,
-  comments,
-  friends,
-  friends_posts,
-  friendrequests_to,
-}: profileSelectionsInterface) => {
-  return Prisma.validator<Prisma.ProfileSelect>()({
-    user: user,
-    posts: posts
-      ? {
-          include: {
-            comments: comments
-              ? {
-                  orderBy: { createdAt: "desc" },
-                }
-              : false,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        }
-      : false,
-    friends: friends
-      ? {
-          include: {
-            user: true,
-            posts: friends_posts,
-          },
-        }
-      : false,
-    friendrequest_to: friendrequests_to
-      ? {
-          include: {
-            user: true,
-          },
-        }
-      : false,
-    friendrequest_by: friendrequests_to
-      ? {
-          include: {
-            user: true,
-          },
-        }
-      : false,
-  });
-};
-
-export const postSelection = ({
-  author,
-  user,
-}: {
-  author?: boolean;
-  user?: boolean;
-}) => {
+export const postSelection = ({ author, user }: SelectionsOnPost) => {
   return Prisma.validator<Prisma.PostSelect>()({
     _count: { select: { comments: true } },
     author: author

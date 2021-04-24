@@ -1,10 +1,8 @@
+import { PostInput, SelectionsOnPost } from "../../types/PostTypes";
 import { prisma } from "./db";
 import { postSelection } from "./selections";
 
-export async function getAllPosts(selections: {
-  author?: boolean;
-  user?: boolean;
-}) {
+export async function getAllPosts(selections: SelectionsOnPost) {
   return await prisma.post.findMany({
     include: postSelection(selections),
     orderBy: {
@@ -15,7 +13,7 @@ export async function getAllPosts(selections: {
 
 export async function getPostByProfile(
   id: string,
-  selections: { author?: boolean; user?: boolean }
+  selections: SelectionsOnPost
 ) {
   return await prisma.post.findMany({
     where: {
@@ -70,10 +68,7 @@ export async function generateFeedForUser(profileId: string) {
   return feedPosts;
 }
 
-export async function savePost(
-  profileId: string,
-  postData: { text?: string; image?: string }
-) {
+export async function savePost(profileId: string, postData: PostInput) {
   const savedPost = await prisma.post.create({
     data: {
       image: postData.image || null,

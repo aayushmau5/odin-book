@@ -16,7 +16,7 @@ export async function sendFriendRequest(
     select: { id: true, friendrequest_by: true, friendrequest_to: true },
   });
   if (!sender && !receiver) {
-    return false; //throw error
+    throw new Error("User doesn't exist");
   }
   await prisma.profile.update({
     where: {
@@ -59,7 +59,7 @@ export async function deleteFriendRequest(
     where: { id: receiverProfileId },
   });
   if (!sender && !receiver) {
-    return false;
+    throw new Error("User doesn't exist");
   }
   await prisma.profile.update({
     where: {

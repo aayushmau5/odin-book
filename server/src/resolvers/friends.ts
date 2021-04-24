@@ -1,50 +1,51 @@
 import {
+  FriendFunctionType,
+  RequestFunctionType,
+} from "../types/UserProfileTypes";
+import {
   sendFriendRequest as requestFriend,
   acceptRequest,
   deleteFriendRequest,
   unfriend as removeFriend,
 } from "../utils/db/friends";
 import { getProfileId } from "../utils/db/user";
-import { checkForSelectionField } from "../utils/getSelections";
 
-const friendsSelection = ["user"];
-
-export const sendFriendRequest = async (
-  _: any,
-  { toUserId }: { toUserId: string },
-  { userId }: { userId: string }
+export const sendFriendRequest: RequestFunctionType = async (
+  _,
+  { toUserId },
+  { userId }
 ) => {
   const senderProfileId = await getProfileId(userId);
   const receiverProfileId = await getProfileId(toUserId);
   return await requestFriend(senderProfileId, receiverProfileId);
 };
 
-export const cancelFriendRequest = async (
+export const cancelFriendRequest: RequestFunctionType = async (
   _: any,
-  { toUserId }: { toUserId: string },
-  { userId }: { userId: string }
+  { toUserId },
+  { userId }
 ) => {
   const senderProfileId = await getProfileId(userId);
   const receiverProfileId = await getProfileId(toUserId);
   return await deleteFriendRequest(senderProfileId, receiverProfileId);
 };
 
-export const acceptFriendRequest = async (
+export const acceptFriendRequest: FriendFunctionType = async (
   _: any,
-  { toUserId }: { toUserId: string },
-  { userId }: { userId: string }
+  { toUserId },
+  { userId }
 ) => {
   const senderProfileId = await getProfileId(userId);
   const receiverProfileId = await getProfileId(toUserId);
   return await acceptRequest(senderProfileId, receiverProfileId);
 };
 
-export const unfriend = async (
+export const unfriend: FriendFunctionType = async (
   _: any,
-  { toUserId }: { toUserId: string },
-  { userId }: { userId: string }
+  { toUserId },
+  { userId }
 ) => {
   const senderProfileId = await getProfileId(userId);
   const receiverProfileId = await getProfileId(toUserId);
-  return (await removeFriend(senderProfileId, receiverProfileId))?.friends;
+  return await removeFriend(senderProfileId, receiverProfileId);
 };

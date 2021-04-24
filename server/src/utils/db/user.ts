@@ -1,9 +1,6 @@
 import { prisma } from "./db";
-import {
-  userSelectionsInterface,
-  profileSelectionsInterface,
-} from "../../types/userInterface";
-import { userSelection, profileSelection } from "./selections";
+import { userSelectionsInterface } from "../../types/UserProfileTypes";
+import { userSelection } from "./selections";
 
 export async function getUserByEmail(
   email: string,

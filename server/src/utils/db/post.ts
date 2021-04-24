@@ -28,6 +28,13 @@ export async function getPostByProfile(
   });
 }
 
+export async function getSinglePost(postId: string) {
+  return await prisma.post.findUnique({
+    where: { id: postId },
+    include: { author: true },
+  });
+}
+
 export async function generateFeedForUser(profileId: string) {
   const userFriends = await prisma.profile.findUnique({
     where: { id: profileId },
@@ -65,12 +72,12 @@ export async function generateFeedForUser(profileId: string) {
 
 export async function savePost(
   profileId: string,
-  postData: { textData?: string; imageUrl?: string }
+  postData: { text?: string; image?: string }
 ) {
   const savedPost = await prisma.post.create({
     data: {
-      image: postData.imageUrl || null,
-      data: postData.textData || null,
+      image: postData.image || null,
+      data: postData.text || null,
       author: {
         connect: {
           id: profileId,
@@ -95,19 +102,30 @@ export async function removeAllPostByUser(userId: string) {
   return removedPosts;
 }
 
-// TODO add the ability to store the liked/disliked users
-export async function increaseLike(postId: string) {
+export async function increaseLike(profileId: string, postId: string) {
   return await prisma.post.update({
     where: { id: postId },
-    data: { likes: { increment: 1 } },
-    select: { likes: true },
+    data: {
+      likes: {
+        connect: {
+          id: profileId,
+        },
+      },
+    },
+    select: { likes: true, _count: { select: { likes: true } } },
   });
 }
 
-export async function decreaseLike(postId: string) {
+export async function decreaseLike(profileId: string, postId: string) {
   return await prisma.post.update({
     where: { id: postId },
-    data: { likes: { decrement: 1 } },
-    select: { likes: true },
+    data: {
+      likes: {
+        disconnect: {
+          id: profileId,
+        },
+      },
+    },
+    select: { likes: true, _count: { select: { likes: true } } },
   });
 }

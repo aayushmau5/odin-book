@@ -107,8 +107,7 @@ export async function acceptRequest(
   });
 
   if (!receiver && !sender) {
-    // A good error
-    return false;
+    throw new Error("User doesn't exist");
   }
   await prisma.profile.update({
     where: {
@@ -152,8 +151,7 @@ export async function unfriend(profile1Id: string, profile2Id: string) {
   });
 
   if (!user1 && !user2) {
-    // A good error
-    return false;
+    throw new Error("User doesn't exist");
   }
   await prisma.profile.update({
     where: {

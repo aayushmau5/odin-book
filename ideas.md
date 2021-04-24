@@ -3,10 +3,11 @@
 - Users
 - profiles
 - posts
+- Comments
 - liking
 - friend requests
-- news feed
-- signup using github/email-password
+- feed
+- signup using gmail/github/email-password
 - _possibly_ a chat system using `socket.io`.
 
 ## Steps
@@ -17,16 +18,15 @@
 - Creating posts
 - Liking posts
 - commenting on posts
-- Post should have content, author, comment, likes
+- Post should have content, author, comment(count from outside), likes
 - timeline feed
 - profile page
-  - info, photo, posts
-- Make posts also allow images (either just via a url, or by uploading one.)
+  - info, photo, posts, friends
+- Make posts also allow images (by uploading one.)
 - Allow Users to upload and update their own profile photo.
 
 ## Consider thinking about
 
 - TDD with JEST(+ In-memory db like sqlite)
 - Use `fakerjs` to mock fake data.
-- A Commit template(feat, test, fix)
 - Pagination

@@ -23,7 +23,7 @@ export async function addCommentToPost(
   return comment;
 }
 
-export async function addCommentOnComment(
+export async function commentOnComment(
   postId: string,
   commentId: string,
   userId: string,
@@ -57,6 +57,34 @@ export async function getCommentsOnPost(postId: string) {
 }
 
 export async function removeComment(id: string) {
-  const removedComment = await prisma.comment.delete({ where: { id } });
-  return removedComment;
+  const comment = await prisma.comment.findUnique({
+    where: { id },
+    select: { repliedBy: true },
+  });
+  if (comment?.repliedBy.length === 0) {
+    const removedComment = await prisma.comment.delete({ where: { id } });
+    return removedComment;
+  }
+  return await prisma.comment.update({
+    where: { id },
+    data: { data: "<DELETED>", authorId: { set: "<DELETED>" } },
+  });
+}
+
+export async function getSingleComment(id: string) {
+  return await prisma.comment.findUnique({
+    where: { id },
+    include: {
+      author: true,
+    },
+  });
+}
+
+export async function removeAllCommentsByUser(profileId: string) {
+  const comments = await prisma.comment.findMany({
+    where: { authorId: profileId },
+  });
+  comments.forEach(async (comment) => {
+    await removeComment(comment.id);
+  });
 }

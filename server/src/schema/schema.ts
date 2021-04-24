@@ -15,6 +15,11 @@ const userTypeDefs = `
     email: String!
     createdAt: DateTime!
   }
+
+  type Token {
+    user: UserWithoutProfile!
+    token: String
+  }
 `;
 
 const profileTypeDefs = `
@@ -64,7 +69,7 @@ const friendsTypeDefs = `
     firstname: String!
     lastname: String!
     display: String
-    user: UserWithoutProfile!
+    userId: ID!
   }
 
   type FriendRequests {
@@ -99,6 +104,7 @@ const postsTypeDefs = `
   }
 
   type LikeDislike {
+    liked_by: [Profile]
     likes: Int!
   }
 `;
@@ -132,9 +138,9 @@ const inputs = `
   }
 
   input ProfileData {
-    firstname: String!
-    lastname: String!
-    display: String!
+    firstname: String
+    lastname: String
+    display: String
   }
 
 `;
@@ -156,7 +162,7 @@ export const typeDefs = gql`
     posts: [Post]
     postsByUser(id: ID!): [Post]
     feed: [Post]
-    login(data: Login!): User
+    login(data: Login!): Token
   }
 
   type Mutation {
@@ -165,12 +171,15 @@ export const typeDefs = gql`
     updateProfile(data: ProfileData!): ChangedProfile!
     addPost(data: AddPost!): Post!
     addCommentOnPost(postId: ID!, data: String!): Comment!
-    addCommentOnComment(commentId: ID!, data: String!): Comment!
-    sendFriendRequest(profileId: ID!): [FriendRequests]
-    cancelFriendRequest(profileId: ID!): [FriendRequests]
-    acceptFriendRequest(profileId: ID!): [AcceptedRequests]
-    unfriend(profileId: ID!): [AcceptedRequests]
+    addCommentOnComment(postId: ID!, commentId: ID!, data: String!): Comment!
+    sendFriendRequest(toUserId: ID!): FriendRequests
+    cancelFriendRequest(toUserId: ID!): FriendRequests
+    acceptFriendRequest(toUserId: ID!): AcceptedRequests
+    unfriend(toUserId: ID!): AcceptedRequests
     likePost(postId: ID!): LikeDislike!
     dislikePost(postId: ID!): LikeDislike!
+    deletePost(postId: ID!): Post
+    deleteComment(commentId: ID!): Comment
+    deleteUser: User
   }
 `;

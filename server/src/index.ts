@@ -12,6 +12,24 @@ const main = async () => {
   const apolloserver = new ApolloServer({
     typeDefs,
     resolvers,
+    debug: false,
+    context: ({ req, res }) => {
+      // let token = "";
+      // if (req && req.headers["authorization"]) {
+      //   const authHeader = req.headers["authorization"];
+      //   [, token] = authHeader.split(" ");
+      // }
+      let userId;
+      if (req && req.headers["user"]) {
+        userId = req.headers["user"];
+      }
+      return {
+        req,
+        res,
+        userId,
+        // token,
+      };
+    },
   });
 
   app.use(cors({ credentials: true }));

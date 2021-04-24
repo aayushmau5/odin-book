@@ -9,7 +9,11 @@ import {
   setProfile,
   updateCommonProfile,
   getProfileId,
+  deleteProfile,
+  deleteUser as removeUser,
 } from "../utils/db/user";
+import { removeAllPostByUser } from "../utils/db/post";
+import { removeAllCommentsByUser } from "../utils/db/comment";
 
 const selectionsForUser = [
   "profile",
@@ -54,17 +58,17 @@ export const user = async (
 
 export const addProfile = async (
   _: any,
-  { data }: { data: { firstname: string; lastname: string; display: string } }
+  { data }: { data: { firstname: string; lastname: string; display: string } },
+  { userId }: { userId: string }
 ) => {
-  let userId = "";
   return await setProfile(userId, data);
 };
 
 export const updateProfile = async (
   _: any,
-  { data }: { data: { firstname: string; lastname: string; display: string } }
+  { data }: { data: { firstname: string; lastname: string; display: string } },
+  { userId }: { userId: string }
 ) => {
-  let userId = "";
   let profileId = await getProfileId(userId);
   return await updateCommonProfile(profileId, data);
 };
@@ -99,4 +103,16 @@ export const login = async (
     throw error;
   }
   return user;
+};
+
+export const deleteUser = async (
+  _: any,
+  __: any,
+  { userId }: { userId: string }
+) => {
+  const profileId = await getProfileId(userId);
+  await removeAllCommentsByUser(profileId);
+  await removeAllPostByUser(profileId);
+  await deleteProfile(profileId);
+  return await removeUser(userId);
 };

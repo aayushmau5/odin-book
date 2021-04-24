@@ -1,6 +1,15 @@
 import { Kind, GraphQLScalarType } from "graphql";
 
-import { users, user, addProfile, updateProfile, signup, login } from "./user";
+import {
+  users,
+  user,
+  addProfile,
+  updateProfile,
+  signup,
+  login,
+  deleteUser,
+} from "./user";
+
 import {
   posts,
   postsByUser,
@@ -10,7 +19,10 @@ import {
   dislikePost,
   addCommentOnPost,
   addCommentOnComment,
+  deletePost,
+  deleteComment,
 } from "./post";
+
 import {
   sendFriendRequest,
   acceptFriendRequest,
@@ -59,5 +71,8 @@ export const resolvers = {
     unfriend,
     likePost,
     dislikePost,
+    deletePost,
+    deleteComment,
+    deleteUser,
   },
 };

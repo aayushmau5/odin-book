@@ -4,7 +4,7 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["selectRelationCount"]
 }
 
@@ -28,7 +28,8 @@ model Profile {
   friendsRelation  Profile[] @relation("friends", references: [id])
   friendrequest_to Profile[] @relation("friendrequests", references: [id])
   friendrequest_by Profile[] @relation("friendrequests", references: [id])
-  posts            Post[]
+  posts            Post[]    @relation("author")
+  likes            Post[]    @relation("likes")
   comments         Comment[]
   user             User      @relation("profile", fields: [userId], references: [id])
   userId           String
@@ -41,9 +42,9 @@ model Post {
   data      String?
   image     String?
   createdAt DateTime  @default(now())
-  author    Profile   @relation(fields: [authorId], references: [id])
+  author    Profile   @relation("author", fields: [authorId], references: [id])
   authorId  String
-  likes     Int       @default(0)
+  likes     Profile[] @relation("likes")
   comments  Comment[]
 
   @@map("posts")

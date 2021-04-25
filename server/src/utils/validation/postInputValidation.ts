@@ -22,7 +22,7 @@ export function validatePostInput({ text, image }: PostInput) {
   return value;
 }
 
-export function validateCommentInput({ data }: { data: string }) {
+export function validateCommentInput(data: string) {
   const { value, error } = commentInputValidationSchema.validate({
     data,
   });

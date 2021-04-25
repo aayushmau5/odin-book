@@ -18,6 +18,10 @@ import {
 } from "../utils/db/post";
 import { getProfileId } from "../utils/db/user";
 import { checkForSelectionField } from "../utils/getSelections";
+import {
+  validateCommentInput,
+  validatePostInput,
+} from "../utils/validation/postInputValidation";
 
 const postSelections = ["author", "user"];
 
@@ -30,7 +34,8 @@ export const createPost = async (
   { data }: { data: PostInput },
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  return await savePost(currentProfileId, data);
+  const validatedData = validatePostInput(data);
+  return await savePost(currentProfileId, validatedData);
 };
 
 export const getAllPostsByUser = async (
@@ -77,7 +82,8 @@ export const createCommentOnPost = async (
   { postId, data }: PostComment,
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  return await addCommentToPost(currentProfileId, postId, data);
+  const validatedData = validateCommentInput(data);
+  return await addCommentToPost(currentProfileId, postId, validatedData);
 };
 
 export const createCommentOnComment = async (
@@ -85,7 +91,13 @@ export const createCommentOnComment = async (
   { postId, commentId, data }: CommentComment,
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  return await commentOnComment(postId, commentId, currentProfileId, data);
+  const validatedData = validateCommentInput(data);
+  return await commentOnComment(
+    postId,
+    commentId,
+    currentProfileId,
+    validatedData
+  );
 };
 
 export const deleteComment = async (

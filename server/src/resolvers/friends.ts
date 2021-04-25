@@ -20,7 +20,7 @@ export const sendFriendRequest: RequestFunctionType = async (
 };
 
 export const cancelFriendRequest: RequestFunctionType = async (
-  _: any,
+  _,
   { userId },
   { currentProfileId }
 ) => {
@@ -29,7 +29,7 @@ export const cancelFriendRequest: RequestFunctionType = async (
 };
 
 export const acceptFriendRequest: FriendFunctionType = async (
-  _: any,
+  _,
   { userId },
   { currentProfileId }
 ) => {
@@ -38,7 +38,7 @@ export const acceptFriendRequest: FriendFunctionType = async (
 };
 
 export const unfriendUser: FriendFunctionType = async (
-  _: any,
+  _,
   { userId },
   { currentProfileId }
 ) => {

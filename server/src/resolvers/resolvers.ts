@@ -7,7 +7,7 @@ import {
   updateProfile,
   signup,
   login,
-  deleteUser,
+  deleteCurrentUser,
 } from "./user";
 
 import {
@@ -74,6 +74,6 @@ export const resolvers = {
     dislikePost: authenticate(dislikePost),
     deletePost: authenticate(deletePost),
     deleteComment: authenticate(deleteComment),
-    deleteUser: authenticate(deleteUser),
+    deleteCurrentUser: authenticate(deleteCurrentUser),
   },
 };

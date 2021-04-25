@@ -5,7 +5,6 @@ import {
   getUserByEmail,
   setProfile,
   updateCommonProfile,
-  getProfileId,
   deleteProfile,
   deleteUser as removeUser,
   db_getAllUsers,
@@ -17,6 +16,11 @@ import {
   ProfileInput,
   SignupInput,
 } from "../types/UserProfileTypes";
+import {
+  validateLoginInput,
+  validateProfileInput,
+  validateSignupInput,
+} from "../utils/validation/userInputValidation";
 
 const selectionsForUser = [
   "profile",
@@ -50,7 +54,8 @@ export const createProfile = async (
   { data }: { data: ProfileInput },
   { userId }: { userId: string }
 ) => {
-  return await setProfile(userId, data);
+  const validatedData = validateProfileInput(data);
+  return await setProfile(userId, validatedData);
 };
 
 export const updateProfile = async (
@@ -58,11 +63,12 @@ export const updateProfile = async (
   { data }: { data: ProfileInput },
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  return await updateCommonProfile(currentProfileId, data);
+  const validatedData = validateProfileInput(data);
+  return await updateCommonProfile(currentProfileId, validatedData);
 };
 
 export const signup = async (_: any, args: { data: SignupInput }) => {
-  const { username, email, password } = args.data;
+  const { username, email, password } = validateSignupInput(args.data);
   const hashedPassword = password;
   return await addUser(username, email, hashedPassword);
 };
@@ -73,15 +79,14 @@ export const login = async (
   __: any,
   info: any
 ) => {
-  const { email, password } = args.data;
-  const user = await getUserByEmail(
+  const { email, password } = validateLoginInput(args.data);
+  return await getUserByEmail(
     email,
     checkForSelectionField(info, selectionsForUser)
   );
-  return user;
 };
 
-export const deleteUser = async (
+export const deleteCurrentUser = async (
   _: any,
   __: any,
   { userId, currentProfileId }: { userId: string; currentProfileId: string }

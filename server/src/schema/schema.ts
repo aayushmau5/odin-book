@@ -89,7 +89,7 @@ const postsTypeDefs = `
     data: String
     image: String
     author: Profile!
-    likes: Int!
+    likes: [Profile]
     comments: [Comment]
     createdAt: DateTime!
   }
@@ -98,7 +98,7 @@ const postsTypeDefs = `
     id: ID!
     data: String
     image: String
-    likes: Int!
+    likes: [Profile]
     comments: [Comment]
     createdAt: DateTime!
   }

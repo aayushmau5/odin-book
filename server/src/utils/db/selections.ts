@@ -33,8 +33,8 @@ export const userSelection = ({
                   },
                 }
               : false,
-            friendrequest_to: friendrequests_to,
-            friendrequest_by: friendrequests_to,
+            friendrequest_to: friendrequests_to || false,
+            friendrequest_by: friendrequests_to || false,
           },
         }
       : false,
@@ -47,7 +47,7 @@ export const postSelection = ({ author, user }: SelectionsOnPost) => {
     author: author
       ? {
           include: {
-            user: user,
+            user: user || false,
           },
         }
       : false,

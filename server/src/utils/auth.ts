@@ -1,4 +1,5 @@
 import { AuthenticationError } from "apollo-server-errors";
+import { verify } from "jsonwebtoken";
 import { db_getUser } from "./db/user";
 
 export const authenticate = (next: any) => async (
@@ -8,11 +9,18 @@ export const authenticate = (next: any) => async (
   info: any
 ) => {
   const { currentUserId } = context;
-  const user = await db_getUser(currentUserId, { profile: true });
-  if (!user) {
-    throw new AuthenticationError("Invalid User");
+  try {
+    if (!currentUserId) {
+      throw new AuthenticationError("Invalid User");
+    }
+    const user = await db_getUser(currentUserId, { profile: true });
+    if (!user) {
+      throw new AuthenticationError("Invalid User");
+    }
+    context.currentUserId = user.id;
+    context.currentProfileId = user.profile?.id;
+    return next(parent, args, context, info);
+  } catch (err) {
+    return err;
   }
-  context.currentUserId = user.id;
-  context.currentProfileId = user.profile?.id;
-  return next(parent, args, context, info);
 };

@@ -1,3 +1,5 @@
+import { hash } from "bcryptjs";
+
 import { checkForSelectionField } from "../utils/getSelections";
 import {
   db_getUser,
@@ -69,7 +71,8 @@ export const updateProfile = async (
 
 export const signup = async (_: any, args: { data: SignupInput }) => {
   const { username, email, password } = validateSignupInput(args.data);
-  const hashedPassword = password;
+  hash;
+  const hashedPassword = await hash(password, 16);
   return await addUser(username, email, hashedPassword);
 };
 

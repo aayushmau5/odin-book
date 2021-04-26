@@ -3,7 +3,6 @@ import { gql } from "apollo-server-express";
 const userTypeDefs = `
   type User {
     id: ID!
-    username: String!
     email: String!
     profile: ProfileWithoutUser
     createdAt: DateTime!
@@ -11,14 +10,13 @@ const userTypeDefs = `
 
   type UserWithoutProfile {
     id: ID!
-    username: String!
     email: String!
     createdAt: DateTime!
   }
 
   type Token {
     user: UserWithoutProfile!
-    token: String
+    token: String!
   }
 `;
 
@@ -122,7 +120,6 @@ const commentTypeDefs = `
 
 const inputs = `
   input Signup {
-    username: String!
     email: String!
     password: String!
   }
@@ -143,6 +140,10 @@ const inputs = `
     display: String
   }
 
+  input OAuthInput {
+    email: String!
+    idToken: String!
+  }
 `;
 
 export const typeDefs = gql`
@@ -163,10 +164,12 @@ export const typeDefs = gql`
     getAllPostsByUser(userId: ID!): [Post]
     getFeed: [Post]
     login(data: Login!): Token
+    oauthLogin(data: OAuthInput!): Token
   }
 
   type Mutation {
-    signup(data: Signup!): UserWithoutProfile
+    signup(data: Signup!): Token
+    oauthSignup(data: OAuthInput): Token
     createProfile(data: ProfileData!): ChangedProfile!
     updateProfile(data: ProfileData!): ChangedProfile!
     createPost(data: AddPost!): Post!

@@ -1,13 +1,8 @@
 import { object, string } from "joi";
 import { UserInputError } from "apollo-server-express";
-import {
-  SignupInput,
-  LoginInput,
-  ProfileInput,
-} from "../../types/UserProfileTypes";
+import { UserInput, ProfileInput } from "../../types/UserProfileTypes";
 
 const userSignupValidationSchema = object({
-  username: string().alphanum().min(2).required(),
   password: string().min(6).required(),
   email: string()
     .email({
@@ -31,13 +26,8 @@ const profileValidationSchema = object({
   display: string().min(5),
 });
 
-export function validateSignupInput({
-  username,
-  password,
-  email,
-}: SignupInput) {
+export function validateSignupInput({ password, email }: UserInput) {
   const { value, error } = userSignupValidationSchema.validate({
-    username,
     password,
     email,
   });
@@ -47,7 +37,7 @@ export function validateSignupInput({
   return value;
 }
 
-export function validateLoginInput({ email, password }: LoginInput) {
+export function validateLoginInput({ email, password }: UserInput) {
   const { value, error } = userLoginValidationSchema.validate({
     email,
     password,

@@ -40,14 +40,9 @@ export async function getAllUserExcept(id: string) {
   return users;
 }
 
-export async function addUser(
-  username: string,
-  email: string,
-  password: string
-) {
+export async function addUser(email: string, password: string) {
   const savedUser = await prisma.user.create({
     data: {
-      username,
       email,
       password,
     },

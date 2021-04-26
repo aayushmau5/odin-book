@@ -5,8 +5,10 @@ import {
   getUser,
   createProfile,
   updateProfile,
-  signup,
   login,
+  oauthLogin,
+  signup,
+  oauthSignup,
   deleteCurrentUser,
 } from "./user";
 
@@ -58,9 +60,11 @@ export const resolvers = {
     getAllPostsByUser,
     getFeed: authenticate(getFeed),
     login,
+    oauthLogin,
   },
   Mutation: {
     signup,
+    oauthSignup,
     createProfile: authenticate(createProfile),
     updateProfile: authenticate(updateProfile),
     createPost: authenticate(createPost),

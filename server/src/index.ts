@@ -37,13 +37,6 @@ const main = async () => {
 
   apolloserver.applyMiddleware({ app, cors: false });
 
-  app.post("/oauth", (req, res) => {
-    const body = req.body;
-    res.json({
-      body,
-    });
-  });
-
   app.use((_, res) => {
     res.status(200);
     res.json({

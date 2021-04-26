@@ -13,11 +13,7 @@ import {
 } from "../utils/db/user";
 import { removeAllPostByUser } from "../utils/db/post";
 import { removeAllCommentsByUser } from "../utils/db/comment";
-import {
-  LoginInput,
-  ProfileInput,
-  SignupInput,
-} from "../types/UserProfileTypes";
+import { UserInput, ProfileInput } from "../types/UserProfileTypes";
 import {
   validateLoginInput,
   validateProfileInput,
@@ -69,16 +65,9 @@ export const updateProfile = async (
   return await updateCommonProfile(currentProfileId, validatedData);
 };
 
-export const signup = async (_: any, args: { data: SignupInput }) => {
-  const { username, email, password } = validateSignupInput(args.data);
-  hash;
-  const hashedPassword = await hash(password, 16);
-  return await addUser(username, email, hashedPassword);
-};
-
 export const login = async (
   _: any,
-  args: { data: LoginInput },
+  args: { data: UserInput },
   __: any,
   info: any
 ) => {
@@ -87,6 +76,27 @@ export const login = async (
     email,
     checkForSelectionField(info, selectionsForUser)
   );
+};
+
+export const oauthLogin = async (
+  _: any,
+  args: { data: { email: string; idToken: string } }
+) => {
+  console.log(args.data);
+};
+
+export const signup = async (_: any, args: { data: UserInput }) => {
+  const { email, password } = validateSignupInput(args.data);
+  hash;
+  const hashedPassword = await hash(password, 16);
+  return await addUser(email, hashedPassword);
+};
+
+export const oauthSignup = async (
+  _: any,
+  args: { data: { email: string; idToken: string } }
+) => {
+  console.log(args.data);
 };
 
 export const deleteCurrentUser = async (

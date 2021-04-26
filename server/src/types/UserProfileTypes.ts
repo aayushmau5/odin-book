@@ -27,15 +27,10 @@ export type FriendFunctionType = (
   friends: Profile[];
 } | null>;
 
-export interface LoginInput {
+export interface UserInput {
   email: string;
   password: string;
 }
-
-export interface SignupInput extends LoginInput {
-  username: string;
-}
-
 export interface ProfileInput {
   firstname: string;
   lastname: string;

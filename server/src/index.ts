@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import { ApolloServer } from "apollo-server-express";
-import { typeDefs } from "./schema/schema";
+import { schema } from "./schema/index";
 import { resolvers } from "./resolvers/resolvers";
 
 const main = async () => {
@@ -10,7 +10,7 @@ const main = async () => {
   const app = express();
   dotenv.config();
   const apolloserver = new ApolloServer({
-    typeDefs,
+    typeDefs: schema,
     resolvers,
     debug: false,
     context: ({ req, res }) => {

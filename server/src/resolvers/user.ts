@@ -10,15 +10,22 @@ import {
   deleteProfile,
   deleteUser as removeUser,
   db_getAllUsers,
+  addOAuthUser,
 } from "../utils/db/user";
 import { removeAllPostByUser } from "../utils/db/post";
 import { removeAllCommentsByUser } from "../utils/db/comment";
-import { UserInput, ProfileInput } from "../types/UserProfileTypes";
 import {
-  validateLoginInput,
+  UserInput,
+  ProfileInput,
+  OAuthUserInput,
+} from "../types/UserProfileTypes";
+import {
   validateProfileInput,
-  validateSignupInput,
+  validateUserDataInput,
+  validateOAuthUserDataInput,
 } from "../utils/validation/userInputValidation";
+import { verifyGoogleId } from "../utils/google-id-verification";
+import { AuthenticationError } from "apollo-server-errors";
 
 const selectionsForUser = [
   "profile",
@@ -71,7 +78,8 @@ export const login = async (
   __: any,
   info: any
 ) => {
-  const { email, password } = validateLoginInput(args.data);
+  const { email, password } = validateUserDataInput(args.data);
+  //TODO JWT and Stuff + Verify password
   return await getUserByEmail(
     email,
     checkForSelectionField(info, selectionsForUser)
@@ -80,23 +88,39 @@ export const login = async (
 
 export const oauthLogin = async (
   _: any,
-  args: { data: { email: string; idToken: string } }
+  args: { data: OAuthUserInput },
+  __: any,
+  info: any
 ) => {
-  console.log(args.data);
+  const { idToken } = validateOAuthUserDataInput(args.data);
+  const payload = await verifyGoogleId(idToken);
+  if (payload && payload.email) {
+    let email = payload.email;
+    return await getUserByEmail(
+      email,
+      checkForSelectionField(info, selectionsForUser)
+    );
+  } else {
+    throw new AuthenticationError("Unauthenticated");
+  }
 };
 
 export const signup = async (_: any, args: { data: UserInput }) => {
-  const { email, password } = validateSignupInput(args.data);
+  const { email, password } = validateUserDataInput(args.data);
   hash;
   const hashedPassword = await hash(password, 16);
   return await addUser(email, hashedPassword);
 };
 
-export const oauthSignup = async (
-  _: any,
-  args: { data: { email: string; idToken: string } }
-) => {
-  console.log(args.data);
+export const oauthSignup = async (_: any, args: { data: OAuthUserInput }) => {
+  const { idToken } = validateOAuthUserDataInput(args.data);
+  const payload = await verifyGoogleId(idToken);
+  if (payload && payload.email) {
+    let email = payload.email;
+    return await addOAuthUser(email, idToken);
+  } else {
+    throw new AuthenticationError("Unauthenticated");
+  }
 };
 
 export const deleteCurrentUser = async (

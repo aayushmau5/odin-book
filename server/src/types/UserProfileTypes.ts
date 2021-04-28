@@ -31,6 +31,11 @@ export interface UserInput {
   email: string;
   password: string;
 }
+
+export interface OAuthUserInput {
+  idToken: string;
+}
+
 export interface ProfileInput {
   firstname: string;
   lastname: string;

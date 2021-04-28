@@ -2,8 +2,8 @@ import { gql, useLazyQuery } from "@apollo/client";
 import { GoogleLogin } from "react-google-login";
 
 const authQuery = gql`
-  query AuthData($email: String!, $idToken: String!) {
-    oauthLogin(data: { email: $email, idToken: $idToken }) {
+  query AuthData($idToken: String!) {
+    oauthLogin(data: { idToken: $idToken }) {
       token
     }
   }
@@ -28,8 +28,9 @@ function Login() {
   };
 
   const sendToServer = async (data: { email: string; idToken: string }) => {
+    console.log(data);
     console.log("Request sent");
-    login({ variables: { email: data.email, idToken: data.idToken } });
+    login({ variables: { idToken: data.idToken } });
   };
 
   return (

@@ -6,11 +6,10 @@ export async function getUserByEmail(
   email: string,
   selections: userSelectionsInterface
 ) {
-  const user = await prisma.user.findUnique({
+  return await prisma.user.findUnique({
     where: { email },
     include: userSelection(selections),
   });
-  return user;
 }
 
 export async function db_getUser(
@@ -24,30 +23,37 @@ export async function db_getUser(
 }
 
 export async function db_getAllUsers(selections: userSelectionsInterface) {
-  const users = await prisma.user.findMany({
+  return await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: userSelection(selections),
   });
-  return users;
 }
 
 export async function getAllUserExcept(id: string) {
-  const users = await prisma.user.findMany({
+  return await prisma.user.findMany({
     where: { NOT: { id } },
     include: { profile: true },
     orderBy: { createdAt: "desc" },
   });
-  return users;
 }
 
 export async function addUser(email: string, password: string) {
-  const savedUser = await prisma.user.create({
+  return await prisma.user.create({
     data: {
       email,
       password,
     },
   });
-  return savedUser;
+}
+
+export async function addOAuthUser(email: string, idToken: string) {
+  return await prisma.user.create({
+    data: {
+      email,
+      idToken,
+      type: "GMAIL",
+    },
+  });
 }
 
 export async function setProfile(
@@ -59,7 +65,7 @@ export async function setProfile(
   }
 ) {
   const { display, firstname, lastname } = data;
-  const profile = await prisma.profile.create({
+  return await prisma.profile.create({
     data: {
       display,
       firstname,
@@ -67,7 +73,6 @@ export async function setProfile(
       userId,
     },
   });
-  return profile;
 }
 
 export async function updateCommonProfile(
@@ -84,7 +89,7 @@ export async function updateCommonProfile(
     lastname: newLastname,
   } = data;
   const profile = await prisma.profile.findFirst({ where: { id } });
-  const updateProfile = await prisma.profile.update({
+  return await prisma.profile.update({
     where: { id },
     data: {
       display: newDisplay || profile?.display,
@@ -92,22 +97,18 @@ export async function updateCommonProfile(
       lastname: newLastname || profile?.lastname,
     },
   });
-
-  return updateProfile;
 }
 
 export async function deleteProfile(profileId: string) {
-  const deletedProfile = await prisma.profile.delete({
+  return await prisma.profile.delete({
     where: { id: profileId },
   });
-  return deletedProfile;
 }
 
 export async function deleteUser(userId: string) {
-  const deletedUser = await prisma.user.delete({
+  return await prisma.user.delete({
     where: { id: userId },
   });
-  return deletedUser;
 }
 
 export async function getProfileId(userId: string) {

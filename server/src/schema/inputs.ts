@@ -23,7 +23,6 @@ const inputs = gql`
   }
 
   input OAuthInput {
-    email: String!
     idToken: String!
   }
 `;

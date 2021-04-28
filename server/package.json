@@ -23,6 +23,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "flat": "^5.0.2",
+    "google-auth-library": "^7.0.4",
     "graphql": "^15.5.0",
     "graphql-parse-resolve-info": "^4.11.0",
     "joi": "^17.4.0",

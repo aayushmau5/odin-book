@@ -1,5 +1,3 @@
-import { hash } from "bcryptjs";
-
 import { checkForSelectionField } from "../utils/getSelections";
 import {
   db_getUser,
@@ -26,6 +24,7 @@ import {
 } from "../utils/validation/userInputValidation";
 import { verifyGoogleId } from "../utils/google-id-verification";
 import { AuthenticationError } from "apollo-server-errors";
+import { generateJwt } from "../utils/jwt";
 
 const selectionsForUser = [
   "profile",
@@ -57,10 +56,10 @@ export const getUser = async (
 export const createProfile = async (
   _: any,
   { data }: { data: ProfileInput },
-  { userId }: { userId: string }
+  { currentUserId }: { currentUserId: string }
 ) => {
   const validatedData = validateProfileInput(data);
-  return await setProfile(userId, validatedData);
+  return await setProfile(currentUserId, validatedData);
 };
 
 export const updateProfile = async (
@@ -79,11 +78,19 @@ export const login = async (
   info: any
 ) => {
   const { email, password } = validateUserDataInput(args.data);
-  //TODO JWT and Stuff + Verify password
-  return await getUserByEmail(
+  //Verify password
+  const user = await getUserByEmail(
     email,
     checkForSelectionField(info, selectionsForUser)
   );
+  if (!user) {
+    throw new Error("User doesn't exist");
+  }
+  const token = await generateJwt(user.id);
+  return {
+    user,
+    token,
+  };
 };
 
 export const oauthLogin = async (
@@ -96,10 +103,18 @@ export const oauthLogin = async (
   const payload = await verifyGoogleId(idToken);
   if (payload && payload.email) {
     let email = payload.email;
-    return await getUserByEmail(
+    const user = await getUserByEmail(
       email,
       checkForSelectionField(info, selectionsForUser)
     );
+    if (!user) {
+      throw new Error("User doesn't exist");
+    }
+    const token = await generateJwt(user.id);
+    return {
+      user,
+      token,
+    };
   } else {
     throw new AuthenticationError("Unauthenticated");
   }
@@ -107,9 +122,9 @@ export const oauthLogin = async (
 
 export const signup = async (_: any, args: { data: UserInput }) => {
   const { email, password } = validateUserDataInput(args.data);
-  hash;
-  const hashedPassword = await hash(password, 16);
-  return await addUser(email, hashedPassword);
+  const user = await addUser(email, password);
+  const token = await generateJwt(user.id);
+  return { user, token };
 };
 
 export const oauthSignup = async (_: any, args: { data: OAuthUserInput }) => {
@@ -117,7 +132,9 @@ export const oauthSignup = async (_: any, args: { data: OAuthUserInput }) => {
   const payload = await verifyGoogleId(idToken);
   if (payload && payload.email) {
     let email = payload.email;
-    return await addOAuthUser(email, idToken);
+    const user = await addOAuthUser(email, idToken);
+    const token = await generateJwt(user.id);
+    return { user, token };
   } else {
     throw new AuthenticationError("Unauthenticated");
   }
@@ -126,10 +143,13 @@ export const oauthSignup = async (_: any, args: { data: OAuthUserInput }) => {
 export const deleteCurrentUser = async (
   _: any,
   __: any,
-  { userId, currentProfileId }: { userId: string; currentProfileId: string }
+  {
+    currentUserId,
+    currentProfileId,
+  }: { currentUserId: string; currentProfileId: string }
 ) => {
   await removeAllCommentsByUser(currentProfileId);
   await removeAllPostByUser(currentProfileId);
   await deleteProfile(currentProfileId);
-  return await removeUser(userId);
+  return await removeUser(currentUserId);
 };

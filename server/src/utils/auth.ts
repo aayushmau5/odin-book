@@ -1,6 +1,6 @@
 import { AuthenticationError } from "apollo-server-errors";
-import { verify } from "jsonwebtoken";
 import { db_getUser } from "./db/user";
+import { verifyJwt } from "./jwt";
 
 export const authenticate = (next: any) => async (
   parent: any,
@@ -8,12 +8,13 @@ export const authenticate = (next: any) => async (
   context: any,
   info: any
 ) => {
-  const { currentUserId } = context;
+  const { token } = context;
   try {
-    if (!currentUserId) {
-      throw new AuthenticationError("Invalid User");
+    if (!token) {
+      throw new AuthenticationError("Unauthenticated");
     }
-    const user = await db_getUser(currentUserId, { profile: true });
+    const userId = verifyJwt(token);
+    const user = await db_getUser(userId, { profile: true });
     if (!user) {
       throw new AuthenticationError("Invalid User");
     }

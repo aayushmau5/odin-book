@@ -14,20 +14,15 @@ const main = async () => {
     resolvers,
     debug: false,
     context: ({ req, res }) => {
-      // let token = "";
-      // if (req && req.headers["authorization"]) {
-      //   const authHeader = req.headers["authorization"];
-      //   [, token] = authHeader.split(" ");
-      // }
-      let currentUserId;
-      if (req && req.headers["user"]) {
-        currentUserId = req.headers["user"];
+      let token;
+      if (req && req.headers["authorization"]) {
+        const authHeader = req.headers["authorization"];
+        [, token] = authHeader.split(" ");
       }
       return {
         req,
         res,
-        currentUserId,
-        // token,
+        token,
       };
     },
   });

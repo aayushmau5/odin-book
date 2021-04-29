@@ -1,3 +1,5 @@
+import { compare, hash } from "bcryptjs";
+
 import { checkForSelectionField } from "../utils/getSelections";
 import {
   db_getUser,
@@ -84,7 +86,14 @@ export const login = async (
     checkForSelectionField(info, selectionsForUser)
   );
   if (!user) {
-    throw new Error("User doesn't exist");
+    throw new AuthenticationError("User does not exist");
+  }
+  if (!user.password) {
+    throw new AuthenticationError("UNAUTHENTICATED");
+  }
+  const result = await compare(password, user.password);
+  if (!result) {
+    throw new AuthenticationError("UNAUTHENTICATED");
   }
   const token = await generateJwt(user.id);
   return {
@@ -122,7 +131,8 @@ export const oauthLogin = async (
 
 export const signup = async (_: any, args: { data: UserInput }) => {
   const { email, password } = validateUserDataInput(args.data);
-  const user = await addUser(email, password);
+  const hashedPassword = await hash(password, 16);
+  const user = await addUser(email, hashedPassword);
   const token = await generateJwt(user.id);
   return { user, token };
 };

@@ -11,7 +11,6 @@ import {
   oauthSignup,
   deleteCurrentUser,
 } from "./user";
-
 import {
   getAllPosts,
   getAllPostsByUser,
@@ -24,7 +23,6 @@ import {
   deletePost,
   deleteComment,
 } from "./post";
-
 import {
   sendFriendRequest,
   acceptFriendRequest,
@@ -32,6 +30,7 @@ import {
   unfriendUser,
 } from "./friends";
 import { authenticate } from "../utils/auth";
+import { errorHandlerWrapper } from "../utils/errorHandler";
 
 // Custome "DateTime" Scalar
 const dateScalar = new GraphQLScalarType({
@@ -54,17 +53,17 @@ const dateScalar = new GraphQLScalarType({
 export const resolvers = {
   DateTime: dateScalar,
   Query: {
-    getAllUsers,
-    getUser,
-    getAllPosts,
-    getAllPostsByUser,
+    getAllUsers: errorHandlerWrapper(getAllUsers),
+    getUser: errorHandlerWrapper(getUser),
+    getAllPosts: errorHandlerWrapper(getAllPosts),
+    getAllPostsByUser: errorHandlerWrapper(getAllPostsByUser),
     getFeed: authenticate(getFeed),
-    login,
-    oauthLogin,
+    login: errorHandlerWrapper(login),
+    oauthLogin: errorHandlerWrapper(oauthLogin),
   },
   Mutation: {
-    signup,
-    oauthSignup,
+    signup: errorHandlerWrapper(signup),
+    oauthSignup: errorHandlerWrapper(oauthSignup),
     createProfile: authenticate(createProfile),
     updateProfile: authenticate(updateProfile),
     createPost: authenticate(createPost),

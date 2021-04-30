@@ -1,32 +1,18 @@
 import { AuthenticationError } from "apollo-server-errors";
-import { PostInput, PostComment, CommentComment } from "../types/PostTypes";
-import {
-  addCommentToPost,
-  commentOnComment,
-  getSingleComment,
-  removeComment,
-} from "../utils/db/comment";
-import {
-  db_getAllPosts,
-  getPostByProfile,
-  generateFeedForUser,
-  increaseLike,
-  decreaseLike,
-  getSinglePost,
-  removePost,
-  savePost,
-} from "../utils/db/post";
+
+import * as PostDb from "../utils/db/post";
+import * as CommentDb from "../utils/db/comment";
 import { getProfileId } from "../utils/db/user";
 import { checkForSelectionField } from "../utils/getSelections";
-import {
-  validateCommentInput,
-  validatePostInput,
-} from "../utils/validation/postInputValidation";
+import * as Validations from "../utils/validation/postInputValidation";
+import { PostInput, PostComment, CommentComment } from "../types/PostTypes";
 
 const postSelections = ["author", "user"];
 
 export const getAllPosts = async (_: any, __: any, ___: any, info: any) => {
-  return await db_getAllPosts(checkForSelectionField(info, postSelections));
+  return await PostDb.db_getAllPosts(
+    checkForSelectionField(info, postSelections)
+  );
 };
 
 export const createPost = async (
@@ -34,8 +20,8 @@ export const createPost = async (
   { data }: { data: PostInput },
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  const validatedData = validatePostInput(data);
-  return await savePost(currentProfileId, validatedData);
+  const validatedData = Validations.validatePostInput(data);
+  return await PostDb.savePost(currentProfileId, validatedData);
 };
 
 export const getAllPostsByUser = async (
@@ -45,7 +31,7 @@ export const getAllPostsByUser = async (
   info: any
 ) => {
   const profileId = await getProfileId(userId);
-  return await getPostByProfile(
+  return await PostDb.getPostByProfile(
     profileId,
     checkForSelectionField(info, postSelections)
   );
@@ -56,7 +42,7 @@ export const getFeed = async (
   __: any,
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  return await generateFeedForUser(currentProfileId);
+  return await PostDb.generateFeedForUser(currentProfileId);
 };
 
 export const likePost = async (
@@ -64,7 +50,7 @@ export const likePost = async (
   { postId }: { postId: string },
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  const data = await increaseLike(currentProfileId, postId);
+  const data = await PostDb.increaseLike(currentProfileId, postId);
   return { liked_by: data.likes, likes: data._count?.likes };
 };
 
@@ -73,7 +59,7 @@ export const dislikePost = async (
   { postId }: { postId: any },
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  const data = await decreaseLike(currentProfileId, postId);
+  const data = await PostDb.decreaseLike(currentProfileId, postId);
   return { liked_by: data.likes, likes: data._count?.likes };
 };
 
@@ -82,8 +68,12 @@ export const createCommentOnPost = async (
   { postId, data }: PostComment,
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  const validatedData = validateCommentInput(data);
-  return await addCommentToPost(currentProfileId, postId, validatedData);
+  const validatedData = Validations.validateCommentInput(data);
+  return await CommentDb.addCommentToPost(
+    currentProfileId,
+    postId,
+    validatedData
+  );
 };
 
 export const createCommentOnComment = async (
@@ -91,8 +81,8 @@ export const createCommentOnComment = async (
   { postId, commentId, data }: CommentComment,
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  const validatedData = validateCommentInput(data);
-  return await commentOnComment(
+  const validatedData = Validations.validateCommentInput(data);
+  return await CommentDb.commentOnComment(
     postId,
     commentId,
     currentProfileId,
@@ -105,11 +95,11 @@ export const deleteComment = async (
   { commentId }: { commentId: string },
   { currentUserId }: { currentUserId: string }
 ) => {
-  const comment = await getSingleComment(commentId);
+  const comment = await CommentDb.getSingleComment(commentId);
   if (comment?.author.userId !== currentUserId) {
     throw new AuthenticationError("Access Denied");
   }
-  return await removeComment(commentId);
+  return await CommentDb.removeComment(commentId);
 };
 
 export const deletePost = async (
@@ -117,9 +107,9 @@ export const deletePost = async (
   { postId }: { postId: string },
   { currentUserId }: { currentUserId: string }
 ) => {
-  const post = await getSinglePost(postId);
+  const post = await PostDb.getSinglePost(postId);
   if (post?.author.userId !== currentUserId) {
     throw new AuthenticationError("Access Denied");
   }
-  return await removePost(postId);
+  return await PostDb.removePost(postId);
 };

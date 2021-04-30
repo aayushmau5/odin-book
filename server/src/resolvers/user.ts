@@ -1,32 +1,18 @@
 import { compare, hash } from "bcryptjs";
 
 import { checkForSelectionField } from "../utils/getSelections";
-import {
-  db_getUser,
-  addUser,
-  getUserByEmail,
-  setProfile,
-  updateCommonProfile,
-  deleteProfile,
-  deleteUser as removeUser,
-  db_getAllUsers,
-  addOAuthUser,
-} from "../utils/db/user";
+import * as UserDb from "../utils/db/user";
 import { removeAllPostByUser } from "../utils/db/post";
 import { removeAllCommentsByUser } from "../utils/db/comment";
+import * as Validations from "../utils/validation/userInputValidation";
+import { verifyGoogleId } from "../utils/google-id-verification";
+import { AuthenticationError } from "apollo-server-errors";
+import { generateJwt } from "../utils/jwt";
 import {
   UserInput,
   ProfileInput,
   OAuthUserInput,
 } from "../types/UserProfileTypes";
-import {
-  validateProfileInput,
-  validateUserDataInput,
-  validateOAuthUserDataInput,
-} from "../utils/validation/userInputValidation";
-import { verifyGoogleId } from "../utils/google-id-verification";
-import { AuthenticationError } from "apollo-server-errors";
-import { generateJwt } from "../utils/jwt";
 
 const selectionsForUser = [
   "profile",
@@ -43,7 +29,9 @@ export const getAllUsers = async (
   _context: any,
   info: any
 ) => {
-  return await db_getAllUsers(checkForSelectionField(info, selectionsForUser));
+  return await UserDb.db_getAllUsers(
+    checkForSelectionField(info, selectionsForUser)
+  );
 };
 
 export const getUser = async (
@@ -52,7 +40,10 @@ export const getUser = async (
   _context: any,
   info: any
 ) => {
-  return await db_getUser(id, checkForSelectionField(info, selectionsForUser));
+  return await UserDb.db_getUser(
+    id,
+    checkForSelectionField(info, selectionsForUser)
+  );
 };
 
 export const createProfile = async (
@@ -60,8 +51,8 @@ export const createProfile = async (
   { data }: { data: ProfileInput },
   { currentUserId }: { currentUserId: string }
 ) => {
-  const validatedData = validateProfileInput(data);
-  return await setProfile(currentUserId, validatedData);
+  const validatedData = Validations.validateProfileInput(data);
+  return await UserDb.setProfile(currentUserId, validatedData);
 };
 
 export const updateProfile = async (
@@ -69,8 +60,8 @@ export const updateProfile = async (
   { data }: { data: ProfileInput },
   { currentProfileId }: { currentProfileId: string }
 ) => {
-  const validatedData = validateProfileInput(data);
-  return await updateCommonProfile(currentProfileId, validatedData);
+  const validatedData = Validations.validateProfileInput(data);
+  return await UserDb.updateCommonProfile(currentProfileId, validatedData);
 };
 
 export const login = async (
@@ -79,9 +70,8 @@ export const login = async (
   __: any,
   info: any
 ) => {
-  const { email, password } = validateUserDataInput(args.data);
-  //Verify password
-  const user = await getUserByEmail(
+  const { email, password } = Validations.validateUserDataInput(args.data);
+  const user = await UserDb.getUserByEmail(
     email,
     checkForSelectionField(info, selectionsForUser)
   );
@@ -108,11 +98,11 @@ export const oauthLogin = async (
   __: any,
   info: any
 ) => {
-  const { idToken } = validateOAuthUserDataInput(args.data);
+  const { idToken } = Validations.validateOAuthUserDataInput(args.data);
   const payload = await verifyGoogleId(idToken);
   if (payload && payload.email) {
     let email = payload.email;
-    const user = await getUserByEmail(
+    const user = await UserDb.getUserByEmail(
       email,
       checkForSelectionField(info, selectionsForUser)
     );
@@ -130,19 +120,19 @@ export const oauthLogin = async (
 };
 
 export const signup = async (_: any, args: { data: UserInput }) => {
-  const { email, password } = validateUserDataInput(args.data);
+  const { email, password } = Validations.validateUserDataInput(args.data);
   const hashedPassword = await hash(password, 16);
-  const user = await addUser(email, hashedPassword);
+  const user = await UserDb.addUser(email, hashedPassword);
   const token = await generateJwt(user.id);
   return { user, token };
 };
 
 export const oauthSignup = async (_: any, args: { data: OAuthUserInput }) => {
-  const { idToken } = validateOAuthUserDataInput(args.data);
+  const { idToken } = Validations.validateOAuthUserDataInput(args.data);
   const payload = await verifyGoogleId(idToken);
   if (payload && payload.email) {
     let email = payload.email;
-    const user = await addOAuthUser(email, idToken);
+    const user = await UserDb.addOAuthUser(email, idToken);
     const token = await generateJwt(user.id);
     return { user, token };
   } else {
@@ -160,6 +150,6 @@ export const deleteCurrentUser = async (
 ) => {
   await removeAllCommentsByUser(currentProfileId);
   await removeAllPostByUser(currentProfileId);
-  await deleteProfile(currentProfileId);
-  return await removeUser(currentUserId);
+  await UserDb.deleteProfile(currentProfileId);
+  return await UserDb.deleteUser(currentUserId);
 };

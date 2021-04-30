@@ -1,14 +1,9 @@
+import * as FriendsDb from "../utils/db/friends";
+import { getProfileId } from "../utils/db/user";
 import {
   FriendFunctionType,
   RequestFunctionType,
 } from "../types/UserProfileTypes";
-import {
-  sendFriendRequest as requestFriend,
-  acceptRequest,
-  deleteFriendRequest,
-  unfriend as removeFriend,
-} from "../utils/db/friends";
-import { getProfileId } from "../utils/db/user";
 
 export const sendFriendRequest: RequestFunctionType = async (
   _,
@@ -16,7 +11,7 @@ export const sendFriendRequest: RequestFunctionType = async (
   { currentProfileId }
 ) => {
   const receiverProfileId = await getProfileId(userId);
-  return await requestFriend(currentProfileId, receiverProfileId);
+  return await FriendsDb.sendFriendRequest(currentProfileId, receiverProfileId);
 };
 
 export const cancelFriendRequest: RequestFunctionType = async (
@@ -25,7 +20,10 @@ export const cancelFriendRequest: RequestFunctionType = async (
   { currentProfileId }
 ) => {
   const receiverProfileId = await getProfileId(userId);
-  return await deleteFriendRequest(currentProfileId, receiverProfileId);
+  return await FriendsDb.deleteFriendRequest(
+    currentProfileId,
+    receiverProfileId
+  );
 };
 
 export const acceptFriendRequest: FriendFunctionType = async (
@@ -34,7 +32,7 @@ export const acceptFriendRequest: FriendFunctionType = async (
   { currentProfileId }
 ) => {
   const receiverProfileId = await getProfileId(userId);
-  return await acceptRequest(currentProfileId, receiverProfileId);
+  return await FriendsDb.acceptRequest(currentProfileId, receiverProfileId);
 };
 
 export const unfriendUser: FriendFunctionType = async (
@@ -43,5 +41,5 @@ export const unfriendUser: FriendFunctionType = async (
   { currentProfileId }
 ) => {
   const receiverProfileId = await getProfileId(userId);
-  return await removeFriend(currentProfileId, receiverProfileId);
+  return await FriendsDb.unfriend(currentProfileId, receiverProfileId);
 };

@@ -1,34 +1,8 @@
 import { Kind, GraphQLScalarType } from "graphql";
 
-import {
-  getAllUsers,
-  getUser,
-  createProfile,
-  updateProfile,
-  login,
-  oauthLogin,
-  signup,
-  oauthSignup,
-  deleteCurrentUser,
-} from "./user";
-import {
-  getAllPosts,
-  getAllPostsByUser,
-  createPost,
-  getFeed,
-  likePost,
-  dislikePost,
-  createCommentOnPost,
-  createCommentOnComment,
-  deletePost,
-  deleteComment,
-} from "./post";
-import {
-  sendFriendRequest,
-  acceptFriendRequest,
-  cancelFriendRequest,
-  unfriendUser,
-} from "./friends";
+import * as UserResolvers from "./user";
+import * as PostResolvers from "./post";
+import * as FriendsResolvers from "./friends";
 import { authenticate } from "../utils/auth";
 import { errorHandlerWrapper } from "../utils/errorHandler";
 
@@ -53,30 +27,30 @@ const dateScalar = new GraphQLScalarType({
 export const resolvers = {
   DateTime: dateScalar,
   Query: {
-    getAllUsers: errorHandlerWrapper(getAllUsers),
-    getUser: errorHandlerWrapper(getUser),
-    getAllPosts: errorHandlerWrapper(getAllPosts),
-    getAllPostsByUser: errorHandlerWrapper(getAllPostsByUser),
-    getFeed: authenticate(getFeed),
-    login: errorHandlerWrapper(login),
-    oauthLogin: errorHandlerWrapper(oauthLogin),
+    getAllUsers: authenticate(UserResolvers.getAllUsers),
+    getUser: authenticate(UserResolvers.getUser),
+    getAllPosts: authenticate(PostResolvers.getAllPosts),
+    getAllPostsByUser: authenticate(PostResolvers.getAllPostsByUser),
+    getFeed: authenticate(PostResolvers.getFeed),
+    login: errorHandlerWrapper(UserResolvers.login),
+    oauthLogin: errorHandlerWrapper(UserResolvers.oauthLogin),
   },
   Mutation: {
-    signup: errorHandlerWrapper(signup),
-    oauthSignup: errorHandlerWrapper(oauthSignup),
-    createProfile: authenticate(createProfile),
-    updateProfile: authenticate(updateProfile),
-    createPost: authenticate(createPost),
-    createCommentOnPost: authenticate(createCommentOnPost),
-    createCommentOnComment: authenticate(createCommentOnComment),
-    sendFriendRequest: authenticate(sendFriendRequest),
-    cancelFriendRequest: authenticate(cancelFriendRequest),
-    acceptFriendRequest: authenticate(acceptFriendRequest),
-    unfriendUser: authenticate(unfriendUser),
-    likePost: authenticate(likePost),
-    dislikePost: authenticate(dislikePost),
-    deletePost: authenticate(deletePost),
-    deleteComment: authenticate(deleteComment),
-    deleteCurrentUser: authenticate(deleteCurrentUser),
+    signup: errorHandlerWrapper(UserResolvers.signup),
+    oauthSignup: errorHandlerWrapper(UserResolvers.oauthSignup),
+    createProfile: authenticate(UserResolvers.createProfile),
+    updateProfile: authenticate(UserResolvers.updateProfile),
+    createPost: authenticate(PostResolvers.createPost),
+    createCommentOnPost: authenticate(PostResolvers.createCommentOnPost),
+    createCommentOnComment: authenticate(PostResolvers.createCommentOnComment),
+    sendFriendRequest: authenticate(FriendsResolvers.sendFriendRequest),
+    cancelFriendRequest: authenticate(FriendsResolvers.cancelFriendRequest),
+    acceptFriendRequest: authenticate(FriendsResolvers.acceptFriendRequest),
+    unfriendUser: authenticate(FriendsResolvers.unfriendUser),
+    likePost: authenticate(PostResolvers.likePost),
+    dislikePost: authenticate(PostResolvers.dislikePost),
+    deletePost: authenticate(PostResolvers.deletePost),
+    deleteComment: authenticate(PostResolvers.deleteComment),
+    deleteCurrentUser: authenticate(UserResolvers.deleteCurrentUser),
   },
 };

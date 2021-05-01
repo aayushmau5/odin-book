@@ -1,30 +1,38 @@
+import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import { ApolloServer } from "apollo-server-express";
-import { schema } from "./schema/index";
-import { resolvers } from "./resolvers/resolvers";
+import { buildSchema } from "type-graphql";
+import { UserResolver } from "./type-gql/resolvers/user";
+import { prisma } from "./utils/db/db";
+import {
+  UserCrudResolver,
+  UserRelationsResolver,
+  ProfileCrudResolver,
+  ProfileRelationsResolver,
+  PostCrudResolver,
+  PostRelationsResolver,
+} from "./generated/typegraphql-prisma";
 
 const main = async () => {
   const PORT = process.env.PORT || 8000;
   const app = express();
   dotenv.config();
+  const schema = await buildSchema({
+    resolvers: [
+      UserCrudResolver,
+      UserRelationsResolver,
+      ProfileRelationsResolver,
+      ProfileCrudResolver,
+      PostCrudResolver,
+      PostRelationsResolver,
+    ],
+    validate: false,
+  });
   const apolloserver = new ApolloServer({
-    typeDefs: schema,
-    resolvers,
-    debug: false,
-    context: ({ req, res }) => {
-      let token;
-      if (req && req.headers["authorization"]) {
-        const authHeader = req.headers["authorization"];
-        [, token] = authHeader.split(" ");
-      }
-      return {
-        req,
-        res,
-        token,
-      };
-    },
+    schema,
+    context: () => ({ prisma }),
   });
 
   app.use(cors({ credentials: true }));

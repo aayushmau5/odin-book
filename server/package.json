@@ -7,11 +7,10 @@
     "start": "node dist/index.js",
     "dev": "nodemon ./dist/index.js",
     "watch": "tsc -w",
-    "migrate": "prisma migrate dev --schema ./src/prisma/schema.prisma",
-    "studio": "prisma studio --schema ./src/prisma/schema.prisma",
-    "format": "prisma format --schema ./src/prisma/schema.prisma",
-    "generate": "prisma generate --schema ./src/prisma/schema.prisma",
-    "test": "ts-node ./src/test-db.ts"
+    "prisma:migrate": "prisma migrate dev --schema ./src/prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema ./src/prisma/schema.prisma",
+    "prisma:format": "prisma format --schema ./src/prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema ./src/prisma/schema.prisma"
   },
   "author": "aayushmau5",
   "license": "ISC",
@@ -33,8 +32,7 @@
     "jsonwebtoken": "^8.5.1",
     "prisma": "^2.21.2",
     "reflect-metadata": "^0.1.13",
-    "type-graphql": "^1.1.1",
-    "typegraphql-prisma": "^0.14.0"
+    "type-graphql": "^1.1.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

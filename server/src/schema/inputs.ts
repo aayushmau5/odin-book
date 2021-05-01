@@ -1,30 +1,38 @@
-import { gql } from "apollo-server-express";
+import { ArgsType, Field, ID, InputType } from "type-graphql";
+import { Profile } from "./user";
 
-const inputs = gql`
-  input Signup {
-    email: String!
-    password: String!
-  }
+@ArgsType()
+export class SignupArgs {
+  @Field()
+  email: string;
 
-  input Login {
-    email: String!
-    password: String!
-  }
+  @Field()
+  password: string;
+}
 
-  input AddPost {
-    text: String
-    image: String
-  }
+@ArgsType()
+export class ProfileArgs {
+  @Field()
+  firstname: string;
 
-  input ProfileData {
-    firstname: String
-    lastname: String
-    display: String
-  }
+  @Field()
+  lastname: string;
 
-  input OAuthInput {
-    idToken: String!
-  }
-`;
+  @Field()
+  display: string;
 
-export default inputs;
+  @Field((type) => ID)
+  userId: string;
+}
+
+@InputType()
+export class ProfileInput implements Partial<Profile> {
+  @Field()
+  firstname: string;
+
+  @Field()
+  lastname: string;
+
+  @Field()
+  display: string;
+}

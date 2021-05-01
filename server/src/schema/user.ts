@@ -1,79 +1,49 @@
-import { gql } from "apollo-server-core";
+import { Field, ID, ObjectType } from "type-graphql";
 
-const userTypeDefs = gql`
-  type User {
-    id: ID!
-    email: String!
-    profile: ProfileWithoutUser
-    createdAt: DateTime!
-  }
+@ObjectType()
+export class Profile {
+  @Field((type) => ID)
+  id: string;
 
-  type UserWithoutProfile {
-    id: ID!
-    email: String!
-    createdAt: DateTime!
-  }
+  @Field()
+  firstname: string;
 
-  type Token {
-    user: UserWithoutProfile!
-    token: String!
-  }
+  @Field()
+  lastname: string;
 
-  type Profile {
-    id: ID!
-    firstname: String!
-    lastname: String!
-    display: String
-    friends: [friendsProfile]
-    user: UserWithoutProfile!
-    posts: [Post]
-    friendrequest_to: [requestProfile]
-    friendrequest_by: [requestProfile]
-  }
+  @Field()
+  display: string;
 
-  type ChangedProfile {
-    id: ID!
-    firstname: String!
-    lastname: String!
-    display: String
-  }
+  @Field((type) => [Profile], { nullable: "items" })
+  friends?: Profile[];
 
-  type ProfileWithoutUser {
-    id: ID!
-    firstname: String!
-    lastname: String!
-    display: String
-    friends: [friendsProfile]
-    posts: [PostWithoutAuthor]
-    friendrequest_to: [requestProfile]
-    friendrequest_by: [requestProfile]
-  }
-  type friendsProfile {
-    id: ID!
-    firstname: String!
-    lastname: String!
-    display: String
-    user: UserWithoutProfile!
-    friends_posts: [PostWithoutAuthor]
-  }
+  @Field((type) => [Profile], { nullable: "items" })
+  friendrequest_to?: Profile[];
 
-  type requestProfile {
-    id: ID!
-    firstname: String!
-    lastname: String!
-    display: String
-    userId: ID!
-  }
+  @Field((type) => [Profile], { nullable: "items" })
+  friendrequest_by?: Profile[];
+}
 
-  type FriendRequests {
-    id: ID!
-    friendrequest_to: [requestProfile]
-    friendrequest_by: [requestProfile]
-  }
+@ObjectType()
+export class User {
+  @Field((type) => ID)
+  id: string;
 
-  type AcceptedRequests {
-    friends: [requestProfile]
-  }
-`;
+  @Field()
+  email: string;
 
-export default userTypeDefs;
+  @Field({ nullable: true })
+  profile?: Profile;
+
+  @Field()
+  createdAt: Date;
+}
+
+@ObjectType()
+export class Token {
+  @Field()
+  user: User;
+
+  @Field()
+  token: string;
+}

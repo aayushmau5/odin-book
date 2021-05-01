@@ -1,6 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { SelectionsOnPost } from "../../types/PostTypes";
-import { userSelectionsInterface } from "../../types/UserProfileTypes";
+import {
+  SelectionsOnPost,
+  userSelectionsInterface,
+} from "../../types/selectionTypes";
 
 export const userSelection = ({
   profile,

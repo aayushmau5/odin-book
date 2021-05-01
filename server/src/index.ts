@@ -4,35 +4,22 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { UserResolver } from "./type-gql/resolvers/user";
-import { prisma } from "./utils/db/db";
-import {
-  UserCrudResolver,
-  UserRelationsResolver,
-  ProfileCrudResolver,
-  ProfileRelationsResolver,
-  PostCrudResolver,
-  PostRelationsResolver,
-} from "./generated/typegraphql-prisma";
+import { UserResolver } from "./resolvers/user";
+import { FriendsResolver } from "./resolvers/friends";
+import { PostsResolver } from "./resolvers/post";
 
 const main = async () => {
   const PORT = process.env.PORT || 8000;
   const app = express();
   dotenv.config();
+
   const schema = await buildSchema({
-    resolvers: [
-      UserCrudResolver,
-      UserRelationsResolver,
-      ProfileRelationsResolver,
-      ProfileCrudResolver,
-      PostCrudResolver,
-      PostRelationsResolver,
-    ],
-    validate: false,
+    resolvers: [UserResolver, FriendsResolver, PostsResolver],
   });
+
   const apolloserver = new ApolloServer({
     schema,
-    context: () => ({ prisma }),
+    context: ({ req, res }) => ({ req, res }),
   });
 
   app.use(cors({ credentials: true }));

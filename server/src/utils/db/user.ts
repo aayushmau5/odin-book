@@ -1,5 +1,5 @@
 import { prisma } from "./db";
-import { userSelectionsInterface } from "../../types/UserProfileTypes";
+import { userSelectionsInterface } from "../../types/selectionTypes";
 import { userSelection } from "./selections";
 
 export async function getUserByEmail(

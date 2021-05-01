@@ -1,8 +1,9 @@
-import { ArgsType, Field, ID, InputType } from "type-graphql";
-import { Profile } from "./user";
+import { ArgsType, Field, InputType } from "type-graphql";
+import { Post } from "./post";
+import { BaseProfile } from "./user";
 
 @ArgsType()
-export class SignupArgs {
+export class UserInputArgs {
   @Field()
   email: string;
 
@@ -11,22 +12,13 @@ export class SignupArgs {
 }
 
 @ArgsType()
-export class ProfileArgs {
+export class OAuthInput {
   @Field()
-  firstname: string;
-
-  @Field()
-  lastname: string;
-
-  @Field()
-  display: string;
-
-  @Field((type) => ID)
-  userId: string;
+  idToken: string;
 }
 
 @InputType()
-export class ProfileInput implements Partial<Profile> {
+export class ProfileInput implements Partial<BaseProfile> {
   @Field()
   firstname: string;
 
@@ -35,4 +27,13 @@ export class ProfileInput implements Partial<Profile> {
 
   @Field()
   display: string;
+}
+
+@InputType()
+export class PostInput implements Partial<Post> {
+  @Field({ nullable: true })
+  data?: string;
+
+  @Field({ nullable: true })
+  image?: string;
 }

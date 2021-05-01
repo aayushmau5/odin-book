@@ -1,6 +1,7 @@
-import { PostInput, SelectionsOnPost } from "../../types/PostTypes";
+import { SelectionsOnPost } from "../../types/selectionTypes";
 import { prisma } from "./db";
 import { postSelection } from "./selections";
+import { PostInput } from "../../schema/inputs";
 
 export async function db_getAllPosts(selections: SelectionsOnPost) {
   return await prisma.post.findMany({
@@ -38,7 +39,7 @@ export async function generateFeedForUser(profileId: string) {
     where: { id: profileId },
     select: { friends: { select: { id: true } } },
   });
-  if (!userFriends) return false; //TODO throw Error
+  if (!userFriends) return [];
   const friendsId = userFriends.friends.map((data) => data.id);
   const feedPosts = await prisma.post.findMany({
     where: {
@@ -72,7 +73,7 @@ export async function savePost(profileId: string, postData: PostInput) {
   const savedPost = await prisma.post.create({
     data: {
       image: postData.image || null,
-      data: postData.text || null,
+      data: postData.data || null,
       author: {
         connect: {
           id: profileId,

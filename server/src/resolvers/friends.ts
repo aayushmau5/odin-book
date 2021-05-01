@@ -1,45 +1,48 @@
+import { Context } from "node:vm";
+import { Arg, Args, Ctx, Info, Mutation, Query, Resolver } from "type-graphql";
+import { FriendRequests, Friends } from "../schema/user";
+
 import * as FriendsDb from "../utils/db/friends";
 import { getProfileId } from "../utils/db/user";
-import {
-  FriendFunctionType,
-  RequestFunctionType,
-} from "../types/UserProfileTypes";
 
-export const sendFriendRequest: RequestFunctionType = async (
-  _,
-  { userId },
-  { currentProfileId }
-) => {
-  const receiverProfileId = await getProfileId(userId);
-  return await FriendsDb.sendFriendRequest(currentProfileId, receiverProfileId);
-};
+@Resolver()
+export class FriendsResolver {
+  @Mutation((returns) => FriendRequests, { nullable: true })
+  async sendFriendRequest(@Arg("userId") userId: string, @Ctx() ctx: Context) {
+    const receiverProfileId = await getProfileId(userId);
+    return await FriendsDb.sendFriendRequest(
+      ctx.currentProfileId,
+      receiverProfileId
+    );
+  }
 
-export const cancelFriendRequest: RequestFunctionType = async (
-  _,
-  { userId },
-  { currentProfileId }
-) => {
-  const receiverProfileId = await getProfileId(userId);
-  return await FriendsDb.deleteFriendRequest(
-    currentProfileId,
-    receiverProfileId
-  );
-};
+  @Mutation((returns) => FriendRequests, { nullable: true })
+  async cancelFriendRequest(
+    @Arg("userId") userId: string,
+    @Ctx() ctx: Context
+  ) {
+    const receiverProfileId = await getProfileId(userId);
+    return await FriendsDb.deleteFriendRequest(
+      ctx.currentProfileId,
+      receiverProfileId
+    );
+  }
 
-export const acceptFriendRequest: FriendFunctionType = async (
-  _,
-  { userId },
-  { currentProfileId }
-) => {
-  const receiverProfileId = await getProfileId(userId);
-  return await FriendsDb.acceptRequest(currentProfileId, receiverProfileId);
-};
+  @Mutation((returns) => Friends, { nullable: true })
+  async acceptFriendRequest(
+    @Arg("userId") userId: string,
+    @Ctx() ctx: Context
+  ) {
+    const receiverProfileId = await getProfileId(userId);
+    return await FriendsDb.acceptRequest(
+      ctx.currentProfileId,
+      receiverProfileId
+    );
+  }
 
-export const unfriendUser: FriendFunctionType = async (
-  _,
-  { userId },
-  { currentProfileId }
-) => {
-  const receiverProfileId = await getProfileId(userId);
-  return await FriendsDb.unfriend(currentProfileId, receiverProfileId);
-};
+  @Mutation((returns) => Friends, { nullable: true })
+  async unfriendUser(@Arg("userId") userId: string, @Ctx() ctx: Context) {
+    const receiverProfileId = await getProfileId(userId);
+    return await FriendsDb.unfriend(ctx.currentProfileId, receiverProfileId);
+  }
+}

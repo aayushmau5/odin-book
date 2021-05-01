@@ -1,3 +1,7 @@
+# ===============================================
+#                     USER
+# ===============================================
+
 type User {
   id: ID!
   email: String!
@@ -73,6 +77,10 @@ type AcceptedRequests {
   friends: [requestProfile]
 }
 
+# ===============================================
+#                     POST
+# ===============================================
+
 type Post {
   id: ID!
   data: String
@@ -106,6 +114,10 @@ type Comment {
   createdAt: DateTime!
 }
 
+# ===============================================
+#                     INPUTS
+# ===============================================
+
 input Signup {
   email: String!
   password: String!
@@ -133,6 +145,10 @@ input OAuthInput {
 
 scalar DateTime
 
+# ===============================================
+#                     QUERY
+# ===============================================
+
 type Query {
   getAllUsers: [User]
   getUser(userId: ID!): User
@@ -143,21 +159,25 @@ type Query {
   oauthLogin(data: OAuthInput!): Token
 }
 
+# ===============================================
+#                     MUTATION
+# ===============================================
+
 type Mutation {
   signup(data: Signup!): Token
   oauthSignup(data: OAuthInput): Token
   createProfile(data: ProfileData!): ChangedProfile!
   updateProfile(data: ProfileData!): ChangedProfile!
-  createPost(data: AddPost!): Post!
-  createCommentOnPost(postId: ID!, data: String!): Comment!
-  createCommentOnComment(postId: ID!, commentId: ID!, data: String!): Comment!
+  deleteCurrentUser: User
   sendFriendRequest(userId: ID!): FriendRequests
   cancelFriendRequest(userId: ID!): FriendRequests
   acceptFriendRequest(userId: ID!): AcceptedRequests
   unfriendUser(userId: ID!): AcceptedRequests
+  createPost(data: AddPost!): Post!
+  createCommentOnPost(postId: ID!, data: String!): Comment!
+  createCommentOnComment(postId: ID!, commentId: ID!, data: String!): Comment!
   likePost(postId: ID!): LikeDislike!
   dislikePost(postId: ID!): LikeDislike!
   deletePost(postId: ID!): Post
   deleteComment(commentId: ID!): Comment
-  deleteCurrentUser: User
 }

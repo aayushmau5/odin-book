@@ -1,115 +1,101 @@
-import { AuthenticationError } from "apollo-server-errors";
+import { Arg, Ctx, Info, Mutation, Query, Resolver } from "type-graphql";
 
+import { Comment, LikeDislike, Post, PostWithAuthor } from "../schema/post";
+import { checkForSelectionField } from "../utils/getSelections";
 import * as PostDb from "../utils/db/post";
 import * as CommentDb from "../utils/db/comment";
 import { getProfileId } from "../utils/db/user";
-import { checkForSelectionField } from "../utils/getSelections";
-import * as Validations from "../utils/validation/postInputValidation";
-import { PostInput, PostComment, CommentComment } from "../types/PostTypes";
+import { Context } from "node:vm";
+import { PostInput } from "../schema/inputs";
+import { AuthenticationError } from "apollo-server-express";
 
 const postSelections = ["author", "user"];
 
-export const getAllPosts = async (_: any, __: any, ___: any, info: any) => {
-  return await PostDb.db_getAllPosts(
-    checkForSelectionField(info, postSelections)
-  );
-};
-
-export const createPost = async (
-  _: any,
-  { data }: { data: PostInput },
-  { currentProfileId }: { currentProfileId: string }
-) => {
-  const validatedData = Validations.validatePostInput(data);
-  return await PostDb.savePost(currentProfileId, validatedData);
-};
-
-export const getAllPostsByUser = async (
-  _: any,
-  { userId }: { userId: string },
-  __: any,
-  info: any
-) => {
-  const profileId = await getProfileId(userId);
-  return await PostDb.getPostByProfile(
-    profileId,
-    checkForSelectionField(info, postSelections)
-  );
-};
-
-export const getFeed = async (
-  _: any,
-  __: any,
-  { currentProfileId }: { currentProfileId: string }
-) => {
-  return await PostDb.generateFeedForUser(currentProfileId);
-};
-
-export const likePost = async (
-  _: any,
-  { postId }: { postId: string },
-  { currentProfileId }: { currentProfileId: string }
-) => {
-  const data = await PostDb.increaseLike(currentProfileId, postId);
-  return { liked_by: data.likes, likes: data._count?.likes };
-};
-
-export const dislikePost = async (
-  _: any,
-  { postId }: { postId: any },
-  { currentProfileId }: { currentProfileId: string }
-) => {
-  const data = await PostDb.decreaseLike(currentProfileId, postId);
-  return { liked_by: data.likes, likes: data._count?.likes };
-};
-
-export const createCommentOnPost = async (
-  _: any,
-  { postId, data }: PostComment,
-  { currentProfileId }: { currentProfileId: string }
-) => {
-  const validatedData = Validations.validateCommentInput(data);
-  return await CommentDb.addCommentToPost(
-    currentProfileId,
-    postId,
-    validatedData
-  );
-};
-
-export const createCommentOnComment = async (
-  _: any,
-  { postId, commentId, data }: CommentComment,
-  { currentProfileId }: { currentProfileId: string }
-) => {
-  const validatedData = Validations.validateCommentInput(data);
-  return await CommentDb.commentOnComment(
-    postId,
-    commentId,
-    currentProfileId,
-    validatedData
-  );
-};
-
-export const deleteComment = async (
-  _: any,
-  { commentId }: { commentId: string },
-  { currentUserId }: { currentUserId: string }
-) => {
-  const comment = await CommentDb.getSingleComment(commentId);
-  if (comment?.author.userId !== currentUserId) {
-    throw new AuthenticationError("Access Denied");
+@Resolver()
+export class PostsResolver {
+  @Query((returns) => [Post], { nullable: "items" })
+  async getAllPosts(@Info() info: any) {
+    return await PostDb.db_getAllPosts(
+      checkForSelectionField(info, postSelections)
+    );
   }
-  return await CommentDb.removeComment(commentId);
-};
 
-export const deletePost = async (
-  _: any,
-  { postId }: { postId: string },
-  { currentUserId }: { currentUserId: string }
-) => {
-  const post = await PostDb.getSinglePost(postId);
-  if (post?.author.userId !== currentUserId) {
-    throw new AuthenticationError("Access Denied");
+  @Query((returns) => [Post], { nullable: "items" })
+  async getAllPostsByUser(@Arg("userId") userId: string, @Info() info: any) {
+    const profileId = await getProfileId(userId);
+    return await PostDb.getPostByProfile(
+      profileId,
+      checkForSelectionField(info, postSelections)
+    );
   }
-  return await PostDb.removePost(postId);
-};
+
+  @Query((returns) => [Post], { nullable: "items" })
+  async getFeed(@Ctx() ctx: Context) {
+    return await PostDb.generateFeedForUser(ctx.currentProfileId);
+  }
+
+  @Mutation((returns) => [PostWithAuthor])
+  async createPost(
+    @Arg("data") { data, image }: PostInput,
+    @Ctx() ctx: Context
+  ) {
+    return await PostDb.savePost(ctx.currentProfileId, { data, image });
+  }
+
+  @Mutation((returns) => LikeDislike)
+  async likePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
+    const data = await PostDb.increaseLike(ctx.currentProfileId, postId);
+    return { liked_by: data.likes, likes: data._count?.likes };
+  }
+
+  @Mutation((returns) => LikeDislike)
+  async dislikePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
+    const data = await PostDb.decreaseLike(ctx.currentProfileId, postId);
+    return { liked_by: data.likes, likes: data._count?.likes };
+  }
+
+  @Mutation((returns) => Comment)
+  async createCommentOnPost(
+    @Arg("postId") postId: string,
+    @Arg("data") data: string,
+    @Ctx() ctx: Context
+  ) {
+    return await CommentDb.addCommentToPost(ctx.currentProfileId, postId, data);
+  }
+
+  @Mutation((returns) => Comment)
+  async createCommentOnComment(
+    @Arg("postId") postId: string,
+    @Arg("commentId") commentId: string,
+    @Arg("data") data: string,
+    @Ctx() ctx: Context
+  ) {
+    return await CommentDb.commentOnComment(
+      postId,
+      commentId,
+      ctx.currentProfileId,
+      data
+    );
+  }
+
+  @Mutation((returns) => Comment, { nullable: true })
+  async deleteComment(
+    @Arg("commentId") commentId: string,
+    @Ctx() ctx: Context
+  ) {
+    const comment = await CommentDb.getSingleComment(commentId);
+    if (comment?.author.userId !== ctx.currentUserId) {
+      throw new AuthenticationError("Access Denied");
+    }
+    return await CommentDb.removeComment(commentId);
+  }
+
+  @Mutation((returns) => Post, { nullable: true })
+  async deletePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
+    const post = await PostDb.getSinglePost(postId);
+    if (post?.author.userId !== ctx.currentUserId) {
+      throw new AuthenticationError("Access Denied");
+    }
+    return await PostDb.removePost(postId);
+  }
+}

@@ -6,11 +6,11 @@ export class Post {
   @Field((type) => ID)
   id: string;
 
-  @Field({ nullable: true })
-  data?: string;
+  @Field((type) => String, { nullable: true })
+  data?: string | null;
 
-  @Field({ nullable: true })
-  image?: string;
+  @Field((type) => String, { nullable: true })
+  image?: string | null;
 
   @Field((returns) => [Profile], { nullable: "items" })
   likes: Profile[];

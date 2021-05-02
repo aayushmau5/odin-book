@@ -4,9 +4,17 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/user";
+import {
+  fieldExtensionsEstimator,
+  getComplexity,
+  simpleEstimator,
+} from "graphql-query-complexity";
+
 import { FriendsResolver } from "./resolvers/friends";
 import { PostsResolver } from "./resolvers/post";
+import { UserResolver, BaseProfileFieldResolvers } from "./resolvers/user";
+import { customAuthChecker } from "./utils/auth";
+import { ErrorInterceptor } from "./utils/errorMiddlerware";
 
 const main = async () => {
   const PORT = process.env.PORT || 8000;
@@ -14,12 +22,62 @@ const main = async () => {
   dotenv.config();
 
   const schema = await buildSchema({
-    resolvers: [UserResolver, FriendsResolver, PostsResolver],
+    resolvers: [
+      UserResolver,
+      FriendsResolver,
+      PostsResolver,
+      BaseProfileFieldResolvers,
+    ],
+    authChecker: customAuthChecker,
+    globalMiddlewares: [ErrorInterceptor],
+    emitSchemaFile: {
+      path: __dirname + "/schema/schema.gql",
+      commentDescriptions: true,
+      sortedSchema: false, // by default the printed schema is sorted alphabetically
+    },
   });
 
   const apolloserver = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({ req, res }),
+    debug: false,
+    context: ({ req, res }) => {
+      let token;
+      if (req && req.headers["authorization"]) {
+        const authHeader = req.headers["authorization"];
+        [, token] = authHeader.split(" ");
+      }
+
+      return {
+        token,
+        req,
+        res,
+      };
+    },
+    plugins: [
+      {
+        // Checker for Query Complexity
+        requestDidStart: () => ({
+          didResolveOperation({ request, document }) {
+            const complexity = getComplexity({
+              schema,
+              operationName: request.operationName,
+              query: document,
+              variables: request.variables,
+
+              estimators: [
+                fieldExtensionsEstimator(),
+                simpleEstimator({ defaultComplexity: 1 }),
+              ],
+            });
+            if (complexity > 20) {
+              throw new Error(
+                `Sorry, too complicated query! ${complexity} is over 20 that is the max allowed complexity.`
+              );
+            }
+          },
+        }),
+      },
+    ],
   });
 
   app.use(cors({ credentials: true }));

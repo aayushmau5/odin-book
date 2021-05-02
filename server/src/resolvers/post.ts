@@ -1,13 +1,21 @@
-import { Arg, Ctx, Info, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Info,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
+import { AuthenticationError } from "apollo-server-express";
 
 import { Comment, LikeDislike, Post, PostWithAuthor } from "../schema/post";
 import { checkForSelectionField } from "../utils/getSelections";
 import * as PostDb from "../utils/db/post";
 import * as CommentDb from "../utils/db/comment";
 import { getProfileId } from "../utils/db/user";
-import { Context } from "node:vm";
+import { Context } from "../types/context";
 import { PostInput } from "../schema/inputs";
-import { AuthenticationError } from "apollo-server-express";
 
 const postSelections = ["author", "user"];
 
@@ -29,11 +37,13 @@ export class PostsResolver {
     );
   }
 
+  @Authorized()
   @Query((returns) => [Post], { nullable: "items" })
   async getFeed(@Ctx() ctx: Context) {
     return await PostDb.generateFeedForUser(ctx.currentProfileId);
   }
 
+  @Authorized()
   @Mutation((returns) => [PostWithAuthor])
   async createPost(
     @Arg("data") { data, image }: PostInput,
@@ -42,18 +52,21 @@ export class PostsResolver {
     return await PostDb.savePost(ctx.currentProfileId, { data, image });
   }
 
+  @Authorized()
   @Mutation((returns) => LikeDislike)
   async likePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
     const data = await PostDb.increaseLike(ctx.currentProfileId, postId);
     return { liked_by: data.likes, likes: data._count?.likes };
   }
 
+  @Authorized()
   @Mutation((returns) => LikeDislike)
   async dislikePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
     const data = await PostDb.decreaseLike(ctx.currentProfileId, postId);
     return { liked_by: data.likes, likes: data._count?.likes };
   }
 
+  @Authorized()
   @Mutation((returns) => Comment)
   async createCommentOnPost(
     @Arg("postId") postId: string,
@@ -63,6 +76,7 @@ export class PostsResolver {
     return await CommentDb.addCommentToPost(ctx.currentProfileId, postId, data);
   }
 
+  @Authorized()
   @Mutation((returns) => Comment)
   async createCommentOnComment(
     @Arg("postId") postId: string,
@@ -78,6 +92,7 @@ export class PostsResolver {
     );
   }
 
+  @Authorized()
   @Mutation((returns) => Comment, { nullable: true })
   async deleteComment(
     @Arg("commentId") commentId: string,
@@ -90,6 +105,7 @@ export class PostsResolver {
     return await CommentDb.removeComment(commentId);
   }
 
+  @Authorized()
   @Mutation((returns) => Post, { nullable: true })
   async deletePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
     const post = await PostDb.getSinglePost(postId);

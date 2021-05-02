@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from "type-graphql";
+import { Post } from "./post";
 
 @ObjectType()
 export class UserWithoutProfile {
@@ -25,10 +26,16 @@ export class BaseProfile {
 
   @Field()
   display: string;
+
+  @Field({ nullable: true })
+  fullName?: string;
 }
 
 @ObjectType()
 export class ProfileWithoutUser extends BaseProfile {
+  @Field((type) => [Post], { nullable: "items" })
+  posts?: Post[];
+
   @Field((type) => [Profile], { nullable: "items" })
   friends?: Profile[];
 
@@ -40,9 +47,15 @@ export class ProfileWithoutUser extends BaseProfile {
 }
 
 @ObjectType()
+export class Profile extends ProfileWithoutUser {
+  @Field((type) => UserWithoutProfile)
+  user?: UserWithoutProfile;
+}
+
+@ObjectType()
 export class User extends UserWithoutProfile {
-  @Field({ nullable: true })
-  profile?: ProfileWithoutUser;
+  @Field((type) => ProfileWithoutUser, { nullable: true })
+  profile?: ProfileWithoutUser | null;
 }
 
 @ObjectType()
@@ -52,12 +65,6 @@ export class Token {
 
   @Field()
   token: string;
-}
-
-@ObjectType()
-export class Profile extends ProfileWithoutUser {
-  @Field((type) => UserWithoutProfile)
-  user: UserWithoutProfile;
 }
 
 @ObjectType()

@@ -45,7 +45,13 @@ export const userSelection = ({
 
 export const postSelection = ({ author, user }: SelectionsOnPost) => {
   return Prisma.validator<Prisma.PostSelect>()({
-    _count: { select: { comments: true } },
+    likes: true,
+    comments: {
+      include: {
+        post: true,
+        author: true,
+      },
+    },
     author: author
       ? {
           include: {

@@ -9,7 +9,10 @@ import { getProfileId } from "../utils/db/user";
 export class FriendsResolver {
   @Authorized()
   @Mutation((returns) => FriendRequests, { nullable: true })
-  async sendFriendRequest(@Arg("userId") userId: string, @Ctx() ctx: Context) {
+  async sendFriendRequest(
+    @Arg("userId") userId: string,
+    @Ctx() ctx: Context
+  ): Promise<FriendRequests | null> {
     const receiverProfileId = await getProfileId(userId);
     return await FriendsDb.sendFriendRequest(
       ctx.currentProfileId,
@@ -22,7 +25,7 @@ export class FriendsResolver {
   async cancelFriendRequest(
     @Arg("userId") userId: string,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<FriendRequests | null> {
     const receiverProfileId = await getProfileId(userId);
     return await FriendsDb.deleteFriendRequest(
       ctx.currentProfileId,
@@ -35,7 +38,7 @@ export class FriendsResolver {
   async acceptFriendRequest(
     @Arg("userId") userId: string,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<Friends | null> {
     const receiverProfileId = await getProfileId(userId);
     return await FriendsDb.acceptRequest(
       ctx.currentProfileId,
@@ -45,7 +48,10 @@ export class FriendsResolver {
 
   @Authorized()
   @Mutation((returns) => Friends, { nullable: true })
-  async unfriendUser(@Arg("userId") userId: string, @Ctx() ctx: Context) {
+  async unfriendUser(
+    @Arg("userId") userId: string,
+    @Ctx() ctx: Context
+  ): Promise<Friends | null> {
     const receiverProfileId = await getProfileId(userId);
     return await FriendsDb.unfriend(ctx.currentProfileId, receiverProfileId);
   }

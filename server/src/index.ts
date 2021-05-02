@@ -9,6 +9,7 @@ import {
   getComplexity,
   simpleEstimator,
 } from "graphql-query-complexity";
+import helmet from "helmet";
 
 import { FriendsResolver } from "./resolvers/friends";
 import { PostsResolver } from "./resolvers/post";
@@ -80,6 +81,7 @@ const main = async () => {
     ],
   });
 
+  app.use(helmet());
   app.use(cors({ credentials: true }));
   app.use(express.json());
 

@@ -19,6 +19,9 @@ export async function addCommentToPost(
         },
       },
     },
+    include: {
+      post: true,
+    },
   });
   return comment;
 }
@@ -62,12 +65,16 @@ export async function removeComment(id: string) {
     select: { repliedBy: true },
   });
   if (comment?.repliedBy.length === 0) {
-    const removedComment = await prisma.comment.delete({ where: { id } });
+    const removedComment = await prisma.comment.delete({
+      where: { id },
+      include: { post: true },
+    });
     return removedComment;
   }
   return await prisma.comment.update({
     where: { id },
     data: { data: "<DELETED>", authorId: { set: "<DELETED>" } },
+    include: { post: true },
   });
 }
 

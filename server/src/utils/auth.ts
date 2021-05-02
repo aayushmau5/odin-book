@@ -1,4 +1,3 @@
-import { AuthenticationError } from "apollo-server-errors";
 import { AuthChecker } from "type-graphql";
 
 import { Context } from "../types/context";

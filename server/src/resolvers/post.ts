@@ -9,7 +9,14 @@ import {
 } from "type-graphql";
 import { AuthenticationError } from "apollo-server-express";
 
-import { Comment, LikeDislike, Post, PostWithAuthor } from "../schema/post";
+import {
+  BaseComment,
+  BasePost,
+  Comment,
+  LikeDislike,
+  Post,
+  PostWithAuthor,
+} from "../schema/post";
 import { checkForSelectionField } from "../utils/getSelections";
 import * as PostDb from "../utils/db/post";
 import * as CommentDb from "../utils/db/comment";
@@ -44,24 +51,30 @@ export class PostsResolver {
   }
 
   @Authorized()
-  @Mutation((returns) => [PostWithAuthor])
+  @Mutation((returns) => [BasePost])
   async createPost(
     @Arg("data") { data, image }: PostInput,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<BasePost | null> {
     return await PostDb.savePost(ctx.currentProfileId, { data, image });
   }
 
   @Authorized()
   @Mutation((returns) => LikeDislike)
-  async likePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
+  async likePost(
+    @Arg("postId") postId: string,
+    @Ctx() ctx: Context
+  ): Promise<LikeDislike | null> {
     const data = await PostDb.increaseLike(ctx.currentProfileId, postId);
     return { liked_by: data.likes, likes: data._count?.likes };
   }
 
   @Authorized()
   @Mutation((returns) => LikeDislike)
-  async dislikePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
+  async dislikePost(
+    @Arg("postId") postId: string,
+    @Ctx() ctx: Context
+  ): Promise<LikeDislike | null> {
     const data = await PostDb.decreaseLike(ctx.currentProfileId, postId);
     return { liked_by: data.likes, likes: data._count?.likes };
   }
@@ -72,7 +85,7 @@ export class PostsResolver {
     @Arg("postId") postId: string,
     @Arg("data") data: string,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<BaseComment> {
     return await CommentDb.addCommentToPost(ctx.currentProfileId, postId, data);
   }
 
@@ -97,7 +110,7 @@ export class PostsResolver {
   async deleteComment(
     @Arg("commentId") commentId: string,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<BaseComment> {
     const comment = await CommentDb.getSingleComment(commentId);
     if (comment?.author.userId !== ctx.currentUserId) {
       throw new AuthenticationError("Access Denied");

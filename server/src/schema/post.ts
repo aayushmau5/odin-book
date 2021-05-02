@@ -2,7 +2,7 @@ import { ObjectType, Field, ID, Int } from "type-graphql";
 import { Profile } from "./user";
 
 @ObjectType()
-export class Post {
+export class BasePost {
   @Field((type) => ID)
   id: string;
 
@@ -12,14 +12,17 @@ export class Post {
   @Field((type) => String, { nullable: true })
   image?: string | null;
 
+  @Field()
+  createdAt: Date;
+}
+
+@ObjectType()
+export class Post extends BasePost {
   @Field((returns) => [Profile], { nullable: "items" })
   likes: Profile[];
 
   @Field((returns) => [Comment], { nullable: "items" })
   comments: Comment[];
-
-  @Field()
-  createdAt: Date;
 }
 
 @ObjectType()
@@ -34,11 +37,11 @@ export class LikeDislike {
   liked_by: Profile[];
 
   @Field((type) => Int)
-  likes: number;
+  likes?: number;
 }
 
 @ObjectType()
-export class Comment {
+export class BaseComment {
   @Field((type) => ID)
   id: string;
 
@@ -46,14 +49,17 @@ export class Comment {
   data?: string;
 
   @Field((type) => Post)
-  post: Post;
-
-  @Field((type) => Profile)
-  author: Profile;
+  post: BasePost;
 
   @Field((type) => Comment, { nullable: true })
-  inReplyTo?: Comment;
+  inReplyTo?: BaseComment;
 
   @Field()
   createdAt: Date;
+}
+
+@ObjectType()
+export class Comment extends BaseComment {
+  @Field((type) => Profile)
+  author: Profile;
 }

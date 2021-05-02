@@ -1,12 +1,18 @@
 # odin-book
 
-### Tech stack
+### Frontend
 
 - ReactJS(CRA)
 
-- Apollo GraphQL (client & server)
+- Apollo Client
+
+### Backend
 
 - Express
+
+- Apollo Server
+
+- TypeGraphQL
 
 - Prisma ORM
 

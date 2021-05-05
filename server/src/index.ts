@@ -9,13 +9,14 @@ import {
   getComplexity,
   simpleEstimator,
 } from "graphql-query-complexity";
-import helmet from "helmet";
+// import helmet from "helmet";
 
 import { FriendsResolver } from "./resolvers/friends";
 import { PostsResolver } from "./resolvers/post";
 import { UserResolver, BaseProfileFieldResolvers } from "./resolvers/user";
 import { customAuthChecker } from "./utils/auth";
 import { ErrorInterceptor } from "./utils/errorMiddlerware";
+import { isProd } from "./utils/constants";
 
 const main = async () => {
   const PORT = process.env.PORT || 8000;
@@ -81,7 +82,7 @@ const main = async () => {
     ],
   });
 
-  app.use(helmet());
+  // app.use(helmet()); // not letting the graphql playground load for some reason
   app.use(cors({ credentials: true }));
   app.use(express.json());
 
@@ -95,7 +96,7 @@ const main = async () => {
   });
 
   app.listen(PORT, () => {
-    if (process.env.NODE_ENV === "development") {
+    if (!isProd) {
       console.log(`Listening on PORT http://localhost:${PORT}`);
     }
   });

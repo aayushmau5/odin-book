@@ -15,7 +15,6 @@ import {
   Comment,
   LikeDislike,
   Post,
-  PostWithAuthor,
 } from "../schema/post";
 import { checkForSelectionField } from "../utils/getSelections";
 import * as PostDb from "../utils/db/post";
@@ -29,14 +28,17 @@ const postSelections = ["author", "user"];
 @Resolver()
 export class PostsResolver {
   @Query((returns) => [Post], { nullable: "items" })
-  async getAllPosts(@Info() info: any) {
+  async getAllPosts(@Info() info: any): Promise<Post[]> {
     return await PostDb.db_getAllPosts(
       checkForSelectionField(info, postSelections)
     );
   }
 
   @Query((returns) => [Post], { nullable: "items" })
-  async getAllPostsByUser(@Arg("userId") userId: string, @Info() info: any) {
+  async getAllPostsByUser(
+    @Arg("userId") userId: string,
+    @Info() info: any
+  ): Promise<Post[]> {
     const profileId = await getProfileId(userId);
     return await PostDb.getPostByProfile(
       profileId,
@@ -46,7 +48,7 @@ export class PostsResolver {
 
   @Authorized()
   @Query((returns) => [Post], { nullable: "items" })
-  async getFeed(@Ctx() ctx: Context) {
+  async getFeed(@Ctx() ctx: Context): Promise<Post[]> {
     return await PostDb.generateFeedForUser(ctx.currentProfileId);
   }
 
@@ -96,7 +98,7 @@ export class PostsResolver {
     @Arg("commentId") commentId: string,
     @Arg("data") data: string,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<BaseComment> {
     return await CommentDb.commentOnComment(
       postId,
       commentId,
@@ -120,7 +122,10 @@ export class PostsResolver {
 
   @Authorized()
   @Mutation((returns) => Post, { nullable: true })
-  async deletePost(@Arg("postId") postId: string, @Ctx() ctx: Context) {
+  async deletePost(
+    @Arg("postId") postId: string,
+    @Ctx() ctx: Context
+  ): Promise<BasePost> {
     const post = await PostDb.getSinglePost(postId);
     if (post?.author.userId !== ctx.currentUserId) {
       throw new AuthenticationError("Access Denied");

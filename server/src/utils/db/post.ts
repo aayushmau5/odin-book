@@ -49,8 +49,9 @@ export async function generateFeedForUser(profileId: string) {
     },
     include: {
       _count: {
-        select: { comments: true },
+        select: { likes: true, comments: true },
       },
+      likes: true,
       author: {
         include: {
           user: true,

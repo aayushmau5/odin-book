@@ -59,6 +59,12 @@ export class User extends UserWithoutProfile {
 }
 
 @ObjectType()
+export class SearchedUser extends UserWithoutProfile {
+  @Field((type) => BaseProfile, { nullable: true })
+  profile?: BaseProfile | null;
+}
+
+@ObjectType()
 export class Token {
   @Field()
   user: User;

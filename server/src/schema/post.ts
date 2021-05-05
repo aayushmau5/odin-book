@@ -49,7 +49,7 @@ export class BaseComment {
   data?: string;
 
   @Field((type) => Post)
-  post: BasePost;
+  post?: BasePost;
 
   @Field((type) => Comment, { nullable: true })
   inReplyTo?: BaseComment;

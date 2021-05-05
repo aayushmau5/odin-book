@@ -17,6 +17,7 @@ import { ProfileInput, UserInputArgs, OAuthInput } from "../schema/inputs";
 import {
   BaseProfile,
   Profile,
+  SearchedUser,
   Token,
   User,
   UserWithoutProfile,
@@ -56,6 +57,13 @@ export class UserResolver {
       userId,
       checkForSelectionField(info, selectionsForUser)
     );
+  }
+
+  @Query((returns) => [SearchedUser], { nullable: true })
+  async searchUser(
+    @Arg("searchString") searchString: string
+  ): Promise<SearchedUser[]> {
+    return await UserDb.searchUser(searchString);
   }
 
   @Query((returns) => Token, { nullable: true })

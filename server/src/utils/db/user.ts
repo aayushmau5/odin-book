@@ -37,6 +37,26 @@ export async function getAllUserExcept(id: string) {
   });
 }
 
+export async function searchUser(searchString: string) {
+  return await prisma.user.findMany({
+    where: {
+      email: {
+        contains: searchString,
+        mode: "insensitive",
+      },
+      profile: {
+        OR: [
+          { firstname: { contains: searchString, mode: "insensitive" } },
+          { lastname: { contains: searchString, mode: "insensitive" } },
+        ],
+      },
+    },
+    include: {
+      profile: true,
+    },
+  });
+}
+
 export async function addUser(email: string, password: string) {
   return await prisma.user.create({
     data: {

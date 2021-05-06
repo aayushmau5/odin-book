@@ -1,6 +1,16 @@
 import { PrismaClient } from "@prisma/client";
-import { isProd } from "../constants";
 
-const log: any = isProd ? {} : { log: ["query"] };
+import { isProd, isTest, testDbUrl } from "../constants";
 
-export const prisma = new PrismaClient(log);
+const config: any = {
+  log: isProd ? [] : ["query"],
+  datasources: isTest
+    ? {
+        db: {
+          url: testDbUrl,
+        },
+      }
+    : null,
+};
+
+export const prisma = new PrismaClient(config);

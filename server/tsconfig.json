@@ -6,6 +6,10 @@
       "es2018",
       "ESNext.AsyncIterable"
     ],
+    "types": [
+      "jest",
+      "node"
+    ],
     "declaration": true,
     "sourceMap": true,
     "outDir": "./dist",
@@ -28,11 +32,9 @@
   },
   "exclude": [
     "node_modules",
-    "prisma",
     "dist",
-    "tests"
   ],
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
   ]
 }

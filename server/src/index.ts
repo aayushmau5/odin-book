@@ -3,7 +3,6 @@ import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
 import {
   fieldExtensionsEstimator,
   getComplexity,
@@ -11,33 +10,15 @@ import {
 } from "graphql-query-complexity";
 // import helmet from "helmet";
 
-import { FriendsResolver } from "./resolvers/friends";
-import { PostsResolver } from "./resolvers/post";
-import { UserResolver, BaseProfileFieldResolvers } from "./resolvers/user";
-import { customAuthChecker } from "./utils/auth";
-import { ErrorInterceptor } from "./utils/errorMiddlerware";
 import { isProd } from "./utils/constants";
+import { createSchema } from "./resolvers/createSchema";
 
 const main = async () => {
   const PORT = process.env.PORT || 8000;
   const app = express();
   dotenv.config();
 
-  const schema = await buildSchema({
-    resolvers: [
-      UserResolver,
-      FriendsResolver,
-      PostsResolver,
-      BaseProfileFieldResolvers,
-    ],
-    authChecker: customAuthChecker,
-    globalMiddlewares: [ErrorInterceptor],
-    emitSchemaFile: {
-      path: __dirname + "/schema/schema.gql",
-      commentDescriptions: true,
-      sortedSchema: false, // by default the printed schema is sorted alphabetically
-    },
-  });
+  const schema = await createSchema();
 
   const apolloserver = new ApolloServer({
     schema,

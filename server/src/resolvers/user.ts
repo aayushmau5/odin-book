@@ -131,7 +131,7 @@ export class UserResolver {
   }
 
   @Authorized()
-  @Mutation((returns) => Profile)
+  @Mutation((returns) => BaseProfile)
   async createProfile(
     @Arg("data") profileData: ProfileInput,
     @Ctx() ctx: Context
@@ -141,7 +141,7 @@ export class UserResolver {
   }
 
   @Authorized()
-  @Mutation((returns) => Profile)
+  @Mutation((returns) => BaseProfile)
   async updateProfile(
     @Arg("data") profileData: ProfileInput,
     @Ctx() ctx: Context
@@ -150,7 +150,7 @@ export class UserResolver {
   }
 
   @Authorized()
-  @Mutation((returns) => User, { nullable: true })
+  @Mutation((returns) => UserWithoutProfile, { nullable: true })
   async deleteCurrentUser(@Ctx() ctx: Context): Promise<UserWithoutProfile> {
     const { currentUserId, currentProfileId } = ctx;
     await removeAllCommentsByUser(currentProfileId);

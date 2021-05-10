@@ -36,7 +36,7 @@ function Login() {
   return (
     <>
       <GoogleLogin
-        clientId="1093181997879-2d5j08rd7v2vd3uh0mbfufnk0nuj8717.apps.googleusercontent.com"
+        clientId=""
         buttonText="Login or Signup"
         onSuccess={onSignInSuccess}
         onFailure={onSignInFailure}

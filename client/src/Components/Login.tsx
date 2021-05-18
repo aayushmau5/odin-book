@@ -9,7 +9,7 @@ const authQuery = gql`
   }
 `;
 
-function Login() {
+export default function Login() {
   const [login, { loading, data, error }] = useLazyQuery(authQuery);
 
   if (loading) return <p>Loading...</p>;
@@ -45,5 +45,3 @@ function Login() {
     </>
   );
 }
-
-export default Login;

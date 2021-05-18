@@ -1,13 +1,26 @@
+:root {
+  --background: #313131;
+  --red: #ca3e47;
+  --light-red: #f6777f;
+  --gray: #525252;
+  --mid-gray: #8d8d8d;
+  --light-gray: #b5b5b5;
+  --font: #fff;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
+
 body {
+  background-color: var(--background);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Signika", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 24px;
+  color: var(--font);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }

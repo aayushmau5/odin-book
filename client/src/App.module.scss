@@ -1,0 +1,37 @@
+.app {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  padding: 10px 0;
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.sub_header {
+  margin: 0;
+  font-weight: 400;
+}
+
+.icon {
+  color: var(--red);
+  height: 3.5rem;
+  width: 3.5rem;
+}
+
+.form {
+  background-color: var(--gray);
+}
+
+@media (min-width: 900px) {
+  .app {
+    flex-direction: row;
+  }
+
+  .hero {
+    min-width: 70%;
+  }
+}

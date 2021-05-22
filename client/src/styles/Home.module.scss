@@ -1,0 +1,58 @@
+.home {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__header {
+    padding: 10px 0;
+    font-size: 2em;
+    font-weight: 600;
+  }
+
+  &__sub_header {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  &__logo {
+    color: var(--red);
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+
+  &__featureheader {
+    margin: 0;
+    margin-top: 5rem;
+    font-weight: 600;
+  }
+
+  &__featurelist {
+    margin-top: 0;
+    font-size: 1.7rem;
+  }
+
+  &__source_code {
+    margin: 5rem 0;
+    a {
+      color: var(--light-red);
+      text-decoration: none;
+    }
+  }
+
+  &__github_icon {
+    color: var(--red);
+    height: 1.7rem;
+    width: 1.7rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .home {
+    flex-direction: row;
+
+    &__hero {
+      min-width: 60%;
+    }
+  }
+}

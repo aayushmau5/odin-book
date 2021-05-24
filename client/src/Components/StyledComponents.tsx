@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Button = styled.button`
-  background: var(--background);
+  background: var(--dark-gray);
   border-radius: 5px;
   border: none;
   cursor: pointer;
@@ -17,4 +17,9 @@ export const Button = styled.button`
   &:active {
     background: var(--red);
   }
+`;
+
+export const ErrorDiv = styled.div`
+  color: var(--light-red);
+  font-size: 1rem;
 `;

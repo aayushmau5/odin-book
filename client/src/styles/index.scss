@@ -1,17 +1,18 @@
 :root {
-  --background: #313131;
   --red: #ca3e47;
   --light-red: #f6777f;
+  --dark-gray: #313131;
   --gray: #525252;
   --mid-gray: #8d8d8d;
   --light-gray: #b5b5b5;
+  --border-gray: rgb(126, 126, 126);
   --font: #fff;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
 
 body {
-  background-color: var(--background);
+  background-color: var(--dark-gray);
   margin: 0;
   font-family: "Signika", sans-serif;
   -webkit-font-smoothing: antialiased;

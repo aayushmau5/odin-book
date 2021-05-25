@@ -7,10 +7,11 @@ export const Button = styled.button`
   cursor: pointer;
   color: var(--font);
   font-family: inherit;
+  display: block;
   margin: 10px auto;
   transition: 0.1s ease-in;
-  padding: 5px 10px;
-  font-size: 1.2rem;
+  padding: 10px 15px;
+  font-size: 1.3rem;
   &:hover {
     background: var(--light-red);
   }

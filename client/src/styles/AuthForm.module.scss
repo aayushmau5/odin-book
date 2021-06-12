@@ -16,6 +16,11 @@
       border-radius: 10px;
       font-size: 1.3rem;
       caret-color: var(--red);
+      transition: 0.1s linear;
+
+      &:focus {
+        border-color: var(--red);
+      }
 
       &::selection {
         background-color: var(--red);

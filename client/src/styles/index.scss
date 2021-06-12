@@ -12,7 +12,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
 
 body {
-  background-color: var(--dark-gray);
+  background-image: url(../background.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
   margin: 0;
   font-family: "Signika", sans-serif;
   -webkit-font-smoothing: antialiased;

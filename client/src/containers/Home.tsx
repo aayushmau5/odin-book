@@ -1,5 +1,6 @@
 import { FaBook, FaGithub } from "react-icons/fa";
 
+import { AuthForm } from "../Components/AuthForm";
 import LoginForm from "../Components/Login-Form";
 import styles from "../styles/Home.module.scss";
 
@@ -24,7 +25,9 @@ export default function Home() {
           <FaGithub className={styles.home__github_icon} />
         </div>
       </div>
-      <LoginForm />
+      <LoginForm>
+        <AuthForm isLogin={true} />
+      </LoginForm>
     </div>
   );
 }

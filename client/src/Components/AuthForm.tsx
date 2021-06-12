@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
 import { AuthSchema } from "../utils/authInputValidation";
-import { Button, ErrorDiv } from "./StyledComponents";
+import { Button, ErrorDiv, UserErrorDiv } from "./StyledComponents";
 import styles from "../styles/AuthForm.module.scss";
 
 interface InputValues {
@@ -32,6 +32,9 @@ export function AuthForm({ isLogin }: Props) {
     >
       {({ isSubmitting }) => (
         <Form className={styles.form}>
+          {isSubmitting ? (
+            <UserErrorDiv>Username or Password Incorrect</UserErrorDiv>
+          ) : null}
           <div className={styles.form__group}>
             <label htmlFor="email" className={styles.form__group__label}>
               Email

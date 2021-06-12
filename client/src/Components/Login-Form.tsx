@@ -1,12 +1,11 @@
 import styles from "../styles/LoginForm.module.scss";
-import { AuthForm } from "./AuthForm";
 import { Button } from "./StyledComponents";
 
-export default function LoginForm() {
+export default function LoginForm({ children }: { children: any }) {
   return (
     <div className={styles.form}>
       <h2 className={styles.form__header}>Login</h2>
-      <AuthForm isLogin={true} />
+      {children}
       <h3 className={styles.form__separator}>OR</h3>
       <Button>Login with Google</Button>
       <p className={styles.form__signup_paragraph}>

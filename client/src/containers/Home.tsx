@@ -1,13 +1,38 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { FaBook, FaGithub } from "react-icons/fa";
 
 import { AuthForm } from "../Components/AuthForm";
-import LoginForm from "../Components/Login-Form";
+import Form from "../Components/Form";
 import styles from "../styles/Home.module.scss";
 
+const variant = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+    },
+  },
+};
+
 export default function Home() {
+  const [loginActive, setLoginActive] = useState(true);
+
+  const toggleLoginActive = () => {
+    setLoginActive((active) => !active);
+  };
+
   return (
     <div className={styles.home}>
-      <div className={styles.home__hero}>
+      <motion.div
+        className={styles.home__hero}
+        variants={variant}
+        initial="initial"
+        animate="animate"
+      >
         <FaBook className={styles.home__logo} />
         <header className={styles.home__header}>Odin Book</header>
         <h3 className={styles.home__sub_header}>
@@ -24,10 +49,10 @@ export default function Home() {
           <a href="https://www.github.com/aayushmau5/odin-book">Github</a>{" "}
           <FaGithub className={styles.home__github_icon} />
         </div>
-      </div>
-      <LoginForm>
-        <AuthForm isLogin={true} />
-      </LoginForm>
+      </motion.div>
+      <Form>
+        <AuthForm isLogin={loginActive} toggleActive={toggleLoginActive} />
+      </Form>
     </div>
   );
 }

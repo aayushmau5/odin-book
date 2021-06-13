@@ -3,6 +3,7 @@
   padding: 0.7em 1em;
   box-shadow: 0 2px 10px 0 rgba(1, 1, 1, 67%);
   width: 90%;
+  overflow: hidden;
 
   &__header {
     margin-top: 0;
@@ -17,7 +18,17 @@
       margin-top: 3rem;
     }
     &_link {
-      color: var(--light-red);
+      background: none;
+      outline: none;
+      border: none;
+      font-size: inherit;
+      font-family: inherit;
+      cursor: pointer;
+      color: var(--red);
+
+      &:hover {
+        color: var(--light-red);
+      }
     }
   }
 }

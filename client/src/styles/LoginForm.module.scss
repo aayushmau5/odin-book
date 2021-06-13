@@ -24,13 +24,15 @@
       font-size: inherit;
       font-family: inherit;
       cursor: pointer;
-      color: var(--red);
-
-      &:hover {
-        color: var(--light-red);
-      }
+      color: var(--light-red);
     }
   }
+}
+
+.arrow {
+  vertical-align: middle;
+  height: 1.2rem;
+  width: 1.2rem;
 }
 
 @media (min-width: 900px) {

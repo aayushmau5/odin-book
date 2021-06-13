@@ -8,11 +8,11 @@ interface Props {
 
 const variant = {
   initial: {
-    scale: 0.5,
+    // scale: 0.5,
     opacity: 0,
   },
   animate: {
-    scale: 1,
+    // scale: 1,
     opacity: 1,
     transition: {
       duration: 0.4,
@@ -22,13 +22,13 @@ const variant = {
   },
 };
 
-export default function Form({ children }: Props) {
+export default function FormContainer({ children }: Props) {
   return (
     <motion.div
+      className={containerStyles.form}
       variants={variant}
       initial="initial"
       animate="animate"
-      className={containerStyles.form}
     >
       {children}
     </motion.div>

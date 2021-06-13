@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FaBook, FaGithub } from "react-icons/fa";
 
-import { AuthForm } from "../Components/AuthForm";
-import Form from "../Components/Form";
 import styles from "../styles/Home.module.scss";
+import LoginForm from "../Components/AuthForms/LoginForm";
+import FormContainer from "../Components/FormContainer";
+import SignupForm from "../Components/AuthForms/SignupForm";
 
 const variant = {
   initial: {
@@ -50,9 +51,15 @@ export default function Home() {
           <FaGithub className={styles.home__github_icon} />
         </div>
       </motion.div>
-      <Form>
-        <AuthForm isLogin={loginActive} toggleActive={toggleLoginActive} />
-      </Form>
+      <FormContainer>
+        <AnimatePresence exitBeforeEnter>
+          {loginActive ? (
+            <LoginForm toggleActive={toggleLoginActive} key="login" />
+          ) : (
+            <SignupForm toggleActive={toggleLoginActive} key="signup" />
+          )}
+        </AnimatePresence>
+      </FormContainer>
     </div>
   );
 }

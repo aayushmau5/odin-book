@@ -31,7 +31,6 @@ export default function Home() {
     <>
       <Head>
         <title>Odin Book</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta property="og:title" content="Odin Book" />
         <meta
           property="og:description"

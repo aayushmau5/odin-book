@@ -16,7 +16,7 @@ export const Button = styled.button`
     background: var(--light-red);
   }
   &:focus {
-    outline: 2px solid var(--light-red);
+    outline: 2px solid var(--red);
   }
   &:active {
     background: var(--red);

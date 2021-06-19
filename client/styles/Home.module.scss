@@ -41,6 +41,9 @@
     a {
       color: var(--light-red);
       text-decoration: none;
+      &:focus {
+        outline: 1px solid var(--light-red);
+      }
     }
   }
 

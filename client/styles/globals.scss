@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
+
 :root {
   --red: #ca3e47;
   --light-red: #f6777f;
@@ -9,7 +11,9 @@
   --font: #fff;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
+* {
+  box-sizing: border-box;
+}
 
 body {
   background-image: url(../background.svg);

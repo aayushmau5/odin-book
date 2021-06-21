@@ -25,6 +25,10 @@
       font-family: inherit;
       cursor: pointer;
       color: var(--light-red);
+
+      &:focus {
+        outline: 2px solid var(--light-red);
+      }
     }
   }
 }

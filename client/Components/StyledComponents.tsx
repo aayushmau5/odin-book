@@ -15,6 +15,9 @@ export const Button = styled.button`
   &:hover {
     background: var(--light-red);
   }
+  &:focus {
+    outline: 2px solid var(--red);
+  }
   &:active {
     background: var(--red);
   }

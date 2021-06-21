@@ -1,4 +1,4 @@
-import Document from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
 // hack for using styled-components with NextJS
@@ -29,5 +29,25 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal();
     }
+  }
+
+  render() {
+    return (
+      <Html>
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+          />
+          <link rel="icon" href="favicon.svg" />
+          <link rel="mask-icon" href="favicon.svg" />
+          <link rel="manifest" href="manifest.json" />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }

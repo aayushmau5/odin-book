@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+
 import { Desktop, Tablet, Mobile } from "../Responsive/DeviceWidth";
+import MobileNav from "./Mobile";
 
 /**
  * Breakpoints
@@ -17,7 +19,7 @@ export default function Nav() {
     Reason: Because of SSR, `react-responsive` cannot determine the width/type of device on the server
     there by causing difference between Client and Server output.
 
-    Why use? Because for the time being, this component will not cause any performance issues.
+    Why use? Because for the time being, this component is pretty lightweight and I suspect it will not cause any performance issues.
 
     Think about alternatives: https://github.com/artsy/fresnel
     */
@@ -29,8 +31,12 @@ export default function Nav() {
       {mounted && (
         <div>
           <Desktop>Full Nav</Desktop>
-          <Tablet>Nav with hamburger menu</Tablet>
-          <Mobile>Nav with hamburger menu</Mobile>
+          <Tablet>
+            <MobileNav />
+          </Tablet>
+          <Mobile>
+            <MobileNav />
+          </Mobile>
         </div>
       )}
     </>

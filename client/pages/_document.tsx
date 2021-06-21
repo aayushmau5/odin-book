@@ -1,6 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
+import { mediaStyles } from "../utils/Media";
+
 // hack for using styled-components with NextJS
 // taken from https://github.com/vercel/next.js/blob/master/examples/with-styled-components/pages/_document.js
 
@@ -58,6 +60,10 @@ export default class MyDocument extends Document {
             href="/favicon-16x16.png"
           />
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+          <style
+            type="text/css"
+            dangerouslySetInnerHTML={{ __html: mediaStyles }}
+          />
         </Head>
         <body>
           <Main />

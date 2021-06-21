@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { FaBook } from "react-icons/fa";
 
 import { Desktop, Tablet, Mobile } from "../Responsive/DeviceWidth";
 import MobileNav from "./Mobile";
+import styles from "../../styles/Nav.module.scss";
 
 /**
  * Breakpoints
@@ -12,6 +15,7 @@ import MobileNav from "./Mobile";
 
 export default function Nav() {
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     /* 
@@ -29,13 +33,14 @@ export default function Nav() {
   return (
     <>
       {mounted && (
-        <div>
-          <Desktop>Full Nav</Desktop>
+        <div className={styles.Nav}>
+          <FaBook className={styles.Nav__logo} />
+          <Desktop> Desktop things</Desktop>
           <Tablet>
-            <MobileNav />
+            <MobileNav pageRoute={router.route} />
           </Tablet>
           <Mobile>
-            <MobileNav />
+            <MobileNav pageRoute={router.route} />
           </Mobile>
         </div>
       )}

@@ -1,0 +1,15 @@
+.Nav {
+  width: 100%;
+  background: var(--nav-background);
+  height: 60px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px 0 rgba(1, 1, 1, 67%);
+
+  &__logo {
+    color: var(--red);
+    height: 2rem;
+    width: 2rem;
+  }
+}

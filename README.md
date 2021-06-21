@@ -2,7 +2,11 @@
 
 ### Frontend
 
-- ReactJS(CRA)
+- NextJS
+
+- Sass
+
+- Framer Motion(For animations)
 
 - Apollo Client
 

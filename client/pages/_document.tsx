@@ -1,7 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
-import { mediaStyles } from "../utils/Media";
+import { mediaStyles } from "../Components/Responsive/Media";
 
 // hack for using styled-components with NextJS
 // taken from https://github.com/vercel/next.js/blob/master/examples/with-styled-components/pages/_document.js

@@ -1,15 +1,17 @@
 import Head from "next/head";
-import Nav from "../../Components/Navigation/Nav";
+
+import styles from "../../styles/ProfileSetup.module.scss";
 
 export default function Home() {
   return (
     <>
       <Head>
         <title>Profile Setup | Odin Book</title>
-        <meta property="og:title" content="Profile Setup | Odin Book" />
-        <meta property="og:description" content="Setup your profile" />
       </Head>
-      <Nav />
+      <div className={styles.Wrapper}>
+        <h3>Welcome to Odin Book!</h3>
+        <p>Let&apos;s setup your profile</p>
+      </div>
     </>
   );
 }

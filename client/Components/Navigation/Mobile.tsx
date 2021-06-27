@@ -2,6 +2,7 @@ import { slide as Menu } from "react-burger-menu";
 import { IoExitOutline } from "react-icons/io5";
 import Link from "next/link";
 
+import SearchBar from "./Searchbar";
 import styles from "../../styles/MobileNav.module.scss";
 
 interface Props {
@@ -13,11 +14,11 @@ export default function MobileNav({ pageRoute }: Props) {
     if (pageRoute === `/profile${desiredRoute}`) {
       return styles.active;
     }
-    return null;
+    return "";
   }
 
   return (
-    <Menu right width={250}>
+    <Menu right width={300}>
       <Link href="/profile">
         <a className={`bm-item ${styles.menuItem} ${setActive()}`}>Profile</a>
       </Link>
@@ -37,7 +38,7 @@ export default function MobileNav({ pageRoute }: Props) {
         </a>
       </Link>
       <div className={styles.hr}></div>
-      <div>Search Bar</div>
+      <SearchBar />
       <div className={styles.hr}></div>
       <Link href="/">
         <a className={`bm-item ${styles.menuItem}`}>

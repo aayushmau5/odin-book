@@ -8,7 +8,7 @@
   width: 30%;
   margin-left: auto;
   padding: 0 5px;
-  display: flex;
+  display: flex !important;
 
   svg {
     min-height: 1.5rem;
@@ -83,5 +83,13 @@
   &:focus {
     background-color: var(--dark-gray);
     outline: 2px solid var(--light-red);
+  }
+}
+
+@media (max-width: 999px) {
+  .searchBar {
+    margin-left: 0;
+    width: 100%;
+    font-size: 1.5rem;
   }
 }

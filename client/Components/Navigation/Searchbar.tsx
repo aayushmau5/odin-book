@@ -14,7 +14,7 @@ function submitHandler(values, { setSubmitting }: { setSubmitting: Function }) {
 
 export default function SearchBar() {
   return (
-    <div className={styles.searchBar}>
+    <div className={`bm-item ${styles.searchBar}`}>
       <FaSearch />
       <Formik initialValues={{ searchQuery: "" }} onSubmit={submitHandler}>
         {({ isSubmitting }) => (

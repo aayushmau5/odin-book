@@ -1,14 +1,14 @@
 import SearchBar from "./Searchbar";
-import NotificationDropdown from "./NotificationDropdown";
-import ProfileDropdown from "./ProfileDropdown";
+import NotificationDropdownButton from "./NotificationDropdownButton";
+import ProfileDropdownButton from "./ProfileDropdownButton";
 import styles from "../../styles/DesktopNav.module.scss";
 
 export default function DesktopNav() {
   return (
     <div className={styles.desktopNav}>
       <SearchBar />
-      <NotificationDropdown />
-      <ProfileDropdown />
+      <NotificationDropdownButton />
+      <ProfileDropdownButton />
     </div>
   );
 }

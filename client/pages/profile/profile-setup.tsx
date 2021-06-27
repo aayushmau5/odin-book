@@ -1,5 +1,6 @@
 import Head from "next/head";
 
+import ProfileSetup from "../../Components/ProfileSetupForm";
 import styles from "../../styles/ProfileSetup.module.scss";
 
 export default function Home() {
@@ -10,7 +11,10 @@ export default function Home() {
       </Head>
       <div className={styles.Wrapper}>
         <h3>Welcome to Odin Book!</h3>
-        <p>Let&apos;s setup your profile</p>
+        <p>Let&apos;s setup your profile.</p>
+        <div className={styles.profileSetupWrapper}>
+          <ProfileSetup />
+        </div>
       </div>
     </>
   );

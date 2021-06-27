@@ -1,6 +1,6 @@
 .Nav {
   width: 100%;
-  background: var(--nav-background);
+  background: var(--gray);
   height: 60px;
   padding: 0 1rem;
   display: flex;
@@ -12,4 +12,8 @@
     height: 2rem;
     width: 2rem;
   }
+}
+
+.fresnel {
+  width: 100%;
 }

@@ -13,7 +13,7 @@ export default function Nav() {
       <div className={styles.Nav}>
         <FaBook className={styles.Nav__logo} />
         <MediaContextProvider>
-          <Media greaterThanOrEqual="md">
+          <Media className={styles.fresnel} greaterThanOrEqual="md">
             <DesktopNav />
           </Media>
           <Media lessThan="md">

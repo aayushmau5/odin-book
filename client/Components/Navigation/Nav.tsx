@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { FaBook } from "react-icons/fa";
 
 import MobileNav from "./Mobile";
@@ -7,7 +6,6 @@ import { MediaContextProvider, Media } from "../Responsive/Media";
 import styles from "../../styles/Nav.module.scss";
 
 export default function Nav() {
-  const router = useRouter();
   return (
     <>
       <div className={styles.Nav}>
@@ -17,7 +15,7 @@ export default function Nav() {
             <DesktopNav />
           </Media>
           <Media lessThan="md">
-            <MobileNav pageRoute={router.route} />
+            <MobileNav />
           </Media>
         </MediaContextProvider>
       </div>

@@ -4,9 +4,9 @@ import { FaBook, FaGithub } from "react-icons/fa";
 import Head from "next/head";
 
 import styles from "../styles/Home.module.scss";
-import LoginForm from "../Components/AuthForms/LoginForm";
-import FormContainer from "../Components/FormContainer";
-import SignupForm from "../Components/AuthForms/SignupForm";
+import LoginForm from "../Components/Forms/AuthForms/LoginForm";
+import FormContainer from "../Components/Forms/FormContainer";
+import SignupForm from "../Components/Forms/AuthForms/SignupForm";
 
 const variant = {
   initial: {

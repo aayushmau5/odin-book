@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
-import { Button, ErrorDiv, UserErrorDiv } from "./StyledComponents";
-import formStyles from "../styles/AuthForm.module.scss";
+import { Button, ErrorDiv, UserErrorDiv } from "../StyledComponents";
+import formStyles from "../../styles/AuthForm.module.scss";
 
 interface InputValues {
   firstName?: string;

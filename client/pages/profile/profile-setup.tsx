@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-import ProfileSetup from "../../Components/ProfileSetupForm";
+import ProfileSetup from "../../Components/Forms/ProfileSetupForm";
 import styles from "../../styles/ProfileSetup.module.scss";
 
 export default function Home() {

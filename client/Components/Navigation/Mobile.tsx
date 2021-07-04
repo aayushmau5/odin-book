@@ -3,8 +3,8 @@ import Link from "next/link";
 import { FaDoorOpen } from "react-icons/fa";
 
 import SearchBar from "./Searchbar";
-import styles from "../../styles/MobileNav.module.scss";
 import NavLinks from "./NavLinks";
+import styles from "@/styles/MobileNav.module.scss";
 
 export default function MobileNav() {
   return (

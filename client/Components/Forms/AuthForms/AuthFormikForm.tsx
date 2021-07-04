@@ -1,8 +1,8 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
-import { AuthSchema } from "../../../utils/authInputValidation";
-import { Button, ErrorDiv, UserErrorDiv } from "../../StyledComponents";
-import formStyles from "../../../styles/AuthForm.module.scss";
+import { AuthSchema } from "@/utils/authInputValidation";
+import { Button, ErrorDiv, UserErrorDiv } from "@/components/StyledComponents";
+import formStyles from "@/styles/AuthForm.module.scss";
 
 interface InputValues {
   email?: string;

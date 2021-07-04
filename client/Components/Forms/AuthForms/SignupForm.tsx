@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { FaArrowLeft } from "react-icons/fa";
 
-import { Button } from "../../StyledComponents";
-import containerStyles from "../../../styles/LoginForm.module.scss";
+import { Button } from "@/components/StyledComponents";
 import AuthFormikForm from "./AuthFormikForm";
+import containerStyles from "@/styles/LoginForm.module.scss";
 
 interface Props {
   toggleActive: () => void;

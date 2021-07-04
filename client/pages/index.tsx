@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaBook, FaGithub } from "react-icons/fa";
 import Head from "next/head";
 
-import styles from "../styles/Home.module.scss";
-import LoginForm from "../Components/Forms/AuthForms/LoginForm";
-import FormContainer from "../Components/Forms/FormContainer";
-import SignupForm from "../Components/Forms/AuthForms/SignupForm";
+import styles from "@/styles/Home.module.scss";
+import LoginForm from "@/components/Forms/AuthForms/LoginForm";
+import FormContainer from "@/components/Forms/FormContainer";
+import SignupForm from "@/components/Forms/AuthForms/SignupForm";
 
 const variant = {
   initial: {

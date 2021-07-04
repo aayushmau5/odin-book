@@ -1,6 +1,6 @@
 import { FaUser } from "react-icons/fa";
 
-import styles from "../../styles/DesktopNav.module.scss";
+import styles from "@/styles/DesktopNav.module.scss";
 
 export default function ProfileDropdownButton() {
   return (

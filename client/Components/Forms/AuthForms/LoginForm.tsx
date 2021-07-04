@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 
-import { Button } from "../../StyledComponents";
-import containerStyles from "../../../styles/LoginForm.module.scss";
+import { Button } from "@/components/StyledComponents";
+import containerStyles from "@/styles/LoginForm.module.scss";
 import AuthFormikForm from "./AuthFormikForm";
 
 interface Props {

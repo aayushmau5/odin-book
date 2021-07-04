@@ -1,12 +1,18 @@
 import Head from "next/head";
 
+import Sidebar from "@/components/Navigation/Sidebar";
+
 export default function Feed() {
   return (
     <>
       <Head>
         <title>Feed | Odin Book</title>
       </Head>
-      <h1>Feed</h1>
+      <div>
+        <Sidebar />
+        <span>Feed</span>
+        <span>Suggestions</span>
+      </div>
     </>
   );
 }

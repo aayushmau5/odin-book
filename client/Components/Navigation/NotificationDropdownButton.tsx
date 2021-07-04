@@ -1,6 +1,6 @@
 import { FaBell } from "react-icons/fa";
 
-import styles from "../../styles/DesktopNav.module.scss";
+import styles from "@/styles/DesktopNav.module.scss";
 
 export default function NotificationDropdownButton() {
   return (

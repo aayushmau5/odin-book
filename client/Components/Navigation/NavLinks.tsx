@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import styles from "../../styles/MobileNav.module.scss";
+import styles from "@/styles/MobileNav.module.scss";
 
 export default function Links() {
   const { route } = useRouter();

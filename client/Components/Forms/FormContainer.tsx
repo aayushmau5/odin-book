@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import containerStyles from "../../styles/LoginForm.module.scss";
+import containerStyles from "@/styles/LoginForm.module.scss";
 
 interface Props {
   children: any;

@@ -1,0 +1,21 @@
+.layoutContainer {
+  display: flex;
+  padding: 1.5rem;
+}
+
+.layoutContainer > div:nth-child(2) {
+  margin: 0 1rem;
+}
+
+.fresnelSidebar {
+  width: 20%;
+}
+
+.fresnelMain {
+  width: 100%;
+  border: 1px solid brown;
+}
+
+.fresnelSuggestion {
+  width: 20%;
+}

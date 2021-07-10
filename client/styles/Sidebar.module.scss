@@ -1,10 +1,9 @@
 .container {
   background-color: var(--nav-background);
-  width: 17%;
   padding: 1rem;
   border-radius: 15px;
 
-  & > a {
+  & > a:not(:first-child) {
     margin-top: 1.2rem;
   }
 }

@@ -1,6 +1,8 @@
 import Head from "next/head";
 
-import Sidebar from "@/components/Navigation/Sidebar";
+import FeedLayout from "@/components/FeedLayout";
+import GenerateFeed from "@/components/GenerateFeed";
+import Suggestions from "@/components/Suggestions";
 
 export default function Feed() {
   return (
@@ -8,11 +10,10 @@ export default function Feed() {
       <Head>
         <title>Feed | Odin Book</title>
       </Head>
-      <div>
-        <Sidebar />
-        <span>Feed</span>
-        <span>Suggestions</span>
-      </div>
+      <FeedLayout
+        feed={<GenerateFeed />}
+        suggestion={<Suggestions />}
+      ></FeedLayout>
     </>
   );
 }

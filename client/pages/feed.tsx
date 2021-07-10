@@ -1,19 +1,16 @@
 import Head from "next/head";
 
 import FeedLayout from "@/components/FeedLayout";
-import GenerateFeed from "@/components/GenerateFeed";
+import Feed from "@/components/Feed";
 import Suggestions from "@/components/Suggestions";
 
-export default function Feed() {
+export default function FeedPage() {
   return (
     <>
       <Head>
         <title>Feed | Odin Book</title>
       </Head>
-      <FeedLayout
-        feed={<GenerateFeed />}
-        suggestion={<Suggestions />}
-      ></FeedLayout>
+      <FeedLayout feed={<Feed />} suggestion={<Suggestions />}></FeedLayout>
     </>
   );
 }

@@ -27,6 +27,7 @@
     border: none;
     color: var(--font);
     font-size: inherit;
+    font-weight: 300;
     border-radius: 10px;
     min-width: 100px;
     caret-color: var(--light-red);
@@ -43,7 +44,7 @@
 
 .notification {
   border: none;
-  background-color: var(--dropdown-buttons);
+  background-color: inherit;
   font-size: inherit;
   color: var(--font);
   height: 45px;
@@ -63,13 +64,13 @@
 
   &:focus {
     background-color: var(--dark-gray);
-    outline: 2px solid var(--light-red);
+    border: 2px solid var(--light-red);
   }
 }
 
 .profile {
   border: none;
-  background-color: var(--dropdown-buttons);
+  background-color: inherit;
   font-size: inherit;
   color: var(--font);
   height: 45px;
@@ -89,7 +90,7 @@
 
   &:focus {
     background-color: var(--dark-gray);
-    outline: 2px solid var(--light-red);
+    border: 2px solid var(--light-red);
   }
 }
 

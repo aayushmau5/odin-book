@@ -10,7 +10,7 @@ export default function FeedPage() {
       <Head>
         <title>Feed | Odin Book</title>
       </Head>
-      <FeedLayout feed={<Feed />} suggestion={<Suggestions />}></FeedLayout>
+      <FeedLayout feed={<Feed />} suggestion={<Suggestions />} />
     </>
   );
 }

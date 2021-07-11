@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import { FaSearch } from "react-icons/fa";
+import { AiOutlineSearch } from "react-icons/ai";
 
 import styles from "@/styles/DesktopNav.module.scss";
 
@@ -15,7 +15,7 @@ function submitHandler(values, { setSubmitting }: { setSubmitting: Function }) {
 export default function SearchBar() {
   return (
     <div className={`bm-item ${styles.searchBar}`}>
-      <FaSearch />
+      <AiOutlineSearch />
       <Formik initialValues={{ searchQuery: "" }} onSubmit={submitHandler}>
         {({ isSubmitting }) => (
           <Form className={styles.searchBar__form}>

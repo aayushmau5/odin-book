@@ -1,10 +1,6 @@
-import {
-  FaUser,
-  FaUsers,
-  FaFacebookMessenger,
-  FaList,
-  FaBell,
-} from "react-icons/fa";
+import { BsBell } from "react-icons/bs";
+import { AiOutlineUnorderedList, AiOutlineMessage } from "react-icons/ai";
+import { FiUser, FiUsers } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -24,25 +20,25 @@ export default function Links() {
     <>
       <Link href="/profile">
         <a className={`bm-item ${styles.menuItem} ${setActive("/profile")}`}>
-          <FaUser />
+          <FiUser />
           Profile
         </a>
       </Link>
       <Link href="/friends">
         <a className={`bm-item ${styles.menuItem} ${setActive("/friends")}`}>
-          <FaUsers />
+          <FiUsers />
           Friends
         </a>
       </Link>
       <Link href="/messages">
         <a className={`bm-item ${styles.menuItem} ${setActive("/messages")}`}>
-          <FaFacebookMessenger />
+          <AiOutlineMessage />
           Messages
         </a>
       </Link>
       <Link href="/feed">
         <a className={`bm-item ${styles.menuItem} ${setActive("/feed")}`}>
-          <FaList />
+          <AiOutlineUnorderedList />
           Feed
         </a>
       </Link>
@@ -52,7 +48,7 @@ export default function Links() {
             "/notifications"
           )}`}
         >
-          <FaBell />
+          <BsBell />
           Notifications
         </a>
       </Link>

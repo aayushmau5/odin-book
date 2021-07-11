@@ -56,17 +56,6 @@
   &:hover {
     background-color: var(--dark-gray);
   }
-
-  svg {
-    height: 1.3rem;
-    width: 1.3rem;
-    vertical-align: middle;
-  }
-
-  &:focus {
-    background-color: var(--dark-gray);
-    border: 2px solid var(--light-red);
-  }
 }
 
 .profile {
@@ -83,11 +72,19 @@
   &:hover {
     background-color: var(--dark-gray);
   }
+}
 
-  svg {
+.dropdownButton {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  align-items: center;
+  justify-content: center;
+
+  & > svg {
     height: 1.3rem;
     width: 1.3rem;
-    vertical-align: middle;
   }
 
   &:focus {

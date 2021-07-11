@@ -1,25 +1,17 @@
 import { BsBell } from "react-icons/bs";
 import Link from "next/link";
+import { Button, Wrapper, Menu } from "react-aria-menubutton";
 
 import Dropdown from "./Dropdown";
 import styles from "@/styles/DesktopNav.module.scss";
 
-export default function NotificationDropdownButton({
-  dropdown,
-  changeDropdown,
-}) {
-  function toggleDropdown() {
-    if (dropdown === "notification") {
-      changeDropdown("");
-    } else {
-      changeDropdown("notification");
-    }
-  }
-
+export default function NotificationDropdownButton() {
   return (
-    <button className={styles.notification} onClick={toggleDropdown}>
-      <BsBell />
-      {dropdown === "notification" ? (
+    <Wrapper className={styles.notification}>
+      <Button className={styles.dropdownButton}>
+        <BsBell />
+      </Button>
+      <Menu>
         <Dropdown>
           <Link href="/">
             <a>Notification 1</a>
@@ -37,7 +29,7 @@ export default function NotificationDropdownButton({
             <a>Show all notifications</a>
           </Link>
         </Dropdown>
-      ) : null}
-    </button>
+      </Menu>
+    </Wrapper>
   );
 }

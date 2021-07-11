@@ -1,34 +1,29 @@
 import { FiUser } from "react-icons/fi";
 import Link from "next/link";
+import { Button, Wrapper, Menu } from "react-aria-menubutton";
 
 import Dropdown from "./Dropdown";
 import styles from "@/styles/DesktopNav.module.scss";
 
-export default function ProfileDropdownButton({ dropdown, changeDropdown }) {
-  function toggleDropdown() {
-    if (dropdown === "profile") {
-      changeDropdown("");
-    } else {
-      changeDropdown("profile");
-    }
-  }
-
+export default function ProfileDropdownButton() {
   return (
-    <button className={styles.profile} onClick={toggleDropdown}>
-      <FiUser />
-      {dropdown === "profile" ? (
+    <Wrapper className={styles.profile}>
+      <Button className={styles.dropdownButton}>
+        <FiUser />
+      </Button>
+      <Menu>
         <Dropdown>
-          <Link href="/">
+          <Link href="/profile">
             <a>Profile</a>
           </Link>
-          <Link href="/">
+          <Link href="/profile/settings">
             <a>Settings</a>
           </Link>
           <Link href="/">
             <a>Logout</a>
           </Link>
         </Dropdown>
-      ) : null}
-    </button>
+      </Menu>
+    </Wrapper>
   );
 }

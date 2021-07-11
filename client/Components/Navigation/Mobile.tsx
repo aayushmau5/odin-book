@@ -1,6 +1,6 @@
 import { slide as Menu } from "react-burger-menu";
 import Link from "next/link";
-import { FaDoorOpen } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
 import SearchBar from "./Searchbar";
 import NavLinks from "./NavLinks";
@@ -15,7 +15,7 @@ export default function MobileNav() {
       <div className={styles.hr}></div>
       <Link href="/">
         <a className={`bm-item ${styles.menuItem}`}>
-          <FaDoorOpen />
+          <FiLogOut />
           Logout
         </a>
       </Link>

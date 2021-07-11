@@ -1,3 +1,4 @@
+import MainLayout from "@/components/MainLayout";
 import Head from "next/head";
 
 export default function Profile() {
@@ -6,7 +7,7 @@ export default function Profile() {
       <Head>
         <title>Profile | Odin Book</title>
       </Head>
-      <h1>Profile</h1>
+      <MainLayout centerComponent={<h1>Profile</h1>} />
     </>
   );
 }

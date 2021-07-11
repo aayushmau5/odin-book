@@ -93,6 +93,12 @@
   }
 }
 
+.dropdownLinks {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 @media (max-width: 999px) {
   .searchBar {
     margin-left: 0;

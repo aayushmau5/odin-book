@@ -1,4 +1,4 @@
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiSettings, FiLogOut } from "react-icons/fi";
 import Link from "next/link";
 import { Button, Wrapper, Menu } from "react-aria-menubutton";
 
@@ -14,13 +14,28 @@ export default function ProfileDropdownButton() {
       <Menu>
         <Dropdown>
           <Link href="/profile">
-            <a>Profile</a>
+            <a>
+              <div className={styles.dropdownLinks}>
+                <FiUser />
+                Profile
+              </div>
+            </a>
           </Link>
           <Link href="/profile/settings">
-            <a>Settings</a>
+            <a>
+              <div className={styles.dropdownLinks}>
+                <FiSettings />
+                Settings
+              </div>
+            </a>
           </Link>
           <Link href="/">
-            <a>Logout</a>
+            <a>
+              <div className={styles.dropdownLinks}>
+                <FiLogOut />
+                Logout
+              </div>
+            </a>
           </Link>
         </Dropdown>
       </Menu>

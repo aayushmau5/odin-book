@@ -16,8 +16,7 @@ export default function ProfileDropdownButton() {
           <Link href="/profile">
             <a>
               <div className={styles.dropdownLinks}>
-                <FiUser />
-                Profile
+                TODO: Show user profile details instead
               </div>
             </a>
           </Link>

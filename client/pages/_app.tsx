@@ -1,11 +1,9 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 import Layout from "@/components/Layout";
 import "@/styles/globals.scss";
 
 function MyApp({ Component, pageProps }) {
-  const router = useRouter();
   return (
     <>
       <Head>

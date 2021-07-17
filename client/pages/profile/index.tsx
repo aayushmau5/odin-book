@@ -7,7 +7,11 @@ export default function Profile() {
       <Head>
         <title>Profile | Odin Book</title>
       </Head>
-      <MainLayout centerComponent={<h1>Profile</h1>} />
+      <MainLayout centerComponent={profileData()} />
     </>
   );
+}
+
+function profileData() {
+  return <div>Profile</div>;
 }

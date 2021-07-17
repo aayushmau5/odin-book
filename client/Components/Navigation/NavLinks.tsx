@@ -42,7 +42,7 @@ export default function Links() {
           Feed
         </a>
       </Link>
-      <Link href="/profile/feed">
+      <Link href="/notifications">
         <a
           className={`bm-item ${styles.menuItem} ${setActive(
             "/notifications"

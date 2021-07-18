@@ -18,3 +18,20 @@
     border-bottom: 1px solid gray;
   }
 }
+
+.individualContainer {
+  display: flex;
+
+  & > :first-child {
+    border: 3px solid var(--light-red);
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    min-width: 50px;
+  }
+}
+
+.nameContainer {
+  margin-left: 10px;
+  word-wrap: anywhere;
+}

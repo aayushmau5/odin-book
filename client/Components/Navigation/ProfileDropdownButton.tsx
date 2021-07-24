@@ -13,13 +13,6 @@ export default function ProfileDropdownButton() {
       </Button>
       <Menu>
         <Dropdown>
-          <Link href="/profile">
-            <a>
-              <div className={styles.dropdownLinks}>
-                TODO: Show user profile details instead
-              </div>
-            </a>
-          </Link>
           <Link href="/profile/settings">
             <a>
               <div className={styles.dropdownLinks}>

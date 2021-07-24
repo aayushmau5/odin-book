@@ -3,12 +3,14 @@
   margin: 0;
   margin-bottom: 10px;
   font-size: 1.5rem;
+  color: var(--light-gray);
 }
 
 .suggestions {
-  background-color: var(--gray);
+  background-color: var(--nav-background);
   border-radius: 15px;
   padding: 1rem;
+  color: var(--light-gray);
 
   & > div {
     padding: 10px 0;

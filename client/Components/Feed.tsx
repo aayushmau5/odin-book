@@ -1,25 +1,99 @@
+import { BiLike, BiComment } from "react-icons/bi";
+
 import styles from "@/styles/Feed.module.scss";
+import { SocialButton } from "./StyledComponents";
 
 interface FeedData {
   id: string;
   image?: string;
   data?: string;
   createdAt: string;
-  author: string;
+  like: number;
+  comments: number;
+  author: {
+    username: string;
+    name: string;
+    image?: string;
+  };
 }
 
-const feedData: FeedData[] = [];
+// generate 10 random data
+// thanks github copilot
+const randomData = () => {
+  const feedData: FeedData[] = [];
+  for (let i = 0; i < 10; i++) {
+    const id = `${Math.random().toString(36).substr(2, 9)}`;
+    const image = `https://placeimg.com/800/800/any`;
+    const data = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Nulla facilisi. Sed non risus. Suspendisse lectus tortor, dignissim sit amet,
+    cursus a, aliquam in, libero. Cras elementum ultrices diam. Sed auctor odio
+    ligula, in mollis nunc ultrices a. Aenean massa. Cum sociis natoque penatibus
+    et magnis dis parturient montes, nascetur ridiculus mus. Nulla vitae elit libero,
+    a pharetra augue.`;
+    const createdAt = `${new Date().toISOString()}`;
+    const like = Math.floor(Math.random() * 10);
+    const comments = Math.floor(Math.random() * 10);
+    const author = {
+      username: `${Math.random().toString(36).substr(2, 9)}`,
+      name: `${Math.random().toString(36).substr(2, 9)}`,
+      image: `https://placeimg.com/200/200/any`,
+    };
+    feedData.push({
+      id,
+      image,
+      data,
+      createdAt,
+      like,
+      comments,
+      author,
+    });
+  }
+  return feedData;
+};
+const feedData: FeedData[] = randomData();
 
 export default function Feed() {
   return (
     <div>
-      <div>Post maker form</div>
-      <div>and a bunch of posts</div>
       {feedData.map((feed) => (
-        <div key={feed.id} className={styles.feed}>
-          Feed
+        <div key={feed.id} className={styles.feedContainer}>
+          <div>
+            <div>{feed.author.image}</div>
+            <div>{feed.author.name}</div>
+            <div>{feed.createdAt}</div>
+          </div>
+          <div>{feed.data}</div>
+          <div>{feed.image}</div>
+          <div className={styles.socialInfo}>
+            <div>{feed.like} likes</div>
+            <div>{feed.comments} Comments</div>
+            <div>
+              <LikeButton />
+            </div>
+            <div>
+              <CommentButton />
+            </div>
+          </div>
         </div>
       ))}
     </div>
+  );
+}
+
+function LikeButton() {
+  return (
+    <SocialButton>
+      <BiLike />
+      Like
+    </SocialButton>
+  );
+}
+
+function CommentButton() {
+  return (
+    <SocialButton>
+      <BiComment />
+      Comment
+    </SocialButton>
   );
 }

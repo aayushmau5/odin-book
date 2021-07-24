@@ -61,3 +61,23 @@ export const UserErrorDiv = styled.div`
   margin: 0 auto 25px auto;
   color: white;
 `;
+
+export const SocialButton = styled.button`
+  background: transparent;
+  color: ${(props: { liked?: boolean }) =>
+    props.liked ? "var(--light-red)" : "var(--light-gray)"};
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+
+  &:hover {
+    color: var(--light-red);
+  }
+
+  svg {
+    height: 30px;
+    width: 40px;
+    transform: translateY(30%);
+  }
+`;

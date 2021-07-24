@@ -1,6 +1,13 @@
-.feed {
+.feedContainer {
   background-color: var(--gray);
   border-radius: 15px;
   padding: 0.7rem;
   margin: 1rem 0;
+}
+
+.socialInfo {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--light-gray);
+  padding-top: 5px;
 }

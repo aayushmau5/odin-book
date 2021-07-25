@@ -1,7 +1,11 @@
+import { useState } from "react";
+import { useEffect } from "react";
+import Image from "next/image";
 import { BiLike, BiComment } from "react-icons/bi";
 
 import styles from "@/styles/Feed.module.scss";
 import { SocialButton } from "./StyledComponents";
+import ProfilePic from "../public/profile.png";
 
 interface FeedData {
   id: string;
@@ -36,7 +40,6 @@ const randomData = () => {
     const author = {
       username: `${Math.random().toString(36).substr(2, 9)}`,
       name: `${Math.random().toString(36).substr(2, 9)}`,
-      image: `https://placeimg.com/200/200/any`,
     };
     feedData.push({
       id,
@@ -50,20 +53,31 @@ const randomData = () => {
   }
   return feedData;
 };
-const feedData: FeedData[] = randomData();
 
 export default function Feed() {
+  const [feed, setFeed] = useState<FeedData[]>([]);
+
+  useEffect(() => {
+    setFeed(randomData());
+  }, []);
+
   return (
     <div>
-      {feedData.map((feed) => (
+      {feed.map((feed) => (
         <div key={feed.id} className={styles.feedContainer}>
-          <div>
-            <div>{feed.author.image}</div>
-            <div>{feed.author.name}</div>
-            <div>{feed.createdAt}</div>
+          <div className={styles.userInfo}>
+            <Image src={ProfilePic} alt={feed.author.username} />
+            <div className={styles.nameContainer}>
+              <div>{feed.author.name}</div>
+              <div>{feed.createdAt}</div>
+            </div>
           </div>
-          <div>{feed.data}</div>
-          <div>{feed.image}</div>
+          <div className={styles.postContainer}>
+            <div>{feed.data}</div>
+            <div className={styles.postImageContainer}>
+              <Image src={ProfilePic} alt={feed.author.username} />
+            </div>
+          </div>
           <div className={styles.socialInfo}>
             <div>{feed.like} likes</div>
             <div>{feed.comments} Comments</div>

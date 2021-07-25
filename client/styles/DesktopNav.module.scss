@@ -87,7 +87,7 @@
     width: 1.3rem;
   }
 
-  &:focus {
+  &:focus-within {
     background-color: var(--dark-gray);
     border: 2px solid var(--light-red);
   }

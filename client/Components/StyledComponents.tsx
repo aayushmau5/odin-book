@@ -76,8 +76,6 @@ export const SocialButton = styled.button`
   }
 
   svg {
-    height: 30px;
-    width: 40px;
-    transform: translateY(30%);
+    transform: translateY(5px);
   }
 `;

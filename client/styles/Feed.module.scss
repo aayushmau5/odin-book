@@ -1,13 +1,38 @@
 .feedContainer {
-  background-color: var(--gray);
+  background-color: var(--nav-background);
   border-radius: 15px;
   padding: 0.7rem;
   margin: 1rem 0;
+  font-size: 1.4rem;
 }
 
 .socialInfo {
   display: flex;
   align-items: center;
-  border-top: 1px solid var(--light-gray);
+  justify-content: space-evenly;
+  border-top: 1px solid var(--dark-gray);
   padding-top: 5px;
+}
+
+.userInfo {
+  display: flex;
+  font-size: 1.2rem;
+
+  & > :first-child {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+  }
+}
+
+.nameContainer {
+  margin-left: 10px;
+}
+
+.postContainer {
+  padding: 15px 0;
+}
+
+.postImageContainer {
+  margin-top: 5px;
 }

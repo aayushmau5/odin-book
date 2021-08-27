@@ -3,10 +3,6 @@
   padding: 1.5rem;
 }
 
-.layoutContainer > div:nth-child(2) {
-  margin: 0 1rem;
-}
-
 .fresnelSidebar {
   max-width: 15%;
 }
@@ -17,4 +13,10 @@
 
 .fresnelSuggestion {
   width: 28%;
+}
+
+@media (min-width: 900px) {
+  .layoutContainer > div:nth-child(2) {
+    margin: 0 1rem;
+  }
 }

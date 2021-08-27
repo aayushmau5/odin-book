@@ -1,5 +1,13 @@
-import MainLayout from "@/components/MainLayout";
 import Head from "next/head";
+
+import MainLayout from "@/components/MainLayout";
+import Header from "@/components/Profile/Header";
+
+const headerData = {
+  imageUrl: "sherlock.jpg",
+  name: "Sherlock Holmes",
+  email: "sherlock@bakerstreet.com",
+};
 
 export default function Profile() {
   return (
@@ -13,5 +21,9 @@ export default function Profile() {
 }
 
 function profileData() {
-  return <div>Profile</div>;
+  return (
+    <div>
+      <Header data={headerData} />
+    </div>
+  );
 }

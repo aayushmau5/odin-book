@@ -1,0 +1,38 @@
+.header {
+  background-color: var(--gray);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+}
+
+.profile_picture {
+  & > :first-child {
+    border: 2px solid red;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+  }
+}
+
+.email {
+  color: var(--light-gray);
+  font-size: 1.4rem;
+}
+
+@media (min-width: 900px) {
+  .header {
+    flex-direction: row;
+  }
+
+  .profile_picture {
+    & > :first-child {
+      width: 10rem;
+      height: 10rem;
+    }
+  }
+
+  .container {
+    margin-left: 2rem;
+  }
+}

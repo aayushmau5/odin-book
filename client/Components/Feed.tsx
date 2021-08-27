@@ -5,7 +5,7 @@ import { BiLike, BiComment } from "react-icons/bi";
 
 import styles from "@/styles/Feed.module.scss";
 import { SocialButton } from "./StyledComponents";
-import ProfilePic from "../public/profile.png";
+import ProfilePic from "@/public/profile.png";
 
 interface FeedData {
   id: string;

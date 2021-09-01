@@ -1,9 +1,13 @@
 .header {
-  background-color: var(--gray);
-  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   word-wrap: break-word;
+}
+
+.headerContainer {
+  background-color: var(--gray);
+  padding: 1rem 1rem;
+  border-radius: 5px;
 }
 
 .profile_picture {

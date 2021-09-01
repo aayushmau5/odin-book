@@ -1,5 +1,16 @@
 import styled from "styled-components";
 
+interface PaddingMargin {
+  paddingTop?: string;
+  paddingBottom?: string;
+  paddingLeft?: string;
+  paddingRight?: string;
+  marginTop?: string;
+  marginBottom?: string;
+  marginLeft?: string;
+  marginRight?: string;
+}
+
 export const Button = styled.button`
   background: var(--dark-gray);
   border-radius: 5px;
@@ -12,6 +23,35 @@ export const Button = styled.button`
   transition: 0.1s ease-in;
   padding: 10px 15px;
   font-size: 1.3rem;
+  &:hover {
+    background: var(--light-red);
+  }
+  &:focus {
+    outline: 2px solid var(--red);
+  }
+  &:active {
+    background: var(--red);
+  }
+`;
+
+export const CommonButton = styled.button<PaddingMargin>`
+  background: var(--dark-gray);
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  color: var(--font);
+  font-family: inherit;
+  display: block;
+  transition: 0.1s ease-in;
+  font-size: 1.3rem;
+  padding-top: ${(props) => props.paddingTop || "10px"};
+  padding-bottom: ${(props) => props.paddingBottom || "10px"};
+  padding-left: ${(props) => props.paddingLeft || "15px"};
+  padding-right: ${(props) => props.paddingRight || "15px"};
+  margin-top: ${(props) => props.marginTop || "0"};
+  margin-bottom: ${(props) => props.marginBottom || "0"};
+  margin-left: ${(props) => props.marginLeft || "0"};
+  margin-right: ${(props) => props.marginRight || "0"};
   &:hover {
     background: var(--light-red);
   }

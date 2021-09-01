@@ -2,6 +2,8 @@ import Head from "next/head";
 
 import MainLayout from "@/components/MainLayout";
 import Header from "@/components/Profile/Header";
+import styles from "@/styles/Profile.module.scss";
+import { CommonButton } from "@/components/StyledComponents";
 
 const headerData = {
   imageUrl: "sherlock.jpg",
@@ -22,8 +24,9 @@ export default function Profile() {
 
 function profileData() {
   return (
-    <div>
+    <div className={styles.headerContainer}>
       <Header data={headerData} />
+      <CommonButton marginLeft="auto">Edit</CommonButton>
     </div>
   );
 }

@@ -1,0 +1,14 @@
+.stats {
+  list-style: none;
+  background-color: var(--nav-background);
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 5px;
+  height: fit-content;
+}
+
+@media (min-width: 900px) {
+  .stats {
+    width: 20%;
+  }
+}

@@ -24,6 +24,11 @@
   font-size: 1.4rem;
 }
 
+.profile_data {
+  display: flex;
+  flex-direction: column;
+}
+
 @media (min-width: 900px) {
   .header {
     flex-direction: row;
@@ -38,5 +43,14 @@
 
   .container {
     margin-left: 2rem;
+  }
+
+  .profile_data {
+    flex-direction: row;
+  }
+
+  .posts_container {
+    margin-left: 1rem;
+    width: 80%;
   }
 }

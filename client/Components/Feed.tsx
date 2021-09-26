@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import Image from "next/image";
-import { BiLike, BiComment } from "react-icons/bi";
 
-import styles from "@/styles/Feed.module.scss";
-import { SocialButton } from "./StyledComponents";
-import ProfilePic from "@/public/profile.png";
+import Post from "./Profile/Post";
 
 interface FeedData {
   id: string;
@@ -64,50 +60,8 @@ export default function Feed() {
   return (
     <div>
       {feed.map((feed) => (
-        <div key={feed.id} className={styles.feedContainer}>
-          <div className={styles.userInfo}>
-            <Image src={ProfilePic} alt={feed.author.username} />
-            <div className={styles.nameContainer}>
-              <div>{feed.author.name}</div>
-              <div>{feed.createdAt}</div>
-            </div>
-          </div>
-          <div className={styles.postContainer}>
-            <div>{feed.data}</div>
-            <div className={styles.postImageContainer}>
-              <Image src={ProfilePic} alt={feed.author.username} />
-            </div>
-          </div>
-          <div className={styles.socialInfo}>
-            <div>{feed.like} likes</div>
-            <div>{feed.comments} Comments</div>
-            <div>
-              <LikeButton />
-            </div>
-            <div>
-              <CommentButton />
-            </div>
-          </div>
-        </div>
+        <Post key={feed.id} postData={feed} />
       ))}
     </div>
-  );
-}
-
-function LikeButton() {
-  return (
-    <SocialButton>
-      <BiLike />
-      Like
-    </SocialButton>
-  );
-}
-
-function CommentButton() {
-  return (
-    <SocialButton>
-      <BiComment />
-      Comment
-    </SocialButton>
   );
 }

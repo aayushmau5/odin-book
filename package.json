@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/aayushmau5/odin-book#readme",
   "dependencies": {
-    "concurrently": "^6.2.1"
+    "concurrently": "^7.0.0"
   }
 }
